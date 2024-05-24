@@ -1,85 +1,75 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+<template >
+  <div>
+    <RouterView />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+
+
+
+<script>
+ 
+  import "@/assets/libs/choices.js/public/assets/scripts/choices.min.js"
+  import "@/assets/js/main.js"
+  import  "@/assets/libs/bootstrap/css/bootstrap.min.css"
+  import "@/assets/css/styles.min.css" 
+  import "@/assets/css/icons.css" 
+  import "@/assets/libs/node-waves/waves.min.css"  
+  import "@/assets/libs/simplebar/simplebar.min.css" 
+  import "@/assets/libs/flatpickr/flatpickr.min.css"
+  import "@/assets/libs/@simonwep/pickr/themes/nano.min.css"
+  import "@/assets/libs/choices.js/public/assets/styles/choices.min.css"
+  import "@/assets/libs/@popperjs/core/umd/popper.min.js"
+  import "@/assets/libs/bootstrap/js/bootstrap.bundle.min.js"
+  // import "@/assets/js/defaultmenu.min.js"
+  // import "@/assets/libs/node-waves/waves.min.js"
+  // import "@/assets/js/sticky.js"
+  // import "@/assets/libs/simplebar/simplebar.min.js"
+  // import "@/assets/js/simplebar.js"
+  // import "@/assets/libs/@simonwep/pickr/pickr.es5.min.js"
+  import "@/assets/libs/apexcharts/apexcharts.min.js"
+  // import "@/assets/js/ecommerce-dashboard.js"
+  // import "@/assets/js/custom-switcher.min.js"
+  // import "@/assets/js/custom.js"
+
+  
+ 
+  //  import "@/assets/libs/swiper/swiper-bundle.min.js"
+  //  import "@/assets/js/authentication.js"
+  //  import "@/assets/js/show-password.js"
+  //  import "@/assets/js/authentication-main.js"
+   import "@/assets/css/icons.min.css"
+  //  import "@/assets/libs/swiper/swiper-bundle.min.css"
+
+
+
+
+
+  export default {
+  name:'App',
+  watch: {
+    created() {
+    
+    },
+    $route(to,) {
+      const name = to.name.toLowerCase()
+      const title = name 
+        // ? `${name} (${to.href.split('/')[2].toLowerCase()})`
+        // : name
+      document.title = `LePrimeCare - ${title}`
+
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  },
+  mounted() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+  },
+  
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
+</script>
+<style lang="css" scoped>
+  
 </style>
