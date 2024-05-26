@@ -63,7 +63,7 @@
                       SERVICES GIVING
                     </p>
                     <p v-else class="mb-0 fs-10 op-7 text-muted fw-semibold">
-                      TOTAL EMPLOYERS
+                      TOTAL EMPLOYEES
                     </p>
                   </div>
                 </div>
@@ -228,11 +228,12 @@
             class="card-header justify-content-between"
             style="background-color: #e5e7eb !important"
           >
-            <div class="card-title">Recent Client That Care Has Been Given</div>
+          
+            <div class="card-title text-uppercase mt-4">Recent Client That Care Has Been Given</div>
             <div class="d-sm-flex align-items-center">
               <a
-                href="profile.html"
-                class="btn btn-primary btn-sm me-3 mt-3"
+                href="#"
+                class="btn btn-primary btn-sm me-3 mt-4"
                 data-bs-toggle="modal"
                 data-bs-target="#employee_add_to_timesheet"
               >
@@ -262,7 +263,7 @@
 
               <div class="bouttons" style="position: relative">
                 <div
-                  class="boutton"
+                  class="boutton mt-4"
                   style="padding: 6px 10px !important ; background: #4dd70a"
                   @click="fetchClientEmployee()"
                 >
@@ -273,15 +274,15 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table text-nowrap table-bordered">
+              <table class="table text-nowrap table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Employee Names</th>
                     <th scope="col">Client Names</th>
+                    <th scope="col">Employee Names</th>
                     <th scope="col">Client Signature</th>
                     <th scope="col">Week Start</th>
                     <th scope="col">Week End</th>
-                    <th scope="col">Services Prodided</th>
+                    <th scope="col">N° Duties</th>
                     <th scope="col">Year</th>
                     <th scope="col">Observation</th>
                     <th scope="col">Print Time Sheet</th>
@@ -304,31 +305,41 @@
                     <td>
                       <div class="d-flex align-items-center">
                         <div class="me-2 lh-1">
-                          <span class="avatar avatar-sm">
-                            <img
-                              src="@/assets/images/ecommerce/png/36.png"
-                              alt=""
-                            />
+                          <span class="avatar avatar-sm" v-if="data.client">
+                            <img v-if="data.client.photo === null" src="@/assets/img/client.png" alt="" />
+                            <img v-else :src="data.client.photo" alt="" />
                           </span>
                         </div>
-                        <div class="fs-14" v-if="data.employee">
-                          {{ data.employee.user.Prenoms }}
-                          {{ data.employee.user.Nom }}
+                        <div class="fs-14" v-if="data.client">
+                          {{ data.client.client_name }}
                         </div>
                       </div>
                     </td>
                     <td>
-                      <span class="fw-semibold" v-if="data.client"
-                        >{{ data.client.client_name }}
+                      <span class="fw-semibold" v-if="data.employee"
+                        >
+                        {{ data.employee.user.Prenoms }}
+                          {{ data.employee.user.Nom }}
                       </span>
                     </td>
                     <td>
                       <button @click="HandleIdSignature(data.client_id ,data.start_date_of_week , data.end_date_of_week)"
-                        class="btn btn-sm btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target="#client_add_signature"
+                       
+                      class="btn btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#client_add_signature"
+              :class="{
+                'btn-danger': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined',
+                'btn-warning': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'null',
+                'btn-success': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'
+              }"
+              :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined' || signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'"
+                        
+                       
                       >
-                        <i class="bi-badge-wc-fill"> Signature </i>
+                        <i class="bi-badge-wc-fill"> 
+                          {{ signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed' ? ' Is Signed ' : 'Signature' }}
+                           </i>
                       </button>
                     </td>
                     <td>
@@ -337,34 +348,34 @@
                     <td>
                       <span class="">{{ data.end_date_of_week }} </span>
                     </td>
-                    <td>
-                      <span class="">{{ data.service_given }} </span>
+                    <td class="text-center">
+                      <span >{{ data.service_given }} </span>
                     </td>
                     <td>
                       <span class="">{{ data.annee }}</span>
                     </td>
                     <td>
                       <span class="">
-                        <a
-                          href="#"  @click="HandleId(data.client_id ,data.start_date_of_week , data.end_date_of_week)"
-                          title="click to add observation to this client"
-                          data-bs-toggle="modal"
-                          data-bs-target="#employee_add_observation"
-                        >
-                          <i class="bi-exclamation-triangle text-danger"> </i>
-                          <span style="font-size: 13px">click to add</span>
-                        </a>
+                        <button @click="HandleId(data.client_id, data.start_date_of_week, data.end_date_of_week)"
+              class="btn btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#employee_add_observation"
+              :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'"
+            >
+              <i class="bi-exclamation-triangle text-danger"></i>
+              <span style="font-size: 13px">Click to add</span>
+            </button>
                       </span>
                     </td>
                     <td>
                       <span class="">
-                        <a target="_blank" :href="fetchPrint(data.client_id)">
+                        <a target="_blank" :href="fetchPrint(data.client_id)" class="d-flex align-items-center">
                           <img
                             src="@/assets/img/pdf-icon.png"
                             alt="excel format"
-                            style="width: 40px"
+                            style="width: 30px"
                           />
-                          View &amp; Download</a
+                           Download</a
                         >
                       </span>
                     </td>
@@ -397,6 +408,7 @@
       tabindex="-1"
       aria-hidden="true"
       data-bs-backdrop="static"
+      ref="employee_add_to_timesheet"
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -580,7 +592,7 @@
               </div>
               <div class="row mb-3">
               <div class="boutton">
-                <button class="" @click.prevent="submitDailyWork">
+                <button class="" @click.prevent="submitDailyWork('employee_add_to_timesheet')">
                   Save To TimeSheet
                 </button>
               </div>
@@ -612,6 +624,7 @@
       tabindex="-1"
       aria-hidden="true"
       data-bs-backdrop="static"
+      ref="employee_add_observation"
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -714,7 +727,7 @@
                 </div>
                 <div class="row mb-3">
                   <div class="boutton">
-                    <button class="" @click="SubmitObersation()">
+                    <button class="" @click="SubmitObersation('employee_add_observation')">
                       Save Observation
                     </button>
                   </div>
@@ -746,6 +759,7 @@
       tabindex="-1"
       aria-hidden="true"
       data-bs-backdrop="static"
+      ref="client_add_signature"
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -792,7 +806,7 @@
                 </div>
                 <div class="row mb-3">
                   <div class="boutton">
-                    <button class="" @click="SubmitSignature()">
+                    <button class="" @click="SubmitSignature('client_add_signature')">
                       Save Observation
                     </button>
                   </div>
@@ -812,7 +826,7 @@
                   Close
                 </button>
               </div>
-              <button @click="clearCanvas">Effacer</button>
+              <button class="btn btn-primary" @click="clearCanvas">Effacer</button>
             </div>
           </div>
         </div>
@@ -846,6 +860,9 @@ export default {
       StatiticsOptions: "",
       currentYear: currentYear,
       currentMonth: currentMonth,
+      IdObservation:"",
+      week_start_All:"",
+      week_end_All:"",
       week: "All",
       month: "",
       data: [],
@@ -856,6 +873,7 @@ export default {
       itemsPerPage: 10,
       totalPageArray: [],
       ClientEmployeeOptions: [],
+      signatureStates: {},
       DutiesOptions: [],
       week_start: "",
       week_end: "",
@@ -938,6 +956,7 @@ style_formats: [
       const endIndex = startIndex + this.itemsPerPage;
       return this.ClientEmployeeOptions.slice(startIndex, endIndex);
     },
+  
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
@@ -947,6 +966,8 @@ style_formats: [
     await this.fetchClients();
     await this.setWeekDates();
     await this.fetchDuties();
+    await this.loadSignatureStates();
+
   },
 
   methods: {
@@ -978,7 +999,7 @@ style_formats: [
             error.response.status === 401
           ) {
             await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-            this.$router.push("/login"); //a revoir
+            this.$router.push("/"); //a revoir
           }
         } else {
           this.formatValidationErrors(error.response.data.errors);
@@ -1009,8 +1030,9 @@ style_formats: [
         if (response.data.status === "success") {
           console.log("responsedatatt", response.data.data.data);
           this.ClientEmployeeOptions = response.data.data.data;
+          await this.loadSignatureStates();
 
-          this.loading = false;
+           this.loading = false;
         }
       } catch (error) {
         console.log(
@@ -1025,7 +1047,7 @@ style_formats: [
             error.response.status === 401
           ) {
             await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-            this.$router.push("/login"); //a revoir
+            this.$router.push("/"); //a revoir
           }
         } else {
           this.formatValidationErrors(error.response.data.errors);
@@ -1103,7 +1125,7 @@ style_formats: [
             error.response.status === 401
           ) {
             await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-            this.$router.push("/login"); //a revoir
+            this.$router.push("/"); //a revoir
           }
         } else {
           this.formatValidationErrors(error.response.data.errors);
@@ -1141,7 +1163,7 @@ style_formats: [
             error.response.status === 401
           ) {
             await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-            this.$router.push("/login"); //a revoir
+            this.$router.push("/"); //a revoir
           }
         } else {
           this.formatValidationErrors(error.response.data.errors);
@@ -1167,8 +1189,7 @@ style_formats: [
       this.step1.week_start = firstDay.toISOString().slice(0, 10);
       this.step1.week_end = lastDay.toISOString().slice(0, 10);
 
-      this.step2.week_start = firstDay.toISOString().slice(0, 10);
-      this.step2.week_end = lastDay.toISOString().slice(0, 10);
+
     },
     startDrawing(event) {
       this.drawing = true;
@@ -1190,8 +1211,8 @@ style_formats: [
       this.drawing = false;
     },
     clearCanvas() {
-      const canvasData = this.$refs.canvas.toDataURL();
-      console.log("canvasData", canvasData);
+      // const canvasData = this.$refs.canvas.toDataURL();
+      // console.log("canvasData", canvasData);
       const ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
     },
@@ -1209,7 +1230,7 @@ style_formats: [
       return this.ClientEmployeeOptions.slice(startIndex, endIndex);
     },
 
-    async submitDailyWork() {
+    async submitDailyWork(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {
         this.loading = true
@@ -1225,14 +1246,18 @@ style_formats: [
         };
 
         console.log("data", data);
+      
         try {
           const response = await axios.post("/employees/timesheets", data, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` },
           });
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
+             this.closeModal(modalId);
+            this.successmsg("New Daily Work Added"," The new daily work has been successfully added! It is now ready to be performed.")
             await this.fetchClientEmployee();
-            this.successmsg("Création d'une Entreprise","L'entreprise a été créée avec succès ! Le propriétaire va recevoir un email contenant ces informations pour se connecter à son portail.")
+
+            
 
           } else {
           }
@@ -1250,35 +1275,27 @@ style_formats: [
         console.log("error", this.v$.$errors);
       }
     },
-    async SubmitObersation() {
+    async  SubmitSignature(modalId) {
       this.loading = true
       const canvasData = this.$refs.canvas.toDataURL();
        console.log("canvasData", canvasData);
       const formData = new FormData();
-      formData.append("employee_id",  this.loggedInUser.id_user);
-      formData.append("client_id",  id);
-      formData.append("start_date_of_week",  this.FileNif);
-      formData.append("end_date_of_week",  this.FileNif);
-      formData.append("observations",  this.FileNif);
-      formData.append("signatureC",  canvasData);
+      formData.append("id",  this.IdObservation);
+      formData.append("SignatureC",  canvasData);
        
-        let data = {
-          employee_id: this.loggedInUser.id_user,
-          client_id: this.step2.client_id,
-          start_date_of_week: this.step2.week_start,
-          end_date_of_week: this.step2.week_end,
-          observations: this.step2.observations,
-        };
+      
 
-        console.log("data", data);
+        console.log("data");
         try {
-          const response = await axios.post("/employees/observations", data, {
+          const response = await axios.post("/employees/observations/timesheet/signature", formData, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` },
           });
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
+            this.closeModal(modalId);
+            this.successmsg("Patient Signature Recorded","The patient's signature has been successfully recorded! It has been saved and is now on file.")
             await this.fetchClientEmployee();
-            this.successmsg("Observations","L'entreprise a été créée avec succès ! Le propriétaire va recevoir un email contenant ces informations pour se connecter à son portail.")
+           
 
           } else {
           }
@@ -1294,8 +1311,8 @@ style_formats: [
         }
      
     },
- async  SubmitSignature(){
-      this.v$.step3.$touch();
+ async  SubmitObersation(modalId){
+      this.v$.step2.$touch();
       if (this.v$.$errors.length == 0) {
         this.loading = true
         let data = {
@@ -1313,8 +1330,10 @@ style_formats: [
           });
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
+            this.closeModal(modalId);
+            this.successmsg("Observation added successfully!","The observation has been added successfully! Details have been saved and are now available for viewing.")
             await this.fetchClientEmployee();
-            this.successmsg("Observations","L'entreprise a été créée avec succès ! Le propriétaire va recevoir un email contenant ces informations pour se connecter à son portail.")
+
 
           } else {
           }
@@ -1361,8 +1380,10 @@ style_formats: [
       return `https://api.leprimecare.care/api/print-timesheet?employee_id=${this.loggedInUser.id_user}&client_id=${id}&start_date_of_week=${this.week_start}&end_date_of_week=${this.week_end}`;
     },
   async  HandleId(id, week_start , week_end){
-      console.log("iddd",id)
+      console.log("iddd",id , week_start , week_end)
      this.step2.client_id = id
+     this.step2.week_start = week_start
+     this.step2.week_end = week_end
      this.fetchClientObservation(id, week_start ,week_end)
     },
     async  HandleIdSignature(id, week_start , week_end){
@@ -1429,11 +1450,20 @@ style_formats: [
        });
 
        console.log("responsett", response);
-       if (response.data.status === "success") {
-         console.log("responsedatattaaaaaa", response.data.data.observations);
-       
+     
+         console.log("responsedatattaaaaaa", response.data.data);
+         if(response.data.data === undefined){
+         console.log("AAAA", response.data);
+
+          this.step2.observations = ""
+         this.loading = false;
+         }else{
+         console.log("AAAA", response.data.data);
           this.step2.observations = response.data.data.observations
          this.loading = false;
+         
+       
+         
        }
      } catch (error) {
        console.log(
@@ -1476,12 +1506,21 @@ style_formats: [
        });
 
        console.log("responsett", response);
-       if (response.data.status === "success") {
-         console.log("responsedatattaaaaaa", response.data.data.observations);
-       
-          this.step2.observations = response.data.data.observations
-         this.loading = false;
-       }
+       console.log("responsedatattaaaaaa", response.data.data);
+       this.loading = false;
+
+      //  return response.data.data;
+       if (response.data.data === undefined) {
+        
+      this.loading = false;
+      // return false; 
+      // Aucune signature trouvée, retourne false
+    } else {
+      this.IdObservation = response.data.data.id;
+      this.loading = false;
+      return true; // Signature trouvée, retourne true
+    }
+      
      } catch (error) {
        console.log(
          "Erreur lors de la mise à jour des données MPME guinee :",
@@ -1504,6 +1543,53 @@ style_formats: [
        }
      }
    },
+   async loadSignatureStates() {
+      // Assurez-vous que `paginatedItems` est disponible et contient les éléments à vérifier
+      for (let item of this.paginatedItems) {
+        await this.checkSignatureState(item.client_id, item.start_date_of_week, item.end_date_of_week);
+      }
+    },
+    async checkSignatureState(client_id, start_date_of_week, end_date_of_week) {
+      try {
+        const response = await axios.get(`/employees/observations/detail/${client_id}`, {
+         headers: {
+           Authorization: `Bearer ${this.loggedInUser.token}`,
+         }, 
+         params:{
+          employee_id: this.loggedInUser.id_user,
+          client_id: client_id,
+          start_date_of_week: start_date_of_week,
+          end_date_of_week: end_date_of_week,
+         }
+       });
+       console.log("signatureStates", response);
+       const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
+       console.log('ssssss',key)
+      //  Signature_client
+
+      if (response.data.data === undefined) {
+          this.signatureStates[key] = 'undefined'; // Rouge
+        } else if (response.data.data.Signature_client === null) {
+          this.signatureStates[key] = 'null'; // Jaune
+        } else {
+          this.signatureStates[key] = 'signed'; // Vert
+        }
+        this.loading =  false
+      } catch (error) {
+        console.error("Erreur lors de la vérification de la signature :", error);
+      
+      }
+    },
+   closeModal(modalId) {
+  let modalElement = this.$refs[modalId];
+  modalElement.classList.remove('show');
+  modalElement.style.display = 'none';
+  document.body.classList.remove('modal-open');
+  let modalBackdrop = document.querySelector('.modal-backdrop');
+  if (modalBackdrop) {
+    modalBackdrop.parentNode.removeChild(modalBackdrop);
+  }
+}
   },
 };
 </script>
@@ -1515,5 +1601,13 @@ canvas {
 .ck.ck-editor__editable_inline>:last-child{
   min-height:300px !important;
   height:auto !important ;
+}
+/* .table td, .table th{
+  text-align:center !important;
+} */
+
+.card.custom-card .card-header{
+
+  padding:10px 15px !important;
 }
 </style>

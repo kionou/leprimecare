@@ -518,7 +518,7 @@
                         <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             <div class="d-flex align-items-center" v-if="loggedInUser">
                                 <div class="me-sm-2 me-0">
-                                    <img v-if="loggedInUser.profile === null" src="@/assets/images/faces/9.jpg" alt="img" width="32" height="32" class="rounded-circle">
+                                    <img v-if="loggedInUser.profile === null" src="@/assets/img/client.png" alt="img" width="32" height="32" class="rounded-circle">
                                     <img v-else :src="loggedInUser.profile" alt="img" width="32" height="32" class="rounded-circle">
                                 </div>
                                 <div class="d-sm-block d-none" >
@@ -573,37 +573,37 @@
                        
                           <!-- Start::slide -->
                           <li class="slide">
-                            <a href="icons.html" class="side-menu__item">
+                            <router-link to="/dashboard" class="side-menu__item">
                               <i class="bx bx-home side-menu__icon"></i>
                                 <span class="side-menu__label">Dashboard</span>
-                            </a>
+                            </router-link>
                         </li>
                         <!-- End::slide -->
 
                          <!-- Start::slide -->
                          <li class="slide">
-                            <a href="icons.html" class="side-menu__item">
+                            <router-link to="/dashboard/employee" class="side-menu__item">
                               <i class='bx bx-group side-menu__icon'></i>
                                 <span class="side-menu__label">Employee management</span>
-                            </a>
+                            </router-link>
                         </li>
                         <!-- End::slide -->
 
                            <!-- Start::slide -->
                            <li class="slide">
-                            <a href="icons.html" class="side-menu__item">
+                            <router-link to="/dashboard/clients" class="side-menu__item">
                               <i class='bx bx-group side-menu__icon'></i>
                                 <span class="side-menu__label">Clients</span>
-                            </a>
+                            </router-link>
                         </li>
                         <!-- End::slide -->
 
                          <!-- Start::slide -->
                          <li class="slide">
-                            <a href="icons.html" class="side-menu__item">
+                            <router-link to="/dashboard/recruitment" class="side-menu__item">
                               <i class='bx bx-book-open side-menu__icon'></i>
                                 <span class="side-menu__label">Recruitment list</span>
-                            </a>
+                            </router-link>
                         </li>
                         <!-- End::slide -->
                 
@@ -690,9 +690,9 @@
         <footer class="footer mt-auto py-3 bg-white text-center">
             <div class="container">
                 <span class="text-muted"> Copyright © <span id="year"></span> <a
-                        href="javascript:void(0);" class="text-dark fw-semibold">Ynex</a>.
-                    Designed with <span class="bi bi-heart-fill text-danger"></span> by <a href="javascript:void(0);">
-                        <span class="fw-semibold text-primary text-decoration-underline">Spruko</span>
+                        href="javascript:void(0);" class="text-dark fw-semibold">Developed</a>.
+                         by <a href="javascript:void(0);">
+                        <span class="fw-semibold text-primary text-decoration-underline"> PrimeCare </span>
                     </a> All
                     rights
                     reserved
@@ -700,6 +700,7 @@
             </div>
         </footer>
         <!-- Footer End -->
+    
 
     </div>
 
@@ -731,8 +732,7 @@ export default {
     
       return (
         this.isAuthenticated &&
-        this.$route.path !== '/',
-        this.$route.path !== '/login'
+        this.$route.path !== '/'
        
       );
     },
@@ -1783,7 +1783,7 @@ document.querySelector(".main-content").addEventListener("click", () => {
          
          console.log('deconnexion');             
           await this.$store.dispatch('auth/clearMyAuthenticatedUser'); // Appel de l'action pour déconnecter l'utilisateur
-          this.$router.push('/login');   
+          this.$router.push('/');   
           location.reload();   
 
     } catch (error) {

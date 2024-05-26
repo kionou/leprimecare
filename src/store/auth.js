@@ -52,13 +52,13 @@ const actions = {
   loadMyAuthenticatedUser({ commit }) {
     const storedUserData = localStorage.getItem('myAuthenticatedPrimecare');
     if (storedUserData) {
-      const data = JSON.parse(storedUserData);
-      if (!isTokenExpired(data.tokenExpiration)) {
+      // const data = JSON.parse(storedUserData);
+      // if (!isTokenExpired(data.tokenExpiration)) {
         commit('SET_MY_AUTHENTICATED_USER', JSON.parse(storedUserData));
-      } else {
-        commit('CLEAR_MY_AUTHENTICATED_USER');
-        localStorage.removeItem('myAuthenticatedPrimecare');
-      }
+      // } else {
+      //   commit('CLEAR_MY_AUTHENTICATED_USER');
+      //   localStorage.removeItem('myAuthenticatedPrimecare');
+      // }
     }
   },
 };

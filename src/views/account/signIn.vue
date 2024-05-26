@@ -15,7 +15,10 @@
                                     <img src="@/assets/img/header.png" class="authentication-image" alt="">
                                 </div>
                                 <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at ratione.</p>
+                                <p class="fw-normal fs-14 op-7"> 
+                                  LE PRIMECARE is a provider of home health care services especially if you much prefer 
+                                  to be treated at home than in a care facility or institutionalized setting.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -23,11 +26,14 @@
                         <div class="text-fixed-white text-center p-5 d-flex align-items-center justify-content-center">
                             <div>
                                 <div class="mb-5">
-                                    <img src="@/assets/img/header.png" class="authentication-image" alt="">
+                                    <img src="@/assets/img/auth-one-bg.png" class="authentication-image" alt="">
 
                                 </div>
                                 <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at ratione.</p>
+                                <p class="fw-normal fs-14 op-7"> 
+                                  Home Health Care services can be easily accessible at your home with us.
+                                   To get started or to request for an assessment, please call 770-686-3566.
+                                   </p>
                             </div>
                         </div>
                     </div>
@@ -35,10 +41,14 @@
                         <div class="text-fixed-white text-center p-5 d-flex align-items-center justify-content-center">
                             <div>
                                 <div class="mb-5">
-                                    <img src="@/assets/images/authentication/2.png" class="authentication-image" alt="">
+                                    <img src="@/assets/img/trois.png" class="authentication-image" alt="">
                                 </div>
                                 <h6 class="fw-semibold text-fixed-white">Sign In</h6>
-                                <p class="fw-normal fs-14 op-7"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa eligendi expedita aliquam quaerat nulla voluptas facilis. Porro rem voluptates possimus, ad, autem quae culpa architecto, quam labore blanditiis at ratione.</p>
+                                <p class="fw-normal fs-14 op-7">
+                                  Stupendous service and exceptional care is what we provide, where we are always by your side. 
+                                  Restoration to the whole persons mind body and soul that they are made whole again.
+
+                                   </p>
                             </div>
                         </div>
                     </div>
