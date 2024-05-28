@@ -74,19 +74,35 @@
 <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
 </div>
 <div class="col">
-<div class="input-groupe">
-  <label for="userpassword">Cell Phone Number <span class="text-danger">*</span></label>
-    <MazPhoneNumberInput v-model="step1.phone"   size="sm" rounded-size="sm" show-code-on-list :ignored-countries="['AC']"
-defaultCountryCode="US" update="results = $event" :success="results?.isValid" :class="{ 'error-border': resultError['phone'] }"
-@input="resultError['phone'] = false"/>
-</div>
-<small v-if="v$.step1.phone.$error">{{ v$.step1.phone.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
-</div>
+    <div class="input-groupe">
+      <label for="userpassword">Cell Phone Number <span class="text-danger">*</span></label>
+      <MazPhoneNumberInput 
+        v-model="step1.phone"   
+        size="sm" 
+        rounded-size="sm" 
+        show-code-on-list 
+        :ignored-countries="['AC']"
+        defaultCountryCode="US" 
+        update="results = $event" 
+        :success="results?.isValid" 
+        :class="{ 'error-border': resultError['phone'] }"
+        @input="validatePhone" 
+      />
+    </div>
+ 
+    <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+  </div>
 
                 </div>
               <div class="row mb-3 mt-3 content-group">
-
+                <div class="col">
+                <div class="input-groupe">
+                  <label for="userpassword"> Address Email <span class="text-danger">*</span></label>
+                <MazInput  v-model="step1.email" type="email"  color="info" name="email"   size="sm" rounded-size="sm" />
+                </div>
+                <small v-if="v$.step1.email.$error">{{ v$.step1.email.$errors[0].$message}}</small>
+                <small v-if="resultError['email']"> {{ resultError["email"] }} </small>
+               </div>
                 <div class="col">
                 <div class="input-groupe">
                   <label for="userpassword">Present Address <span class="text-danger">*</span></label>
@@ -104,17 +120,20 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
                 <small v-if="v$.step1.age.$error">{{ v$.step1.age.$errors[0].$message}}</small>
                 <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
                </div>
+
+              
+
+               </div>
+               <div class="row mb-3 mt-3 content-group">
+             
                <div class="col">
                 <div class="input-groupe">
                   <label for="userpassword">Social Security <span class="text-danger">*</span></label>
-                <MazInput  v-model="step1.social_security" type="text"  color="info" name="social_security"   size="sm" rounded-size="sm" />
+                <MazInput  v-model="step1.social_security"  @input="formatInput"  color="info" name="social_security"   size="sm" rounded-size="sm"  placeholder="XXX-XX-XXXX" />
                 </div>
                 <small v-if="v$.step1.social_security.$error">{{ v$.step1.social_security.$errors[0].$message}}</small>
                 <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
                </div>
-
-               </div>
-               <div class="row mb-3 mt-3 content-group">
                   <div class="col">
                   <div class="input-groupe">
                   <label for="userpassword">Number street city state zip <span class="text-danger">*</span></label>
@@ -165,7 +184,7 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
        
 <div class="col">
 <div class="input-groupe">
-<label for="userpassword">Number pref <span class="text-danger">*</span></label>
+<label for="userpassword">Number pref </label>
 <MazInput  v-model="step1.number_pref" type="text"  color="info"  name="number_pref" size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step1.number_pref.$error">{{ v$.step1.number_pref.$errors[0].$message}}</small>
@@ -195,9 +214,22 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
             <div class="col">
           <div class="input-groupe">
           <label for="userpassword">Days Available to Work <span class="text-danger">*</span></label>
-          <MazSelect  label="Select" v-model="day.day_id" name="day_id" listPosition="left" color="info" :options="DaysOptions"  size="sm" rounded-size="sm" search />     
+          <MazSelect 
+           label="Select" 
+           v-model="day.day_id"
+            name="day_id"  
+            listPosition="left" 
+            color="info"
+             :options="DaysOptions" 
+              size="sm" 
+              rounded-size="sm" 
+               v-slot="{ option }"
+             search > 
+             <div class="flex items-center" style="  width: 100%;  gap: 1rem; " @click="clearError(index, 'day_id')">
+                      {{ option.label }}
+                    </div>
+                  </MazSelect>  
           </div>
-          <!-- <small v-if="v$.step1.DaysHours?.$each[index]?.day_id?.$error">{{ v$.step1.DaysHours.$each[index].day_id.$errors[0].$message }}</small> -->
           <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].day_id">{{ errors.step1.DaysHours[index].day_id }}</small>
           <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
           </div>
@@ -206,7 +238,7 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
           <div class="input-groupe w-100 me-2">
              <div >
               <label for="userpassword">Hours Available to Work <span class="text-danger">*</span></label>
-          <MazInput  v-model="day.available_hour" type="time"  color="info"  name="day.available_hour" size="sm" rounded-size="sm" />
+          <MazInput  v-model="day.available_hour" type="time"  color="info" @input="clearError(index, 'available_hour')"  name="day.available_hour" size="sm" rounded-size="sm" />
           </div>
           <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].available_hour">{{ errors.step1.DaysHours[index].available_hour }}</small>
           <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
@@ -776,6 +808,12 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
         step4: { experiences: [] },
         step5: { references: [] }
       },
+      errorsphone: {
+        step1: {
+          phone: null
+        }
+      },
+      results: null,
       
      
         choix: [
@@ -789,6 +827,7 @@ defaultCountryCode="US" update="results = $event" :success="results?.isValid" :c
             last_name: "",
             phone: "",
 
+            email:"",
             address: "",
             age: "",
             social_security: "",
@@ -891,9 +930,10 @@ step6: {
             last_name: {require},
             phone: {require},
 
+            email:{require},
             address: {require},
             age: {require},
-            social_security: {require , ValidNumeri},
+            social_security: {require },
 
             number_street_city_state_zip:{require},
 
@@ -991,6 +1031,29 @@ reason:{},
      
     },
     methods: {
+   
+      clearError(index, field) {
+        console.log('index')
+      if (this.errors.step1.DaysHours[index]) {
+        this.errors.step1.DaysHours[index][field] = null;
+      }
+    },
+      formatInput(event) {
+        const input = event.target.value.replace(/\D/g, ''); // Remove all non-digit characters
+        let formatted = '';
+  
+        if (input.length > 0) {
+          formatted += input.substring(0, 3); // First 3 digits
+        }
+        if (input.length >= 4) {
+          formatted += '-' + input.substring(3, 5); // Next 2 digits
+        }
+        if (input.length >= 6) {
+          formatted += '-' + input.substring(5, 9); // Last 4 digits
+        }
+  
+        this.step1.social_security = formatted;
+      },
       redirect(){
 
         window.location.href = 'https://www.leprimecare.com'
@@ -1082,6 +1145,7 @@ for (let i = 1; i < step; i++) {
               last_name: this.step1.last_name,
               phone: this.step1.phone,
               address: this.step1.address,
+              email:this.step1.email,
               age: this.step1.age,
               social_security: this.step1.social_security,
               number_street_city_state_zip: this.step1.number_street_city_state_zip,
@@ -1619,6 +1683,7 @@ this.step1.first_name = userData.first_name;
 this.step1.last_name = userData.last_name;
 this.step1.phone = userData.phone;
 this.step1.address = userData.address;
+this.step1.email = userData.email;
 this.step1.age = userData.age;
 this.step1.social_security = userData.social_security;
 this.step1.number_street_city_state_zip = userData.number_street_city_state_zip;
@@ -2299,6 +2364,11 @@ margin-left:5px;
 .m-phone-number-input{
   width: 100%;
 
+}
+.m-select-list-item{
+
+  padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
   </style>
   

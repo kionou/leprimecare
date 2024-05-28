@@ -10,6 +10,9 @@ import Recruitment from '../views/dashboard/recruitment.vue'
 import SignIn from '../views/account/signIn.vue'
 import Employees from '../views/employees/add.vue'
 
+import Test from '../views/test.vue'
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -18,11 +21,16 @@ const router = createRouter({
       name: 'login',
       component: SignIn
     },
-    // {
-    //   path: '/register',
-    //   name: 'register-employee',
-    //   component: Employees
-    // },
+    {
+      path: '/register',
+      name: 'register-employee',
+      component: Employees
+    },
+    {
+      path: '/test',
+      name: 'test',
+       component: Test
+    },
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -58,6 +66,9 @@ const router = createRouter({
           name: 'recruitment',
            component: Recruitment
         },
+
+
+        
       ]
     }
     

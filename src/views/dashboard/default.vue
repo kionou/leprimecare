@@ -369,7 +369,7 @@
                     </td>
                     <td>
                       <span class="">
-                        <a target="_blank" :href="fetchPrint(data.client_id)" class="d-flex align-items-center">
+                        <a target="_blank" :href="fetchPrint(data.client_id , data.start_date_of_week, data.end_date_of_week)" class="d-flex align-items-center">
                           <img
                             src="@/assets/img/pdf-icon.png"
                             alt="excel format"
@@ -1376,8 +1376,8 @@ style_formats: [
       console.log("resultError", this.resultError);
     },
 
-    fetchPrint(id) {
-      return `https://api.leprimecare.care/api/print-timesheet?employee_id=${this.loggedInUser.id_user}&client_id=${id}&start_date_of_week=${this.week_start}&end_date_of_week=${this.week_end}`;
+    fetchPrint(id , week_start , week_end) {
+      return `https://api.leprimecare.care/api/print-timesheet?employee_id=${this.loggedInUser.id_user}&client_id=${id}&start_date_of_week=${week_start}&end_date_of_week=${week_end}`;
     },
   async  HandleId(id, week_start , week_end){
       console.log("iddd",id , week_start , week_end)
