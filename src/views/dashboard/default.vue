@@ -228,8 +228,9 @@
             class="card-header justify-content-between"
             style="background-color: #e5e7eb !important"
           >
-          
-            <div class="card-title text-uppercase mt-4">Recent Client That Care Has Been Given</div>
+            <div class="card-title text-uppercase mt-4">
+              Recent Client That Care Has Been Given
+            </div>
             <div class="d-sm-flex align-items-center">
               <a
                 href="#"
@@ -306,7 +307,11 @@
                       <div class="d-flex align-items-center">
                         <div class="me-2 lh-1">
                           <span class="avatar avatar-sm" v-if="data.client">
-                            <img v-if="data.client.photo === null" src="@/assets/img/client.png" alt="" />
+                            <img
+                              v-if="data.client.photo === null"
+                              src="@/assets/img/client.png"
+                              alt=""
+                            />
                             <img v-else :src="data.client.photo" alt="" />
                           </span>
                         </div>
@@ -316,30 +321,55 @@
                       </div>
                     </td>
                     <td>
-                      <span class="fw-semibold" v-if="data.employee"
-                        >
+                      <span class="fw-semibold" v-if="data.employee">
                         {{ data.employee.user.Prenoms }}
-                          {{ data.employee.user.Nom }}
+                        {{ data.employee.user.Nom }}
                       </span>
                     </td>
                     <td>
-                      <button @click="HandleIdSignature(data.client_id ,data.start_date_of_week , data.end_date_of_week)"
-                       
-                      class="btn btn-sm"
-              data-bs-toggle="modal"
-              data-bs-target="#client_add_signature"
-              :class="{
-                'btn-danger': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined',
-                'btn-warning': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'null',
-                'btn-success': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'
-              }"
-              :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined' || signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'"
-                        
-                       
+                      <button
+                        @click="
+                          HandleIdSignature(
+                            data.client_id,
+                            data.start_date_of_week,
+                            data.end_date_of_week
+                          )
+                        "
+                        class="btn btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#client_add_signature"
+                        :class="{
+                          'btn-danger':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'undefined',
+                          'btn-warning':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'null',
+                          'btn-success':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'signed'
+                        }"
+                        :disabled="
+                          signatureStates[
+                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                          ] === 'undefined' ||
+                          signatureStates[
+                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                          ] === 'signed'
+                        "
                       >
-                        <i class="bi-badge-wc-fill"> 
-                          {{ signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed' ? ' Is Signed ' : 'Signature' }}
-                           </i>
+                        <i class="bi-badge-wc-fill">
+                          {{
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === "signed"
+                              ? " Is Signed "
+                              : "Signature"
+                          }}
+                        </i>
                       </button>
                     </td>
                     <td>
@@ -349,33 +379,48 @@
                       <span class="">{{ data.end_date_of_week }} </span>
                     </td>
                     <td class="text-center">
-                      <span >{{ data.service_given }} </span>
+                      <span>{{ data.service_given }} </span>
                     </td>
                     <td>
                       <span class="">{{ data.annee }}</span>
                     </td>
                     <td>
                       <span class="">
-                        <button @click="HandleId(data.client_id, data.start_date_of_week, data.end_date_of_week)"
-              class="btn btn-sm"
-              data-bs-toggle="modal"
-              data-bs-target="#employee_add_observation"
-              :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'signed'"
-            >
-              <i class="bi-exclamation-triangle text-danger"></i>
-              <span style="font-size: 13px">Click to add</span>
-            </button>
+                        <button
+                          @click="
+                            HandleId(
+                              data.client_id,
+                              data.start_date_of_week,
+                              data.end_date_of_week
+                            )
+                          "
+                          class="btn btn-sm"
+                          data-bs-toggle="modal"
+                          data-bs-target="#employee_add_observation"
+                          :disabled="
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'signed'
+                          "
+                        >
+                          <i class="bi-exclamation-triangle text-danger"></i>
+                          <span style="font-size: 13px">Click to add</span>
+                        </button>
                       </span>
                     </td>
                     <td>
                       <span class="">
-                        <a target="_blank" :href="fetchPrint(data.client_id , data.start_date_of_week, data.end_date_of_week)" class="d-flex align-items-center">
+                        <a
+                          target="_blank"
+                          :href="fetchPrint(data)"
+                          class="d-flex align-items-center"
+                        >
                           <img
                             src="@/assets/img/pdf-icon.png"
                             alt="excel format"
                             style="width: 30px"
                           />
-                           Download</a
+                          Download</a
                         >
                       </span>
                     </td>
@@ -427,14 +472,16 @@
             </h2>
           </div>
           <div class="modal-body px-4">
-            <div class="row gy-2 justify-content-center"
-                style="
-                  border-width: 1px;
-                  border-style: solid;
-                  border-radius: 6px;
-                  border-color: rgb(0, 77, 134);
-                ">
-              <div >
+            <div
+              class="row gy-2 justify-content-center"
+              style="
+                border-width: 1px;
+                border-style: solid;
+                border-radius: 6px;
+                border-color: rgb(0, 77, 134);
+              "
+            >
+              <div>
                 <div class="row mt-3 content-group">
                   <div class="col">
                     <div class="input-groupe">
@@ -591,14 +638,19 @@
                 </div>
               </div>
               <div class="row mb-3">
-              <div class="boutton">
-                <button class="" @click.prevent="submitDailyWork('employee_add_to_timesheet')">
-                  Save To TimeSheet
-                </button>
+                <div class="boutton">
+                  <button
+                    class=""
+                    @click.prevent="
+                      submitDailyWork('employee_add_to_timesheet')
+                    "
+                  >
+                    Save To TimeSheet
+                  </button>
+                </div>
               </div>
             </div>
-            </div>
-         
+
             <br />
             <div class="modal-footer">
               <div class="btn-group ms-auto">
@@ -613,7 +665,6 @@
               </div>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -666,7 +717,8 @@
                         size="xs"
                         rounded-size="xs"
                         :options="ClientOptions"
-                        search disabled
+                        search
+                        disabled
                       />
                     </div>
                   </div>
@@ -712,10 +764,13 @@
                         >Observations <span class="text-danger">*</span></label
                       >
                       <div class="form-ckeditor">
-                        <ckeditor v-model="step2.observations" :editor="editor"  :config="options"></ckeditor>
-
+                        <ckeditor
+                          v-model="step2.observations"
+                          :editor="editor"
+                          :config="options"
+                        ></ckeditor>
                       </div>
-                     
+
                       <small v-if="v$.step2.observations.$error">{{
                         v$.step2.observations.$errors[0].$message
                       }}</small>
@@ -727,7 +782,10 @@
                 </div>
                 <div class="row mb-3">
                   <div class="boutton">
-                    <button class="" @click="SubmitObersation('employee_add_observation')">
+                    <button
+                      class=""
+                      @click="SubmitObersation('employee_add_observation')"
+                    >
                       Save Observation
                     </button>
                   </div>
@@ -799,14 +857,15 @@
                         @mousemove="draw"
                         @mouseup="stopDrawing"
                       ></canvas>
-                      
-                    
                     </div>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="boutton">
-                    <button class="" @click="SubmitSignature('client_add_signature')">
+                    <button
+                      class=""
+                      @click="SubmitSignature('client_add_signature')"
+                    >
                       Save Observation
                     </button>
                   </div>
@@ -826,7 +885,9 @@
                   Close
                 </button>
               </div>
-              <button class="btn btn-primary" @click="clearCanvas">Effacer</button>
+              <button class="btn btn-primary" @click="clearCanvas">
+                Effacer
+              </button>
             </div>
           </div>
         </div>
@@ -840,13 +901,14 @@ import Loading from "@/components/others/loading.vue";
 import Pag from "@/components/others/pagination.vue";
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
-import {successmsg} from "@/lib/modal.js"
+import { successmsg } from "@/lib/modal.js";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   components: {
     Loading,
-    Pag, ckeditor: CKEditor.component
+    Pag,
+    ckeditor: CKEditor.component
   },
   data() {
     const currentDate = new Date();
@@ -860,9 +922,9 @@ export default {
       StatiticsOptions: "",
       currentYear: currentYear,
       currentMonth: currentMonth,
-      IdObservation:"",
-      week_start_All:"",
-      week_end_All:"",
+      IdObservation: "",
+      week_start_All: "",
+      week_end_All: "",
       week: "All",
       month: "",
       data: [],
@@ -884,13 +946,13 @@ export default {
         week_end: "",
         time_in: "",
         time_out: "",
-        duties_id: [],
+        duties_id: []
       },
       step2: {
         client_id: "",
         week_start: "",
         week_end: "",
-        observations:"",
+        observations: ""
       },
 
       weeks: [
@@ -898,33 +960,32 @@ export default {
         { label: "Week 2", value: 2 },
         { label: "Week 3", value: 3 },
         { label: "Week 4", value: 4 },
-        { label: "All", value: "All" },
+        { label: "All", value: "All" }
       ],
       v$: useVuelidate(),
       error: "",
 
       editor: ClassicEditor,
 
-plugins: [
-"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-"save table contextmenu directionality emoticons template paste textcolor",
-],
-toolbar:
-"insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-options: {
-height: 500,
-style_formats: [
-{ title: "Bold text", inline: "b" },
-{ title: "Red text", inline: "span", styles: { color: "#ff0000" } },
-{ title: "Red header", block: "h1", styles: { color: "#ff0000" } },
-{ title: "Example 1", inline: "span", classes: "example1" },
-{ title: "Example 2", inline: "span", classes: "example2" },
-{ title: "Table styles" },
-{ title: "Table row 1", selector: "tr", classes: "tablerow1" },
-],
-},
-  
+      plugins: [
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+        "save table contextmenu directionality emoticons template paste textcolor"
+      ],
+      toolbar:
+        "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+      options: {
+        height: 500,
+        style_formats: [
+          { title: "Bold text", inline: "b" },
+          { title: "Red text", inline: "span", styles: { color: "#ff0000" } },
+          { title: "Red header", block: "h1", styles: { color: "#ff0000" } },
+          { title: "Example 1", inline: "span", classes: "example1" },
+          { title: "Example 2", inline: "span", classes: "example2" },
+          { title: "Table styles" },
+          { title: "Table row 1", selector: "tr", classes: "tablerow1" }
+        ]
+      }
     };
   },
   validations: {
@@ -935,14 +996,14 @@ style_formats: [
       week_end: { require },
       time_in: { require },
       time_out: { require },
-      duties_id: { require },
+      duties_id: { require }
     },
     step2: {
-        client_id: { require },
-        week_start: { require },
-        week_end: { require },
-        observations:{ require },
-      },
+      client_id: { require },
+      week_start: { require },
+      week_end: { require },
+      observations: { require }
+    }
   },
   computed: {
     loggedInUser() {
@@ -955,8 +1016,7 @@ style_formats: [
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.ClientEmployeeOptions.slice(startIndex, endIndex);
-    },
-  
+    }
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
@@ -967,17 +1027,16 @@ style_formats: [
     await this.setWeekDates();
     await this.fetchDuties();
     await this.loadSignatureStates();
-
   },
 
   methods: {
-    successmsg:successmsg,
+    successmsg: successmsg,
     async fetchStatitics() {
       try {
         const response = await axios.get("/statistics/admin", {
           headers: {
-            Authorization: `Bearer ${this.loggedInUser.token}`,
-          },
+            Authorization: `Bearer ${this.loggedInUser.token}`
+          }
         });
 
         console.log("response", response);
@@ -1017,13 +1076,13 @@ style_formats: [
       try {
         const response = await axios.get("/clients-care-gives", {
           headers: {
-            Authorization: `Bearer ${this.loggedInUser.token}`,
+            Authorization: `Bearer ${this.loggedInUser.token}`
           },
           params: {
             // month:`${this.currentYear}-${this.currentMonth}`,
             month: this.month,
-            week: this.week,
-          },
+            week: this.week
+          }
         });
 
         console.log("responsett", response);
@@ -1032,7 +1091,7 @@ style_formats: [
           this.ClientEmployeeOptions = response.data.data.data;
           await this.loadSignatureStates();
 
-           this.loading = false;
+          this.loading = false;
         }
       } catch (error) {
         console.log(
@@ -1068,13 +1127,13 @@ style_formats: [
 
           const currentDayOption = {
             label: response.data.data[currentDayIndex].name,
-            value: response.data.data[currentDayIndex].id,
+            value: response.data.data[currentDayIndex].id
           };
           console.log("this.currentDayOption", currentDayOption);
 
           this.DaysOptions = response.data.data.map((day) => ({
             label: day.name,
-            value: day.id,
+            value: day.id
           }));
 
           // Insérer le jour actuel en première position dans les options de sélection
@@ -1099,8 +1158,8 @@ style_formats: [
           `/employees/assign-clients/list/${this.loggedInUser.id_user}`,
           {
             headers: {
-              Authorization: `Bearer ${this.loggedInUser.token}`,
-            },
+              Authorization: `Bearer ${this.loggedInUser.token}`
+            }
           }
         );
 
@@ -1108,7 +1167,7 @@ style_formats: [
         if (response.data.status === "success") {
           this.ClientOptions = response.data.data.map((client) => ({
             label: client.client.client_name,
-            value: client.client_id,
+            value: client.client_id
           }));
           console.log("this.DaysOptions", this.DaysOptions);
         }
@@ -1138,15 +1197,15 @@ style_formats: [
       try {
         const response = await axios.get("/duties-services", {
           headers: {
-            Authorization: `Bearer ${this.loggedInUser.token}`,
-          },
+            Authorization: `Bearer ${this.loggedInUser.token}`
+          }
         });
 
         console.log("responseclient", response);
         if (response.data.status === "success") {
           this.DutiesOptions = response.data.data.map((client) => ({
             label: client.duty_name,
-            value: client.id,
+            value: client.id
           }));
           console.log("this.DaysOptions", this.DaysOptions);
         }
@@ -1188,8 +1247,6 @@ style_formats: [
 
       this.step1.week_start = firstDay.toISOString().slice(0, 10);
       this.step1.week_end = lastDay.toISOString().slice(0, 10);
-
-
     },
     startDrawing(event) {
       this.drawing = true;
@@ -1220,7 +1277,7 @@ style_formats: [
       this.currentPage = pageNumber;
       window.scrollTo({
         top: 0,
-        behavior: "smooth", // Utilisez 'auto' pour un défilement instantané
+        behavior: "smooth" // Utilisez 'auto' pour un défilement instantané
       });
     },
     updatePaginatedItems() {
@@ -1233,7 +1290,7 @@ style_formats: [
     async submitDailyWork(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {
-        this.loading = true
+        this.loading = true;
         let data = {
           employee_id: this.loggedInUser.id_user,
           client: this.step1.client_id,
@@ -1242,23 +1299,23 @@ style_formats: [
           end_date_of_week: this.step1.week_end,
           time_in: this.step1.time_in,
           time_out: this.step1.time_out,
-          duty_take_id: this.step1.duties_id,
+          duty_take_id: this.step1.duties_id
         };
 
         console.log("data", data);
-      
+
         try {
           const response = await axios.post("/employees/timesheets", data, {
-            headers: { Authorization: `Bearer ${this.loggedInUser.token}` },
+            headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           });
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
-             this.closeModal(modalId);
-            this.successmsg("New Daily Work Added"," The new daily work has been successfully added! It is now ready to be performed.")
+            this.closeModal(modalId);
+            this.successmsg(
+              "New Daily Work Added",
+              " The new daily work has been successfully added! It is now ready to be performed."
+            );
             await this.fetchClientEmployee();
-
-            
-
           } else {
           }
         } catch (error) {
@@ -1275,66 +1332,69 @@ style_formats: [
         console.log("error", this.v$.$errors);
       }
     },
-    async  SubmitSignature(modalId) {
-      this.loading = true
+    async SubmitSignature(modalId) {
+      this.loading = true;
       const canvasData = this.$refs.canvas.toDataURL();
-       console.log("canvasData", canvasData);
+      console.log("canvasData", canvasData);
       const formData = new FormData();
-      formData.append("id",  this.IdObservation);
-      formData.append("SignatureC",  canvasData);
-       
-      
+      formData.append("id", this.IdObservation);
+      formData.append("SignatureC", canvasData);
 
-        console.log("data");
-        try {
-          const response = await axios.post("/employees/observations/timesheet/signature", formData, {
-            headers: { Authorization: `Bearer ${this.loggedInUser.token}` },
-          });
-          console.log("Réponse du téléversement :", response);
-          if (response.data.status === "success") {
-            this.closeModal(modalId);
-            this.successmsg("Patient Signature Recorded","The patient's signature has been successfully recorded! It has been saved and is now on file.")
-            await this.fetchClientEmployee();
-           
-
-          } else {
+      console.log("data");
+      try {
+        const response = await axios.post(
+          "/employees/observations/timesheet/signature",
+          formData,
+          {
+            headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           }
-        } catch (error) {
-          console.log("response.login", error);
-
-          this.loading = false;
-          if (error.response.data.status === "error") {
-            return (this.error = error.response.data.message);
-          } else {
-            this.formatValidationErrors(error.response.data.errors);
-          }
+        );
+        console.log("Réponse du téléversement :", response);
+        if (response.data.status === "success") {
+          this.closeModal(modalId);
+          this.successmsg(
+            "Patient Signature Recorded",
+            "The patient's signature has been successfully recorded! It has been saved and is now on file."
+          );
+          await this.fetchClientEmployee();
+        } else {
         }
-     
+      } catch (error) {
+        console.log("response.login", error);
+
+        this.loading = false;
+        if (error.response.data.status === "error") {
+          return (this.error = error.response.data.message);
+        } else {
+          this.formatValidationErrors(error.response.data.errors);
+        }
+      }
     },
- async  SubmitObersation(modalId){
+    async SubmitObersation(modalId) {
       this.v$.step2.$touch();
       if (this.v$.$errors.length == 0) {
-        this.loading = true
+        this.loading = true;
         let data = {
           employee_id: this.loggedInUser.id_user,
           client_id: this.step2.client_id,
           start_date_of_week: this.step2.week_start,
           end_date_of_week: this.step2.week_end,
-          observations: this.step2.observations,
+          observations: this.step2.observations
         };
 
         console.log("data", data);
         try {
           const response = await axios.post("/employees/observations", data, {
-            headers: { Authorization: `Bearer ${this.loggedInUser.token}` },
+            headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           });
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
             this.closeModal(modalId);
-            this.successmsg("Observation added successfully!","The observation has been added successfully! Details have been saved and are now available for viewing.")
+            this.successmsg(
+              "Observation added successfully!",
+              "The observation has been added successfully! Details have been saved and are now available for viewing."
+            );
             await this.fetchClientEmployee();
-
-
           } else {
           }
         } catch (error) {
@@ -1350,9 +1410,8 @@ style_formats: [
       } else {
         console.log("error", this.v$.$errors);
       }
-
     },
-    
+
     async formatValidationErrors(errors) {
       const formattedErrors = {};
 
@@ -1376,36 +1435,34 @@ style_formats: [
       console.log("resultError", this.resultError);
     },
 
-    fetchPrint(id , week_start , week_end) {
-      return `https://api.leprimecare.care/api/print-timesheet?employee_id=${this.loggedInUser.id_user}&client_id=${id}&start_date_of_week=${week_start}&end_date_of_week=${week_end}`;
+    fetchPrint(data) {
+      return `https://api.leprimecare.care/api/print-timesheet?employee_id=${data.employee_id}&client_id=${data.client_id}&start_date_of_week=${data.start_date_of_week}&end_date_of_week=${data.end_date_of_week}`;
     },
-  async  HandleId(id, week_start , week_end){
-      console.log("iddd",id , week_start , week_end)
-     this.step2.client_id = id
-     this.step2.week_start = week_start
-     this.step2.week_end = week_end
-     this.fetchClientObservation(id, week_start ,week_end)
+    async HandleId(id, week_start, week_end) {
+      console.log("iddd", id, week_start, week_end);
+      this.step2.client_id = id;
+      this.step2.week_start = week_start;
+      this.step2.week_end = week_end;
+      this.fetchClientObservation(id, week_start, week_end);
     },
-    async  HandleIdSignature(id, week_start , week_end){
-      console.log("iddd",id)
-   
-     this.fetchClientSignature(id, week_start ,week_end)
+    async HandleIdSignature(id, week_start, week_end) {
+      console.log("iddd", id);
+
+      this.fetchClientSignature(id, week_start, week_end);
     },
     async fetchClientDetail(id) {
-     
       this.loading = true;
 
       try {
         const response = await axios.get(`/clients/detail/${id}`, {
           headers: {
-            Authorization: `Bearer ${this.loggedInUser.token}`,
-          }, 
+            Authorization: `Bearer ${this.loggedInUser.token}`
+          }
         });
 
         console.log("responsett", response);
         if (response.data.status === "success") {
           console.log("responsedatatt", response.data.data.client_name);
-        
 
           this.loading = false;
         }
@@ -1431,166 +1488,176 @@ style_formats: [
         }
       }
     },
-    async fetchClientObservation(id , week_start ,week_end) {
-      console.log("eereer",id , week_start ,week_end)
-     
-     this.loading = true;
+    async fetchClientObservation(id, week_start, week_end) {
+      console.log("eereer", id, week_start, week_end);
 
-     try {
-       const response = await axios.get(`/employees/observations/detail/${id}`, {
-         headers: {
-           Authorization: `Bearer ${this.loggedInUser.token}`,
-         }, 
-         params:{
-          employee_id: this.loggedInUser.id_user,
-          client_id: id,
-          start_date_of_week: week_start,
-          end_date_of_week: week_end,
-         }
-       });
+      this.loading = true;
 
-       console.log("responsett", response);
-     
-         console.log("responsedatattaaaaaa", response.data.data);
-         if(response.data.data === undefined){
-         console.log("AAAA", response.data);
+      try {
+        const response = await axios.get(
+          `/employees/observations/detail/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.loggedInUser.token}`
+            },
+            params: {
+              employee_id: this.loggedInUser.id_user,
+              client_id: id,
+              start_date_of_week: week_start,
+              end_date_of_week: week_end
+            }
+          }
+        );
 
-          this.step2.observations = ""
-         this.loading = false;
-         }else{
-         console.log("AAAA", response.data.data);
-          this.step2.observations = response.data.data.observations
-         this.loading = false;
-         
-       
-         
-       }
-     } catch (error) {
-       console.log(
-         "Erreur lors de la mise à jour des données MPME guinee :",
-         error
-       );
-       if (error.response.data.status === "error") {
-         console.log("aut", error.response.data.status === "error");
+        console.log("responsett", response);
 
-         if (
-           error.response.data.message === "Vous n'êtes pas autorisé." ||
-           error.response.status === 401
-         ) {
-           await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-           this.$router.push("/login"); //a revoir
-         }
-       } else {
-         this.formatValidationErrors(error.response.data.errors);
-         this.loading = false;
-         return false;
-       }
-     }
-   },
-   async fetchClientSignature(id , week_start ,week_end) {
-      console.log("eereer",id , week_start ,week_end)
-     
-     this.loading = true;
+        console.log("responsedatattaaaaaa", response.data.data);
+        if (response.data.data === undefined) {
+          console.log("AAAA", response.data);
 
-     try {
-       const response = await axios.get(`/employees/observations/detail/${id}`, {
-         headers: {
-           Authorization: `Bearer ${this.loggedInUser.token}`,
-         }, 
-         params:{
-          employee_id: this.loggedInUser.id_user,
-          client_id: id,
-          start_date_of_week: week_start,
-          end_date_of_week: week_end,
-         }
-       });
+          this.step2.observations = "";
+          this.loading = false;
+        } else {
+          console.log("AAAA", response.data.data);
+          this.step2.observations = response.data.data.observations;
+          this.loading = false;
+        }
+      } catch (error) {
+        console.log(
+          "Erreur lors de la mise à jour des données MPME guinee :",
+          error
+        );
+        if (error.response.data.status === "error") {
+          console.log("aut", error.response.data.status === "error");
 
-       console.log("responsett", response);
-       console.log("responsedatattaaaaaa", response.data.data);
-       this.loading = false;
+          if (
+            error.response.data.message === "Vous n'êtes pas autorisé." ||
+            error.response.status === 401
+          ) {
+            await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+            this.$router.push("/login"); //a revoir
+          }
+        } else {
+          this.formatValidationErrors(error.response.data.errors);
+          this.loading = false;
+          return false;
+        }
+      }
+    },
+    async fetchClientSignature(id, week_start, week_end) {
+      console.log("eereer", id, week_start, week_end);
 
-      //  return response.data.data;
-       if (response.data.data === undefined) {
-        
-      this.loading = false;
-      // return false; 
-      // Aucune signature trouvée, retourne false
-    } else {
-      this.IdObservation = response.data.data.id;
-      this.loading = false;
-      return true; // Signature trouvée, retourne true
-    }
-      
-     } catch (error) {
-       console.log(
-         "Erreur lors de la mise à jour des données MPME guinee :",
-         error
-       );
-       if (error.response.data.status === "error") {
-         console.log("aut", error.response.data.status === "error");
+      this.loading = true;
 
-         if (
-           error.response.data.message === "Vous n'êtes pas autorisé." ||
-           error.response.status === 401
-         ) {
-           await this.$store.dispatch("auth/clearMyAuthenticatedUser");
-           this.$router.push("/login"); //a revoir
-         }
-       } else {
-         this.formatValidationErrors(error.response.data.errors);
-         this.loading = false;
-         return false;
-       }
-     }
-   },
-   async loadSignatureStates() {
+      try {
+        const response = await axios.get(
+          `/employees/observations/detail/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.loggedInUser.token}`
+            },
+            params: {
+              employee_id: this.loggedInUser.id_user,
+              client_id: id,
+              start_date_of_week: week_start,
+              end_date_of_week: week_end
+            }
+          }
+        );
+
+        console.log("responsett", response);
+        console.log("responsedatattaaaaaa", response.data.data);
+        this.loading = false;
+
+        //  return response.data.data;
+        if (response.data.data === undefined) {
+          this.loading = false;
+          // return false;
+          // Aucune signature trouvée, retourne false
+        } else {
+          this.IdObservation = response.data.data.id;
+          this.loading = false;
+          return true; // Signature trouvée, retourne true
+        }
+      } catch (error) {
+        console.log(
+          "Erreur lors de la mise à jour des données MPME guinee :",
+          error
+        );
+        if (error.response.data.status === "error") {
+          console.log("aut", error.response.data.status === "error");
+
+          if (
+            error.response.data.message === "Vous n'êtes pas autorisé." ||
+            error.response.status === 401
+          ) {
+            await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+            this.$router.push("/login"); //a revoir
+          }
+        } else {
+          this.formatValidationErrors(error.response.data.errors);
+          this.loading = false;
+          return false;
+        }
+      }
+    },
+    async loadSignatureStates() {
       // Assurez-vous que `paginatedItems` est disponible et contient les éléments à vérifier
       for (let item of this.paginatedItems) {
-        await this.checkSignatureState(item.client_id, item.start_date_of_week, item.end_date_of_week);
+        await this.checkSignatureState(
+          item.client_id,
+          item.start_date_of_week,
+          item.end_date_of_week
+        );
       }
     },
     async checkSignatureState(client_id, start_date_of_week, end_date_of_week) {
       try {
-        const response = await axios.get(`/employees/observations/detail/${client_id}`, {
-         headers: {
-           Authorization: `Bearer ${this.loggedInUser.token}`,
-         }, 
-         params:{
-          employee_id: this.loggedInUser.id_user,
-          client_id: client_id,
-          start_date_of_week: start_date_of_week,
-          end_date_of_week: end_date_of_week,
-         }
-       });
-       console.log("signatureStates", response);
-       const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
-       console.log('ssssss',key)
-      //  Signature_client
+        const response = await axios.get(
+          `/employees/observations/detail/${client_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.loggedInUser.token}`
+            },
+            params: {
+              employee_id: this.loggedInUser.id_user,
+              client_id: client_id,
+              start_date_of_week: start_date_of_week,
+              end_date_of_week: end_date_of_week
+            }
+          }
+        );
+        console.log("signatureStates", response);
+        const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
+        console.log("ssssss", key);
+        //  Signature_client
 
-      if (response.data.data === undefined) {
-          this.signatureStates[key] = 'undefined'; // Rouge
+        if (response.data.data === undefined) {
+          this.signatureStates[key] = "undefined"; // Rouge
         } else if (response.data.data.Signature_client === null) {
-          this.signatureStates[key] = 'null'; // Jaune
+          this.signatureStates[key] = "null"; // Jaune
         } else {
-          this.signatureStates[key] = 'signed'; // Vert
+          this.signatureStates[key] = "signed"; // Vert
         }
-        this.loading =  false
+        this.loading = false;
       } catch (error) {
-        console.error("Erreur lors de la vérification de la signature :", error);
-      
+        console.error(
+          "Erreur lors de la vérification de la signature :",
+          error
+        );
       }
     },
-   closeModal(modalId) {
-  let modalElement = this.$refs[modalId];
-  modalElement.classList.remove('show');
-  modalElement.style.display = 'none';
-  document.body.classList.remove('modal-open');
-  let modalBackdrop = document.querySelector('.modal-backdrop');
-  if (modalBackdrop) {
-    modalBackdrop.parentNode.removeChild(modalBackdrop);
+    closeModal(modalId) {
+      let modalElement = this.$refs[modalId];
+      modalElement.classList.remove("show");
+      modalElement.style.display = "none";
+      document.body.classList.remove("modal-open");
+      let modalBackdrop = document.querySelector(".modal-backdrop");
+      if (modalBackdrop) {
+        modalBackdrop.parentNode.removeChild(modalBackdrop);
+      }
+    }
   }
-}
-  },
 };
 </script>
 <style lang="css" scoped>
@@ -1598,16 +1665,15 @@ canvas {
   border: 2px solid #000;
 }
 
-.ck.ck-editor__editable_inline>:last-child{
-  min-height:300px !important;
-  height:auto !important ;
+.ck.ck-editor__editable_inline > :last-child {
+  min-height: 300px !important;
+  height: auto !important ;
 }
 /* .table td, .table th{
   text-align:center !important;
 } */
 
-.card.custom-card .card-header{
-
-  padding:10px 15px !important;
+.card.custom-card .card-header {
+  padding: 10px 15px !important;
 }
 </style>
