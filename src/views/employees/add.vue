@@ -62,7 +62,7 @@
   <MazInput  v-model="step1.first_name" type="text"  color="info" name="nom"   size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step1.first_name.$error">{{ v$.step1.first_name.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['first_name']"> {{ resultError["first_name"] }} </small>
 </div>
 <div class="col">
 <div class="input-groupe">
@@ -71,7 +71,7 @@
 
 </div>
 <small v-if="v$.step1.last_name.$error">{{ v$.step1.last_name.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['last_name']"> {{ resultError["last_name"] }} </small>
 </div>
 <div class="col">
     <div class="input-groupe">
@@ -90,7 +90,7 @@
       />
     </div>
  
-    <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+    <small v-if="resultError['phone']"> {{ resultError["phone"] }} </small>
   </div>
 
                 </div>
@@ -106,7 +106,7 @@
                 <div class="col">
                 <div class="input-groupe">
                   <label for="userpassword">Present Address <span class="text-danger">*</span></label>
-                <MazInput  v-model="step1.address" type="email"  color="info" name="email"   size="sm" rounded-size="sm" />
+                <MazInput  v-model="step1.address" type="text"  color="info" name="address"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step1.address.$error">{{ v$.step1.address.$errors[0].$message}}</small>
                 <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
@@ -118,7 +118,7 @@
                  <MazInput  v-model="step1.age" type="number" min="0" color="info" name="age"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step1.age.$error">{{ v$.step1.age.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['age']"> {{ resultError["age"] }} </small>
                </div>
 
               
@@ -132,7 +132,7 @@
                 <MazInput  v-model="step1.social_security"  @input="formatInput"  color="info" name="social_security"   size="sm" rounded-size="sm"  placeholder="XXX-XX-XXXX" />
                 </div>
                 <small v-if="v$.step1.social_security.$error">{{ v$.step1.social_security.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['social_security']"> {{ resultError["social_security"] }} </small>
                </div>
                   <div class="col">
                   <div class="input-groupe">
@@ -140,7 +140,7 @@
                   <MazInput  v-model="step1.number_street_city_state_zip" type="text"  color="info"  name="number_street_city_state_zip" size="sm" rounded-size="sm" />
                   </div>
                   <small v-if="v$.step1.number_street_city_state_zip.$error">{{ v$.step1.number_street_city_state_zip.$errors[0].$message}}</small>
-                  <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                  <small v-if="resultError['number_street_city_state_zip']"> {{ resultError["number_street_city_state_zip"] }} </small>
                   </div>
               </div>
 
@@ -154,7 +154,7 @@
 
                 </div>
                 <small v-if="v$.step1.position_applied_agency.$error">{{ v$.step1.position_applied_agency.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['position_applied_agency']"> {{ resultError["position_applied_agency"] }} </small>
                </div>
                <div class="col">
                 <div class="input-groupe">
@@ -163,7 +163,7 @@
 
                 </div>
                 <small v-if="v$.step1.weekly_available_hours.$error">{{ v$.step1.weekly_available_hours.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['weekly_available_hours']"> {{ resultError["weekly_available_hours"] }} </small>
                </div>
 
                <div class="col">
@@ -172,7 +172,7 @@
                   <MazSelect  label="Select" v-model="step1.can_work_night"  name="can_work_night"  color="info" :options="choix"  size="sm" rounded-size="sm" search />     
                      </div>
                 <small v-if="v$.step1.can_work_night.$error">{{ v$.step1.can_work_night.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['can_work_night']"> {{ resultError["can_work_night"] }} </small>
                </div>
 
              
@@ -188,7 +188,7 @@
 <MazInput  v-model="step1.number_pref" type="text"  color="info"  name="number_pref" size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step1.number_pref.$error">{{ v$.step1.number_pref.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['number_pref']"> {{ resultError["number_pref"] }} </small>
 </div>
 
 <div class="col">
@@ -197,7 +197,7 @@
 <MazInput  v-model="step1.how_long" type="number"  color="info"  name="how_long" size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step1.how_long.$error">{{ v$.step1.how_long.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['how_long']"> {{ resultError["how_long"] }} </small>
 </div>
 
 
@@ -231,7 +231,7 @@
                   </MazSelect>  
           </div>
           <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].day_id">{{ errors.step1.DaysHours[index].day_id }}</small>
-          <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+          <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
           </div>
 
           <div class="col   d-flex align-items-center">
@@ -241,7 +241,7 @@
           <MazInput  v-model="day.available_hour" type="time"  color="info" @input="clearError(index, 'available_hour')"  name="day.available_hour" size="sm" rounded-size="sm" />
           </div>
           <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].available_hour">{{ errors.step1.DaysHours[index].available_hour }}</small>
-          <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+          <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
              </div>
              <div class="btn-list mt-8">
               <div class="bouttons" style="position:relative;">
@@ -262,10 +262,10 @@
         <div class="col">
         <div class="input-groupe">
         <label for="userpassword">Date Available to Start <span class="text-danger">*</span></label>
-        <MazInput  v-model="step1.date_available_to_start" type="date"  color="info"  name="date_available_to_start" size="sm" rounded-size="sm" />
+        <MazInput  v-model="step1.date_available_to_start" type="date"  color="info"  name="date_available_to_start" size="sm" rounded-size="sm"  :min="minDate" />
         </div>
         <small v-if="v$.step1.date_available_to_start.$error">{{ v$.step1.date_available_to_start.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['date_available_to_start']"> {{ resultError["date_available_to_start"] }} </small>
         </div>
 
         <div class="col">
@@ -274,7 +274,7 @@
         <MazSelect  label="Select" v-model="step1.full_part_both" name="full_part_both"   listPosition="left" color="info" :options="HonorairesOptions"  size="sm" rounded-size="sm" search />     
         </div>
         <small v-if="v$.step1.full_part_both.$error">{{ v$.step1.full_part_both.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['full_part_both']"> {{ resultError["full_part_both"] }} </small>
         </div>
 
 
@@ -421,6 +421,42 @@
 </div>
 <div class="col">
 <div class="input-groupe">
+  <!-- <label for="userpassword">File <span class="text-danger">*</span></label> -->
+  <div class="mb-3 position-relative">
+                      <div class="input-groupe">
+                <label for="FileNif">Fichier Nif</label>
+                 <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                   @change="handleFileUploadNif"
+                  name="FileNif"
+                  id="FileNif"
+                  placeholder=""
+                 
+                  :class="{ 'error-border': resultError['FileNif'] }"
+                  @input="resultError['FileNif'] = false"
+                />
+              </div>
+                     </div>
+  <!-- <MazInput  v-model="selectfile" type="file"  color="info" name="selectfile"   size="sm" rounded-size="sm" /> -->
+</div>
+</div>
+
+
+     </div>
+
+     <div class="row mb-3 mt-3 content-group">
+
+      <div class="col">
+<div class="input-groupe">
+  <label for="userpassword">Insurance Copy Submitted <span class="text-danger">*</span></label>
+  <MazSelect  label="Select" v-model="step2.insurance_copy_submitted" name="insurance_copy_submitted"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm"  disabled />   
+</div>
+<small v-if="v$.step2.insurance_copy_submitted.$error">{{ v$.step2.insurance_copy_submitted.$errors[0].$message}}</small>
+<small v-if="resultError['insurance_copy_submitted']"> {{ resultError["insurance_copy_submitted"] }} </small>
+</div>
+<div class="col">
+<div class="input-groupe">
   <label for="userpassword">Insurance Policy Number <span class="text-danger">*</span></label>
   <MazInput  v-model="step2.insurance_policy" type="text"  color="info" name="insurance_policy"   size="sm" rounded-size="sm" />
 </div>
@@ -428,14 +464,7 @@
 <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
 </div>
 
-<div class="col">
-<div class="input-groupe">
-  <label for="userpassword">Insurance Copy Submitted <span class="text-danger">*</span></label>
-  <MazSelect  label="Select" v-model="step2.insurance_copy_submitted" name="insurance_copy_submitted"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
-</div>
-<small v-if="v$.step2.insurance_copy_submitted.$error">{{ v$.step2.insurance_copy_submitted.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
-</div>
+
      </div>
            
             </div>
@@ -787,6 +816,14 @@
       stepperProgress() {
         return (100 / 5) * (this.currentStep - 1) + "%";
       },
+      minDate() {
+      // Cette fonction retourne la date d'aujourd'hui au format YYYY-MM-DD
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
     
     },
     data() {
@@ -869,7 +906,7 @@
 
         current_insurance:"",    
         insurance_policy:"",    
-        insurance_copy_submitted:"",    
+        insurance_copy_submitted:true,    
 },
     step3: {
 
@@ -1738,7 +1775,7 @@ this.step6.other_skills = userData.other_skills;
     },
     async mounted() {
     
-   
+   this.step2.insurance_copy_submitted = true
    const localStorageUserData = localStorage.getItem('tempLeprimecare') || null;
    if(localStorageUserData !== null){
     const userDataString = JSON.parse(localStorageUserData)
@@ -1879,10 +1916,10 @@ this.step6.other_skills = userData.other_skills;
   .input-groupe input,
   .form-select {
     width: 100%;
-    border-radius: 0.5rem !important;
-    border: 2px solid rgb(125, 121, 100);
+    border-radius: 0.1rem !important;
+    border: 1px solid #17a4ba;
     outline: 0;
-    padding: 14px;
+    padding: 8px;
     color: rgb(3, 3, 5);
   }
   
