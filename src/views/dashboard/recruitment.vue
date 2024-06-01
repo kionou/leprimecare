@@ -66,9 +66,9 @@
                                                     </div>
                                                     <div class="card-footer bg-gray-400">
                                                         <div class="btn-list">
-                                                            <button class="btn btn-sm btn-icon btn-success-light btn-wave">
+                                                          <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-success-light btn-wave">
                                                                 <i class="ri-eye-line"></i>
-                                                            </button>
+                                                            </router-link>
                                                             <button class="btn btn-sm btn-icon btn-primary-light btn-wave">
                                                                 <i class="ri-edit-line"></i>
                                                             </button>
@@ -76,6 +76,12 @@
                                                             <button class="btn btn-sm btn-icon btn-danger-light btn-wave">
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </button>
+
+                                                            <button class="btn btn-sm  btn-primary-light "  @click="HandleId(client.user_id)">
+                                                            
+                                                            <i class="ri-user-line"></i>
+                                                             Assign a client
+                                                          </button>
 
                                                             
                                                         </div>

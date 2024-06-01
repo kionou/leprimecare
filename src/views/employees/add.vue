@@ -85,8 +85,6 @@
         defaultCountryCode="US" 
         update="results = $event" 
         :success="results?.isValid" 
-        :class="{ 'error-border': resultError['phone'] }"
-        @input="validatePhone" 
       />
     </div>
  
@@ -313,7 +311,7 @@
   <MazSelect  label="Select" v-model="step2.school_level_id"  name="school_level_id"  listPosition="left" color="info" :options="LevelIdOptions"  size="sm" rounded-size="sm" search />   
 </div>
 <small v-if="v$.step2.school_level_id.$error">{{ v$.step2.school_level_id.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['school_level_id']"> {{ resultError["school_level_id"] }} </small>
 </div>
                <div class="col">
                 <div class="input-groupe">
@@ -321,7 +319,7 @@
                 <MazInput  v-model="step2.school_name" type="text"  color="info" name="school_name"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step2.school_name.$error">{{ v$.step2.school_name.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['school_name']"> {{ resultError["school_name"] }} </small>
                </div>
                <div class="col">
                 <div class="input-groupe">
@@ -329,7 +327,7 @@
                 <MazInput  v-model="step2.school_location" type="text"  color="info" name="school_location"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step2.school_location.$error">{{ v$.step2.school_location.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['school_location']"> {{ resultError["school_location"] }} </small>
                </div>
 
                </div>
@@ -342,7 +340,7 @@
   <MazInput  v-model="step2.school_email_address" type="email"  color="info" name="email"   size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step2.school_email_address.$error">{{ v$.step2.school_email_address.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['school_email_address']"> {{ resultError["school_email_address"] }} </small>
 </div>
 <div class="col">
 <div class="input-groupe">
@@ -352,7 +350,7 @@
 
 </div>
 <small v-if="v$.step2.number_of_year_school.$error">{{ v$.step2.number_of_year_school.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['number_of_year_school']"> {{ resultError["number_of_year_school"] }} </small>
 </div>
 
 
@@ -368,7 +366,7 @@
         <MazSelect  label="Select" v-model="step2.means_transportation"  name="means_transportation"  listPosition="left" color="info" :options="TransportOptions"  size="sm" rounded-size="sm" search />   
         </div>
         <small v-if="v$.step2.means_transportation.$error">{{ v$.step2.means_transportation.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['means_transportation']"> {{ resultError["means_transportation"] }} </small>
         </div>
 
         <div class="col">
@@ -377,7 +375,7 @@
         <MazSelect  label="Select" v-model="step2.driver_licence"  name="driver_licence"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
         </div>
         <small v-if="v$.step2.driver_licence.$error">{{ v$.step2.driver_licence.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['driver_licence']"> {{ resultError["driver_licence"] }} </small>
         </div>
        
      </div>
@@ -388,7 +386,7 @@
         <MazInput  v-model="step2.driver_licence_number" type="text"  color="info" name="driver_licence_number"   size="sm" rounded-size="sm" />
         </div>
         <small v-if="v$.step2.driver_licence_number.$error">{{ v$.step2.driver_licence_number.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['driver_licence_number']"> {{ resultError["driver_licence_number"] }} </small>
         </div>
         <div class="col">
         <div class="input-groupe">
@@ -396,7 +394,7 @@
         <MazSelect  label="Select" v-model="step2.driver_licence_issue_state"  name="driver_licence_issue_state"  listPosition="left" color="info" :options="DrivingOptions"  size="sm" rounded-size="sm" search />   
         </div>
         <small v-if="v$.step2.driver_licence_issue_state.$error">{{ v$.step2.driver_licence_issue_state.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['driver_licence_issue_state']"> {{ resultError["driver_licence_issue_state"] }} </small>
         </div>
         <div class="col">
         <div class="input-groupe">
@@ -404,7 +402,7 @@
         <MazInput  v-model="step2.driver_licence_expiration_date" type="date" name="driver_licence_expiration_date" color="info"   size="sm" rounded-size="sm" />
         </div>
         <small v-if="v$.step2.driver_licence_expiration_date.$error">{{ v$.step2.driver_licence_expiration_date.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['driver_licence_expiration_date']"> {{ resultError["driver_licence_expiration_date"] }} </small>
         </div>
     </div>
 
@@ -417,24 +415,24 @@
 
 </div>
 <!-- <small v-if="v$.step2.current_insurance.$error">{{ v$.step2.current_insurance.$errors[0].$message}}</small> -->
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['current_insurance']"> {{ resultError["current_insurance"] }} </small>
 </div>
-<div class="col">
+<div class="col" v-if="this.step2.current_insurance === true">
 <div class="input-groupe">
   <!-- <label for="userpassword">File <span class="text-danger">*</span></label> -->
   <div class="mb-3 position-relative">
                       <div class="input-groupe">
-                <label for="FileNif">Fichier Nif</label>
+                <label for="FileInsurance">File Insurance</label>
                  <input
                   type="file"
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                   @change="handleFileUploadNif"
-                  name="FileNif"
-                  id="FileNif"
+                   @change="handleFileUploadInsurance"
+                  name="FileInsurance"
+                  id="FileInsurance"
                   placeholder=""
                  
-                  :class="{ 'error-border': resultError['FileNif'] }"
-                  @input="resultError['FileNif'] = false"
+                  :class="{ 'error-border': resultError['FileInsurance'] }"
+                  @input="resultError['FileInsurance'] = false"
                 />
               </div>
                      </div>
@@ -450,7 +448,8 @@
       <div class="col">
 <div class="input-groupe">
   <label for="userpassword">Insurance Copy Submitted <span class="text-danger">*</span></label>
-  <MazSelect  label="Select" v-model="step2.insurance_copy_submitted" name="insurance_copy_submitted"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm"  disabled />   
+  <MazSelect  label="Select" v-model="step2.insurance_copy_submitted" name="insurance_copy_submitted"  listPosition="left" color="info" :options="chois"  size="sm" rounded-size="sm" search />   
+
 </div>
 <small v-if="v$.step2.insurance_copy_submitted.$error">{{ v$.step2.insurance_copy_submitted.$errors[0].$message}}</small>
 <small v-if="resultError['insurance_copy_submitted']"> {{ resultError["insurance_copy_submitted"] }} </small>
@@ -461,7 +460,7 @@
   <MazInput  v-model="step2.insurance_policy" type="text"  color="info" name="insurance_policy"   size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step2.insurance_policy.$error">{{ v$.step2.insurance_policy.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['insurance_policy']"> {{ resultError["insurance_policy"] }} </small>
 </div>
 
 
@@ -491,7 +490,7 @@
                   <MazSelect  label="Select" v-model="step3.any_accident_during_past_year" name="any_accident_during_past_year"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
                 </div>
                 <small v-if="v$.step3.any_accident_during_past_year.$error">{{ v$.step3.any_accident_during_past_year.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['any_accident_during_past_year']"> {{ resultError["any_accident_during_past_year"] }} </small>
                </div>
                <div class="col" v-if="step3.any_accident_during_past_year === true">
                 <div class="input-groupe">
@@ -499,7 +498,7 @@
                    <MazInput  v-model="step3.accident_count" type="number" min="0" color="info" name="accident_count"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step3.accident_count.$error">{{ v$.step3.accident_count.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['accident_count']"> {{ resultError["accident_count"] }} </small>
                </div>
               
 
@@ -513,7 +512,7 @@
             <MazSelect  label="Select" v-model="step3.moving_violation_past_three_year"  name="moving_violation_past_three_year" listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
             </div>
             <small v-if="v$.step3.moving_violation_past_three_year.$error">{{ v$.step3.moving_violation_past_three_year.$errors[0].$message}}</small>
-            <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+            <small v-if="resultError['moving_violation_past_three_year']"> {{ resultError["moving_violation_past_three_year"] }} </small>
             </div>
             <div class="col" v-if="step3.moving_violation_past_three_year === true">
             <div class="input-groupe">
@@ -521,7 +520,7 @@
             <MazInput  v-model="step3.moving_violation_count" type="number" min="0" color="info" name="moving_violation_count"   size="sm" rounded-size="sm" />
             </div>
             <small v-if="v$.step3.moving_violation_count.$error">{{ v$.step3.moving_violation_count.$errors[0].$message}}</small>
-            <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+            <small v-if="resultError['moving_violation_count']"> {{ resultError["moving_violation_count"] }} </small>
             </div>
 
         </div>
@@ -536,7 +535,7 @@
         <MazSelect  label="Select" v-model="step3.convicted_crime" name="convicted_crime"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
         </div>
         <small v-if="v$.step3.convicted_crime.$error">{{ v$.step3.convicted_crime.$errors[0].$message}}</small>
-        <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+        <small v-if="resultError['convicted_crime']"> {{ resultError["convicted_crime"] }} </small>
         </div>
      </div>
 
@@ -548,7 +547,7 @@
 <MazTextarea  v-model="step3.crime_description" type="text" min="0" color="info" name="crime_description"   size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step3.crime_description.$error">{{ v$.step3.crime_description.$errors[0].$message}}</small>
-<small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+<small v-if="resultError['crime_description']"> {{ resultError["crime_description"] }} </small>
 </div>
 </div>
 
@@ -586,21 +585,21 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="employer_name">Name <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.employer_name" type="text" color="info" name="employer_name" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.employer_name" type="text" color="info" name="employer_name" size="sm" rounded-size="sm"  @input="clearErrorExp(index, 'employer_name')"/>
                 <small v-if="errors.step4.experiences[index]?.employer_name">{{ errors.step4.experiences[index].employer_name }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="name_of_last">Name of Last <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.name_of_last" type="text" color="info" name="name_of_last" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.name_of_last" type="text" color="info" name="name_of_last" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'name_of_last')" />
                 <small v-if="errors.step4.experiences[index]?.name_of_last">{{ errors.step4.experiences[index].name_of_last }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="phone">Phone Number <span class="text-danger">*</span></label>
-                <MazPhoneNumberInput v-model="experience.phone" size="sm" rounded-size="sm" show-code-on-list :ignored-countries="['AC']" defaultCountryCode="US" update="results = $event" :success="results?.isValid" :class="{ 'error-border': errors.step4.experiences[index]?.phone }" @input="errors.step4.experiences[index].phone = false" />
+                <MazPhoneNumberInput v-model="experience.phone" size="sm" rounded-size="sm" show-code-on-list :ignored-countries="['AC']" defaultCountryCode="US" update="results = $event" :success="results?.isValid"  />
                 <small v-if="errors.step4.experiences[index]?.phone">{{ errors.step4.experiences[index].phone }}</small>
               </div>
             </div>
@@ -609,21 +608,21 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="city_state_zip">City, State, Zip code <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.city_state_zip" type="text" color="info" name="city_state_zip" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.city_state_zip" type="text" color="info" name="city_state_zip" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'city_state_zip')" />
                 <small v-if="errors.step4.experiences[index]?.city_state_zip">{{ errors.step4.experiences[index].city_state_zip }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="salary">Pay or Salary <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.salary" type="text" color="info" name="salary" size="sm" rounded-size="sm" />
+                <MazInputPrice v-model="experience.salary" currency="USD" locale="en-US" :min="0" color="info" name="salary" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'salary')" />
                 <small v-if="errors.step4.experiences[index]?.salary">{{ errors.step4.experiences[index].salary }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="supervisor">Supervisor <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.supervisor" type="text" color="info" name="supervisor" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.supervisor" type="text" color="info" name="supervisor" size="sm" rounded-size="sm"  @input="clearErrorExp(index, 'supervisor')"/>
                 <small v-if="errors.step4.experiences[index]?.supervisor">{{ errors.step4.experiences[index].supervisor }}</small>
               </div>
             </div>
@@ -632,21 +631,21 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="last_job_title">Your last job title <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.last_job_title" type="text" color="info" name="last_job_title" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.last_job_title" type="text" color="info" name="last_job_title" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'last_job_title')" />
                 <small v-if="errors.step4.experiences[index]?.last_job_title">{{ errors.step4.experiences[index].last_job_title }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="employment_date_begin">Start date <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.employment_date_begin" type="date" color="info" name="employment_date_begin" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.employment_date_begin" type="date" color="info" name="employment_date_begin" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'employment_date_begin')" />
                 <small v-if="errors.step4.experiences[index]?.employment_date_begin">{{ errors.step4.experiences[index].employment_date_begin }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="employment_date_end">Finish date <span class="text-danger">*</span></label>
-                <MazInput v-model="experience.employment_date_end" type="date" color="info" name="employment_date_end" size="sm" rounded-size="sm" />
+                <MazInput v-model="experience.employment_date_end" type="date" :min="experience.employment_date_begin" color="info" name="employment_date_end" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'employment_date_end')" />
                 <small v-if="errors.step4.experiences[index]?.employment_date_end">{{ errors.step4.experiences[index].employment_date_end }}</small>
               </div>
             </div>
@@ -655,7 +654,7 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="reason">Reason for leaving (be specific) <span class="text-danger">*</span></label>
-                <MazTextarea v-model="experience.reason" type="text" color="info" name="reason" size="sm" rounded-size="sm" />
+                <MazTextarea v-model="experience.reason" type="text" color="info" name="reason" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'reason')" />
                 <small v-if="errors.step4.experiences[index]?.reason">{{ errors.step4.experiences[index].reason }}</small>
               </div>
             </div>
@@ -690,14 +689,14 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="name">Name <span class="text-danger">*</span></label>
-                <MazInput v-model="reference.name" type="text" color="info" name="name" size="sm" rounded-size="sm" />
+                <MazInput v-model="reference.name" type="text" color="info" name="name" size="sm" rounded-size="sm" @input="clearErrorRef(index, 'name')" />
                 <small v-if="errors.step5.references[index]?.name">{{ errors.step5.references[index].name }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="position">Position <span class="text-danger">*</span></label>
-                <MazInput v-model="reference.position" type="text" color="info" name="position" size="sm" rounded-size="sm" />
+                <MazInput v-model="reference.position" type="text" color="info" name="position" size="sm" rounded-size="sm" @input="clearErrorRef(index, 'position')"/>
                 <small v-if="errors.step5.references[index]?.position">{{ errors.step5.references[index].position }}</small>
               </div>
             </div>
@@ -709,14 +708,14 @@
             <div class="col">
               <div class="input-groupe">
                 <label for="company_address">Company Address <span class="text-danger">*</span></label>
-                <MazInput v-model="reference.company_address" type="text" color="info" name="company_address" size="sm" rounded-size="sm" />
+                <MazInput v-model="reference.company_address" type="text" color="info" name="company_address" size="sm" rounded-size="sm" @input="clearErrorRef(index, 'company_address')"/>
                 <small v-if="errors.step5.references[index]?.company_address">{{ errors.step5.references[index].company_address }}</small>
               </div>
             </div>
             <div class="col">
               <div class="input-groupe">
                 <label for="phone">Phone Number <span class="text-danger">*</span></label>
-                <MazPhoneNumberInput v-model="reference.phone" size="sm" rounded-size="sm" show-code-on-list :ignored-countries="['AC']" defaultCountryCode="US" update="results = $event" :success="results?.isValid" :class="{ 'error-border': errors.step5.references[index]?.phone }" @input="errors.step5.references[index].phone = false" />
+                <MazPhoneNumberInput v-model="reference.phone" size="sm" rounded-size="sm" show-code-on-list :ignored-countries="['AC']" defaultCountryCode="US" update="results = $event" :success="results?.isValid"  />
                 <small v-if="errors.step5.references[index]?.phone">{{ errors.step5.references[index].phone }}</small>
               </div>
             </div>
@@ -744,7 +743,7 @@
                                     
                 </div>
                 <small v-if="v$.step6.type_skill.$error">{{ v$.step6.type_skill.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['type_skill']"> {{ resultError["type_skill"] }} </small>
                </div>
                <div class="col">
                 <div class="input-groupe">
@@ -752,7 +751,7 @@
                   <MazSelect  label="Select" v-model="step6.computer_skill" name="computer_skill"  listPosition="left" color="info" :options="choix"  size="sm" rounded-size="sm" search />   
                 </div>
                 <small v-if="v$.step6.computer_skill.$error">{{ v$.step6.computer_skill.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['computer_skill']"> {{ resultError["computer_skill"] }} </small>
                </div>
               
               
@@ -767,7 +766,7 @@
                   <MazTextarea  v-model="step6.other_skills" type="text"  color="info" name="other_skills"   size="sm" rounded-size="sm" />
                 </div>
                 <small v-if="v$.step6.other_skills.$error">{{ v$.step6.other_skills.$errors[0].$message}}</small>
-                <small v-if="resultError['address']"> {{ resultError["address"] }} </small>
+                <small v-if="resultError['other_skills']"> {{ resultError["other_skills"] }} </small>
                </div>
 
                </div>
@@ -840,6 +839,7 @@
         LevelIdOptions:[],
         DrivingOptions:[],
         TransportOptions:[],
+        FileInsurance:"",
         errors: {
         step1: { DaysHours: [] },
         step4: { experiences: [] },
@@ -854,6 +854,11 @@
       
      
         choix: [
+          { label: "Yes", value: true },
+          { label: "No", value: false },
+        ],
+
+        chois: [
           { label: "Yes", value: true },
           { label: "No", value: false },
         ],
@@ -906,7 +911,7 @@
 
         current_insurance:"",    
         insurance_policy:"",    
-        insurance_copy_submitted:true,    
+        insurance_copy_submitted: false,    
 },
     step3: {
 
@@ -1069,10 +1074,22 @@ reason:{},
     },
     methods: {
    
-      clearError(index, field) {
+      clearErrorExp(index, field) {
+        console.log('index')
+      if (this.errors.step4.experiences[index]) {
+        this.errors.step4.experiences[index][field] = null;
+      }
+    },
+    clearError(index, field) {
         console.log('index')
       if (this.errors.step1.DaysHours[index]) {
         this.errors.step1.DaysHours[index][field] = null;
+      }
+    },
+    clearErrorRef(index, field) {
+        console.log('index')
+      if (this.errors.step5.references[index]) {
+        this.errors.step5.references[index][field] = null;
       }
     },
       formatInput(event) {
@@ -1215,6 +1232,7 @@ for (let i = 1; i < step; i++) {
               current_insurance: this.step2.current_insurance,
               insurance_policy: this.step2.insurance_policy,
               insurance_copy_submitted: this.step2.insurance_copy_submitted,
+              FileInsurance: this.FileInsurance,
 
             };
             break;
@@ -1451,7 +1469,7 @@ async registeremployeeData(employeeData) {
     }
 },
   
-      prevStep() {
+prevStep() {
         if (this.currentStep > 1) {
           this.currentStep--;
           window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1602,6 +1620,50 @@ async registeremployeeData(employeeData) {
     rtl: false,
     className: 'toast-error'
   });
+},
+handleFileUploadInsurance(event) {
+    console.log("File input change");
+    const file = event.target.files[0];
+    console.log("handleFileUploadInsurance Selected file:", file);
+    
+    this.submitFile(file )
+
+  },
+ 
+async submitFile(file ){
+  const formData = new FormData();
+formData.append('Fichier',file);
+
+
+try {
+const response = await axios.post('/recruitment/insurance/upload' , formData, {
+     headers: { 
+     
+            'Content-Type': 'multipart/form-data'
+    }});
+  console.log('Réponse du téléversement :', response);
+  if (response.data.status === "success") { 
+        this.FileInsurance = response.data.data.url
+       
+       
+
+       } else {
+
+       }
+ } catch (error) {
+ console.log('response.login', error); 
+
+ this.loading = false
+ if (error.response.data.status === "error") {
+ return this.error = error.response.data.message
+
+ } else {
+   this.formatValidationErrors(error.response.data.errors);
+ }
+
+  } 
+
+
 },
 
 validateStep1() {
@@ -1775,7 +1837,7 @@ this.step6.other_skills = userData.other_skills;
     },
     async mounted() {
     
-   this.step2.insurance_copy_submitted = true
+ 
    const localStorageUserData = localStorage.getItem('tempLeprimecare') || null;
    if(localStorageUserData !== null){
     const userDataString = JSON.parse(localStorageUserData)

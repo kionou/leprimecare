@@ -633,9 +633,7 @@
                                 <li class="slide">
                                     <a href="coming-soon.html" class="side-menu__item">Driving issues states</a>
                                 </li>
-                                <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">Working days</a>
-                                </li>
+                               
                                 <li class="slide">
                                     <a href="coming-soon.html" class="side-menu__item">Duties</a>
                                 </li>

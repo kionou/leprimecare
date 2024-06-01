@@ -3,7 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
 import Dashboard from '../views/dashboard/index.vue'
 import Accueil from '../views/dashboard/default.vue'
-import Employee from '../views/dashboard/employee.vue'
+
+ import Employee from '../views/employee/employee.vue'
+ import EmployeeDetail from '../views/employee/detail.vue'
+
+
 import Clients from '../views/dashboard/clients.vue'
 import Recruitment from '../views/dashboard/recruitment.vue'
 
@@ -50,10 +54,11 @@ const router = createRouter({
            component: Employee
         },
         {
-          path: 'clients',
-          name: 'clients',
+          path: 'employee-details/:id',
+          name: 'employee-details',
           meta: { requiresAuth: true },
-           component: Clients
+          props:true,
+           component: EmployeeDetail
         },
         {
           path: 'clients',
@@ -61,11 +66,17 @@ const router = createRouter({
           meta: { requiresAuth: true },
            component: Clients
         },
+        // {
+        //   path: 'clients',
+        //   name: 'clients',
+        //   meta: { requiresAuth: true },
+        //    component: Clients
+        // },
         {
           path: 'recruitment',
           name: 'recruitment',
            component: Recruitment
-        },
+        }
 
 
         
