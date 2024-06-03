@@ -620,7 +620,7 @@
                                     <a href="javascript:void(0)">Settings</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">User managment</a>
+                                    <router-link to="/dashboard/user-managment" class="side-menu__item">User managment</router-link>
                                 </li>
                                 
                                 <li class="slide">

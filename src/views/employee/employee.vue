@@ -26,7 +26,7 @@
                                         <div class="h5 fw-semibold mb-0"></div>
                                         <div class="d-flex mt-sm-0 mt-2 align-items-center">
                                             <div class="input-group">
-                                                <input type="text" class="form-control bg-light border-0" placeholder="Search Client" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
+                                                <input type="text" class="form-control bg-light border-0" placeholder="Search Employee" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
                                                 <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
                                             </div>
                                            
@@ -297,7 +297,7 @@ export default {
           }
         );
 
-        // console.log("responseclientenmploy", response.data);
+         console.log("responseclientenmploy", response.data);
         if (response.data.status === "success") {
             this.data  = response.data.data;
               this.EmployeeOptions = this.data
@@ -336,7 +336,7 @@ export default {
           }
         );
 
-        console.log("responseclientenmploy", response.data);
+        // console.log("responseclientenmploy", response.data);
         if (response.data.status === "success") {
             response.data.data;
               this.ClientOptions = response.data.data.map((client) => ({
@@ -465,14 +465,15 @@ if (this.control.name !== null) {
    const tt = this.control.name;
   const  searchValue = tt.toLowerCase()
   this.EmployeeOptions =this.data.filter(user => {
-    const Nom = user.client_name || '';
-    const Address = user.address || '';
-    const State = user.state || '';
-    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue);
+    
+    const Nom = user.user.Prenoms || '';
+    const Address = user.user.Nom || '';
+  
+    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) ;
   });
 
 } else {
-this.ClientOptions = [...this.data];
+this.EmployeeOptions = [...this.data];
  
 }
 

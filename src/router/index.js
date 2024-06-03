@@ -22,6 +22,9 @@ import Driver from '../views/Driving/default.vue'
 
 import Duties from '../views/duties/default.vue'
 
+import Users from '../views/users/default.vue'
+
+
 
 
 
@@ -107,6 +110,12 @@ const router = createRouter({
           meta: { requiresAuth: true },
            component: Duties
         },
+        {
+          path: 'user-managment',
+          name: 'user-managment',
+          meta: { requiresAuth: true },
+           component: Users
+        },
 
         
       ]
@@ -123,7 +132,7 @@ router.beforeEach((to, from, next) => {
   console.log("isAuthenticated", isAuthenticated);
   console.log(authenticatedUser);
   if (requiresAuth && !isAuthenticated) {
-    // Si la route nécessite une authentification et l'utilisateur n'est pas connecté,
+    // Si la route nécesite une authentification et l'utilisateur n'est pas connecté,
     // redirigez-le vers la page de connexion
     next("/");
   } else if (to.name === "login" && isAuthenticated) {
