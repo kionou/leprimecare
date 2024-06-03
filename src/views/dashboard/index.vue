@@ -635,7 +635,7 @@
                                 </li>
                                
                                 <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">Duties</a>
+                                    <router-link to="/dashboard/duties-services" class="side-menu__item">Duties</router-link>
                                 </li>
 
 

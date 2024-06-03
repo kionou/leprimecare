@@ -9186,7 +9186,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   font-size: 0.625rem;
 }
 .modal-footer {
-  padding: 1rem 1.25rem;
+  /* padding: 1rem 1.25rem; */
   border-block-start: 1px solid var(--default-border);
 }
 .modal.animated .modal-dialog {

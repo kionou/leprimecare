@@ -61,14 +61,19 @@
           <div
             v-for="client in paginatedItems"
             :key="client.id"
-            class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12"
+            class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12"
           >
             <div class="card custom-card">
               <div class="card-body">
                 <div class="text-center">
                   <span class="avatar avatar-xl avatar-rounded mb-3">
-                    <img
+                    <img v-if="client.photo === null"
                       src="@/assets/img/client.png"
+                      alt=""
+                      class="text-center"
+                    />
+                    <img v-else
+                      :src="client.photo"
                       alt=""
                       class="text-center"
                     />
@@ -93,6 +98,25 @@
                   <i class="ri-phone-fill"></i>
                   {{ client.phone || "Unknown" }}</span
                 >
+                <div v-if="client.employee !== null">
+                  <br />  
+                <span class="text-muted fs-15 bg-success p-2 text-center mt-1" >
+                  
+                  <i class="ri-user-fill"></i>
+                Assigned to  {{ client.employee.employee.user.Prenoms }} {{ client.employee.employee.user.Nom  }}
+                  </span >
+
+                    </div > 
+                    <div v-else>
+                      <br />
+                <span class="text-muted fs-15  bg-warning p-2 text-center mt-1" >
+                  
+                  <i class="ri-user-fill me-1 "></i>
+                  Not assigned 
+                  </span >
+                    </div>
+               
+                 
               </div>
               <div class="card-footer bg-gray-400">
                 <div class="btn-list">
@@ -259,16 +283,16 @@
                     <div class="input-groupe">
                       <div class="mb-3 position-relative">
                         <div class="input-groupe">
-                          <label for="photo">File </label>
+                          <label for="profil">File </label>
                           <input
                             type="file"
                             accept="image/*"
                             @change="handleFileUploadPhoto"
-                            name="photo"
-                            id="photo"
+                            name="profil"
+                            id="profil"
                             placeholder=""
-                            :class="{ 'error-border': resultError['photo'] }"
-                            @input="resultError['photo'] = false"
+                            :class="{ 'error-border': resultError['profil'] }"
+                            @input="resultError['profil'] = false"
                           />
                         </div>
                       </div>
@@ -432,16 +456,16 @@
                     <div class="input-groupe">
                       <div class="mb-3 position-relative">
                         <div class="input-groupe">
-                          <label for="photo">File </label>
+                          <label for="profil">File </label>
                           <input
                             type="file"
                             accept="image/*"
                             @change="handleFileUploadPhoto"
-                            name="photo"
-                            id="photo"
+                            name="profil"
+                            id="profil"
                             placeholder=""
-                            :class="{ 'error-border': resultError['photo'] }"
-                            @input="resultError['photo'] = false"
+                            :class="{ 'error-border': resultError['profil'] }"
+                            @input="resultError['profil'] = false"
                           />
                         </div>
                       </div>
@@ -515,7 +539,7 @@ export default {
       totalPageArray: [],
       control: { name: "" },
       resultError: {},
-      photo: "",
+      profil: "",
       ToId: "",
 
       step1: {
@@ -598,7 +622,7 @@ export default {
       const file = event.target.files[0];
       console.log("handleFileUploadPhoto Selected file:", file);
 
-      this.photo = file;
+      this.profil = file;
     },
     async submitClient(modalId) {
       this.v$.step1.$touch();
@@ -609,7 +633,7 @@ export default {
         formData.append("address", this.step1.address);
         formData.append("state", this.step1.state);
         formData.append("phone", this.step1.phone);
-        formData.append("photo", this.photo);
+        formData.append("profil", this.profil);
 
         console.log(
           "data",
@@ -617,7 +641,7 @@ export default {
           this.step1.address,
           this.step1.state,
           this.step1.phone,
-          this.photo
+          this.profil
         );
 
         try {
@@ -669,7 +693,7 @@ export default {
             (this.step2.address = data.address),
             (this.step2.state = data.state),
             (this.step2.phone = data.phone),
-            (this.photo = data.photo),
+            (this.profil = data.profil),
             (this.ToId = data.id);
           this.loading = false;
         }
@@ -706,7 +730,7 @@ export default {
         formData.append("address", this.step2.address);
         formData.append("state", this.step2.state);
         formData.append("phone", this.step2.phone);
-        formData.append("photo", this.photo);
+        formData.append("profil", this.profil);
 
         console.log(
           "data",
@@ -714,7 +738,7 @@ export default {
           this.step2.address,
           this.step2.state,
           this.step2.phone,
-          this.photo
+          this.profil
         );
 
         try {

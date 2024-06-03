@@ -20,6 +20,9 @@ import Transportation from '../views/transportation/default.vue'
 
 import Driver from '../views/Driving/default.vue'
 
+import Duties from '../views/duties/default.vue'
+
+
 
 
 
@@ -97,6 +100,12 @@ const router = createRouter({
           name: 'driving-issue-state',
           meta: { requiresAuth: true },
            component: Driver
+        },
+        {
+          path: 'duties-services',
+          name: 'duties-services',
+          meta: { requiresAuth: true },
+           component: Duties
         },
 
         

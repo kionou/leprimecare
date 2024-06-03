@@ -77,10 +77,10 @@
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </button>
 
-                                                            <button class="btn btn-sm  btn-primary-light "  @click="HandleId(client.user_id)">
+                                                            <button class="btn btn-sm  btn-danger "  @click="HandleId(client.user_id)">
                                                             
                                                             <i class="ri-user-line"></i>
-                                                             Assign a client
+                                                             Accept candidate
                                                           </button>
 
                                                             
