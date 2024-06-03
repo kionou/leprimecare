@@ -494,7 +494,7 @@
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <!-- Start::header-link -->
-                        <a aria-label="Hide Sidebar" class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle main-content" data-bs-toggle="sidebar" href="javascript:void(0);"><span></span></a>
+                        <a aria-label="Hide Sidebar"    @click="menuClose" class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle main-content" data-bs-toggle="sidebar"  href="javascript:void(0);"><span></span></a>
                         <!-- End::header-link -->
                     </div>
                     <!-- End::header-element -->
@@ -624,14 +624,14 @@
                                 </li>
                                 
                                 <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">School levels</a>
+                                    <router-link to="/dashboard/school-level" class="side-menu__item">School levels</router-link>
                                 </li>
 
                                 <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">Means of transportations</a>
+                                    <router-link  to="/dashboard/means-transportations" class="side-menu__item">Means of transportations</router-link>
                                 </li>
                                 <li class="slide">
-                                    <a href="coming-soon.html" class="side-menu__item">Driving issues states</a>
+                                    <router-link to="/dashboard/driving-issue-state" class="side-menu__item">Driving issues states</router-link>
                                 </li>
                                
                                 <li class="slide">

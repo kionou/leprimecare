@@ -31,13 +31,13 @@
               <div
                 class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center"
               >
-                <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto user-profile">
-                  <img
+                <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto user-profile" v-if="data.user">
+                  <img v-if="data.user.profile === null"
                     src="@/assets/img/client.png"
                     alt="profile image"
                     class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img"
                   />
-                  <!-- <img v-else :src="data.profile" alt="profile image" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img"> -->
+                  <img v-else :src="data.user.profile" alt="profile image" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
                 </div>
                 <div class="name-user">
                   <div
@@ -161,7 +161,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.age }}
+                                  {{ data.age }} years old
                                 </dd>
                               </div>
                               <div
@@ -207,11 +207,8 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Work nights
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.can_work_night }}
-                                </dd>
+                                <dd v-if="data.can_work_night === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -421,11 +418,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Driver Licence
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.driver_licence }}
-                                </dd>
+                                <dd v-if="data.driver_licence === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                               
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -436,7 +431,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.driver_licence_number }}
+                                  {{ data.driver_licence_number || 'null' }}
                                 </dd>
                               </div>
                               <div
@@ -448,7 +443,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.driver_licence_issue_state }}
+                                  {{ data.driver_licence_issue_state || 'null' }}
                                 </dd>
                               </div>
                               <div
@@ -460,7 +455,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.driver_licence_expiration_date }}
+                                  {{ data.driver_licence_expiration_date || 'null' }}
                                 </dd>
                               </div>
                               <div
@@ -469,11 +464,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Current Insurance
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.current_insurance }}
-                                </dd>
+                                <dd v-if="data.current_insurance === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                               
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -481,11 +474,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Insurance Copy Submitted
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.insurance_copy_submitted }}
-                                </dd>
+                                <dd v-if="data.insurance_copy_submitted === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                                
                               </div>
                               <div
                                 class="px-4 py-3 bg-gray-50 d-flex justify-content-between align-items-center"
@@ -510,7 +501,7 @@
                     <div class="card card-action">
                       <div class="card-header align-items-center">
                         <h5 class="card-action-title mb-0">
-                          <i class="bx bx-list-ul me-2"></i>Details Documents
+                          <i class="bx bx-list-ul me-2"></i>Detail Document
                         </h5>
                       </div>
                       <div class="card-body">
@@ -522,7 +513,7 @@
                             <div class="timeline-event">
                               <div class="d-flex flex-wrap gap-2">
                                 <p v-if="data.FileInsurance === null">
-                                  Pas de Rccm pour l'instant !
+                                 No File Insurance yet 
                                 </p>
                                 <a
                                   v-else
@@ -568,11 +559,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                    Accident During Past Year 
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.any_accident_during_past_year }}
-                                </dd>
+                                <dd v-if="data.any_accident_during_past_year === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                               
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -580,10 +569,11 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Accident Count
                                 </dt>
+                                
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.accident_count }}
+                                  {{ data.accident_count || 0 }}
                                 </dd>
                               </div>
   
@@ -593,11 +583,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Moving Violation Past Three Years 
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.moving_violation_past_three_year }}
-                                </dd>
+                                <dd v-if="data.moving_violation_past_three_year === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                               
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -608,7 +596,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.moving_violation_count }}
+                                  {{ data.moving_violation_count || 0}}
                                 </dd>
                               </div>
                               <div
@@ -617,11 +605,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Ever been convicted of a crime
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.convicted_crime }}
-                                </dd>
+                                <dd v-if="data.convicted_crime === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                                
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -642,11 +628,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Type Skill
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.type_skill }}
-                                </dd>
+                                <dd v-if="data.type_skill === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                               
                               </div>
                               <div
                                 class="px-4 py-3 bg-white d-flex justify-content-between align-items-center"
@@ -654,11 +638,9 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                   Computer Skills
                                 </dt>
-                                <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
-                                >
-                                  {{ data.computer_skill }}
-                                </dd>
+                                <dd v-if="data.computer_skill === '1'" class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> Yes </dd>
+                                <dd v-else class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"> No </dd>
+                                
                               </div>
                               <div
                                 class="px-4 py-3 bg-gray-50 d-flex justify-content-between align-items-center"

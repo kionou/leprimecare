@@ -349,11 +349,11 @@
                           
                         
                         >
-                          <i class="bi-exclamation-triangle text-white"></i>
-                          <span style="font-size: 13px"> 
+                          <i class="bi-exclamation-triangle text-white me-1"></i>
+                          <span style="font-size: 13px">  
                             
                             {{
-                           signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === 'signed' ? " Is Signed " : " Click to sign"
+                           signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === ' signed ' ?  " Is Signed "  :  "  Click to sign "
                            }}
                           </span>
                         </button>
@@ -384,8 +384,8 @@
                           "
                           
                         >
-                          <i class="bi-exclamation-triangle text-danger"></i>
-                          <span style="font-size: 13px">Click to add</span>
+                          <i class="bi-exclamation-triangle text-danger me-1"></i>
+                          <span style="font-size: 13px"> Click to add </span>
                         </button>
                       </span>
                     </td>

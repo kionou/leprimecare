@@ -8,11 +8,20 @@ import Accueil from '../views/dashboard/default.vue'
  import EmployeeDetail from '../views/employee/detail.vue'
 
 
-import Clients from '../views/dashboard/clients.vue'
+import Clients from '../views/clients/default.vue'
 import Recruitment from '../views/dashboard/recruitment.vue'
 
 import SignIn from '../views/account/signIn.vue'
 import Employees from '../views/employees/add.vue'
+
+import SchoolId from '../views/school/default.vue'
+
+import Transportation from '../views/transportation/default.vue'
+
+import Driver from '../views/Driving/default.vue'
+
+
+
 
 import Test from '../views/test.vue'
 
@@ -66,18 +75,29 @@ const router = createRouter({
           meta: { requiresAuth: true },
            component: Clients
         },
-        // {
-        //   path: 'clients',
-        //   name: 'clients',
-        //   meta: { requiresAuth: true },
-        //    component: Clients
-        // },
         {
           path: 'recruitment',
           name: 'recruitment',
            component: Recruitment
-        }
-
+        },
+         {
+          path: 'school-level',
+          name: 'school-level',
+          meta: { requiresAuth: true },
+           component: SchoolId
+        },
+        {
+          path: 'means-transportations',
+          name: 'means-transportations',
+          meta: { requiresAuth: true },
+           component: Transportation
+        },
+        {
+          path: 'driving-issue-state',
+          name: 'driving-issue-state',
+          meta: { requiresAuth: true },
+           component: Driver
+        },
 
         
       ]
