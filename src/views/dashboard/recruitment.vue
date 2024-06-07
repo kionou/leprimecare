@@ -26,7 +26,7 @@
                                         <div class="h5 fw-semibold mb-0"></div>
                                         <div class="d-flex mt-sm-0 mt-2 align-items-center">
                                             <div class="input-group">
-                                                <input type="text" class="form-control bg-light border-0" placeholder="Search Client" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
+                                                <input type="text" class="form-control bg-light border-0" placeholder="Search " aria-describedby="search-member" v-model="control.name" @input="filterByName" >
                                                 <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
                                             </div>
                                            
@@ -69,18 +69,17 @@
                                                           <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-success-light btn-wave">
                                                                 <i class="ri-eye-line"></i>
                                                             </router-link>
-                                                            <button class="btn btn-sm btn-icon btn-primary-light btn-wave">
-                                                                <i class="ri-edit-line"></i>
+                                                            <button class="btn btn-sm  btn-success" @click="HandleId(client.id , 'ACCEPT')">
+                                                              <i class="ri-user-line"></i>
+                                                              Accept candidate
                                                             </button>
  
-                                                            <button class="btn btn-sm btn-icon btn-danger-light btn-wave">
-                                                                <i class="ri-delete-bin-line"></i>
-                                                            </button>
+                                                          
 
-                                                            <button class="btn btn-sm  btn-danger "  @click="HandleId(client.user_id)">
+                                                            <button class="btn btn-sm  btn-danger "  @click="HandleId(client.id ,'REJET')">
                                                             
                                                             <i class="ri-user-line"></i>
-                                                             Accept candidate
+                                                             Rejet candidate
                                                           </button>
 
                                                             
@@ -91,235 +90,21 @@
 
                                         </div>
                                         <div class="row">
-              <div class="col-lg-12">
-                <div class="container_pagination">
-                  <Pag
-                    :current-page="currentPage"
-                    :total-pages="totalPages"
-                    @page-change="updateCurrentPage"
-                  />
-                </div>
-              </div>
+                                      <div class="col-lg-12">
+                                        <div class="container_pagination">
+                                          <Pag
+                                            :current-page="currentPage"
+                                            :total-pages="totalPages"
+                                            @page-change="updateCurrentPage"
+                                          />
+                                        </div>
+                                      </div>
                                       </div>
                                     </div>
                                    
                                 </div>
 
-                                <div
-      class="modal fade effect-rotate-bottom"
-      id="employee_add_to_timesheet"
-      tabindex="-1"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-      ref="employee_add_to_timesheet"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div
-            class="modal-header float-start text-center justify-content-center"
-            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
-          >
-            <h2
-              class="modal-title text-white text-center"
-              id="mail-ComposeLabel"
-              style="font-size: 22px !important"
-            >
-              <b class="text-center"
-                >Add newly attended service to employee timesheet</b
-              >
-            </h2>
-          </div>
-          <div class="modal-body px-4">
-            <div class="row gy-2 justify-content-center"
-                style="
-                  border-width: 1px;
-                  border-style: solid;
-                  border-radius: 6px;
-                  border-color: rgb(0, 77, 134);
-                ">
-              <div >
-                <div class="row mt-3 content-group">
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Client <span class="text-danger">*</span></label
-                      >
-                      <MazSelect
-                        v-model="step1.client_id"
-                        color="info"
-                        name="client_id"
-                        size="xs"
-                        rounded-size="xs"
-                        :options="PendingOptions"
-                        search
-                      />
-                      <small v-if="v$.step1.client_id.$error">{{
-                        v$.step1.client_id.$errors[0].$message
-                      }}</small>
-                      <small v-if="resultError['client']">
-                        {{ resultError["client"] }}
-                      </small>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Day Service is Given<span class="text-danger"
-                          >*</span
-                        ></label
-                      >
-                      <MazSelect
-                        v-model="step1.day_id"
-                        color="info"
-                        name="day_id"
-                        size="xs"
-                        rounded-size="xs"
-                        :options="DaysOptions"
-                        search
-                      />
-                      <small v-if="v$.step1.day_id.$error">{{
-                        v$.step1.day_id.$errors[0].$message
-                      }}</small>
-                      <small v-if="resultError['day_id']">
-                        {{ resultError["day_id"] }}
-                      </small>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3 content-group">
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Week Date Start
-                        <span class="text-danger">*</span></label
-                      >
-                      <MazInput
-                        v-model="step1.week_start"
-                        type="date"
-                        color="info"
-                        name="nom"
-                        size="xs"
-                        rounded-size="xs"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Week Date End <span class="text-danger">*</span></label
-                      >
-                      <MazInput
-                        v-model="step1.week_end"
-                        type="date"
-                        color="info"
-                        name="prenom"
-                        size="xs"
-                        rounded-size="xs"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3 content-group">
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Time In <span class="text-danger">*</span></label
-                      >
-                      <MazInput
-                        v-model="step1.time_in"
-                        type="time"
-                        color="info"
-                        name="time_in"
-                        size="xs"
-                        rounded-size="xs"
-                      />
-                      <small v-if="v$.step1.time_in.$error">{{
-                        v$.step1.time_in.$errors[0].$message
-                      }}</small>
-                      <small v-if="resultError['time_in']">
-                        {{ resultError["time_in"] }}
-                      </small>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Time Out <span class="text-danger">*</span></label
-                      >
-                      <MazInput
-                        v-model="step1.time_out"
-                        type="time"
-                        color="info"
-                        name="time_out"
-                        size="xs"
-                        rounded-size="xs"
-                      />
-                      <small v-if="v$.step1.time_out.$error">{{
-                        v$.step1.time_out.$errors[0].$message
-                      }}</small>
-                      <small v-if="resultError['time_out']">
-                        {{ resultError["time_out"] }}
-                      </small>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row mt-3 content-group">
-                  <div class="col">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Given Services/duties
-                        <span class="text-danger">*</span></label
-                      >
-                      <MazSelect
-                        v-model="step1.duties_id"
-                        color="info"
-                        name="duties_id"
-                        size="xs"
-                        rounded-size="xs"
-                        :options="DutiesOptions"
-                        multiple
-                        search
-                      />
-                      <small v-if="v$.step1.duties_id.$error">{{
-                        v$.step1.duties_id.$errors[0].$message
-                      }}</small>
-                      <small v-if="resultError['duty_take_id']">
-                        {{ resultError["duty_take_id"] }}
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-3">
-              <div class="boutton">
-                <button class="" @click.prevent="submitDailyWork('employee_add_to_timesheet')">
-                  Save To TimeSheet
-                </button>
-              </div>
-            </div>
-            </div>
-         
-            <br />
-            <div class="modal-footer">
-              <div class="btn-group ms-auto">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </div>
+      
                            
     </div>
 </template>
@@ -330,6 +115,7 @@ import axios from '@/lib/axiosConfig'
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
 import {successmsg} from "@/lib/modal.js"
+import Swal from 'sweetalert2'
 export default {
     components: {
     Loading,
@@ -360,26 +146,14 @@ export default {
       control: { name: '',},
       resultError: {},
 
-      step1: {
-        client_id: "",
-        day_id: "",
-        time_in: "",
-        time_out: "",
-        duties_id: [],
-      },
+    
       v$: useVuelidate(),
       error: "",
 
     }
   },
   validations: {
-    step1: {
-      client_id: { require },
-      day_id: { require },
-      time_in: { require },
-      time_out: { require },
-      duties_id: { require },
-    },
+   
    
   },
   async mounted() {
@@ -389,6 +163,7 @@ export default {
   },
 
   methods:{
+    successmsg:successmsg,
     async fetchemployeePending() {
       try {
         const response = await axios.get( '/employees/pending',
@@ -404,8 +179,8 @@ export default {
             console.log("this.DaysOptions398", response.data);
        
 
-            // this.data  = response.data;
-              this.PendingOptions = response.data.data
+             this.data  = response.data.data;
+              this.PendingOptions =  this.data
           console.log("this.DaysOptions", this.PendingOptions);
           this.loading =  false
         }
@@ -431,6 +206,58 @@ export default {
         }
       }
     },
+    async HandleId(id , response) {
+      console.log('id',id , response)
+      // Affichez une boîte de dialogue Sweet Alert pour confirmer la suppression
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, confirm it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      });
+
+      // Si l'utilisateur confirme la suppression
+      if (result.isConfirmed) {
+        this.ConfirmeCandidate(id , response);
+      }
+    },
+    async ConfirmeCandidate(id , response) {
+      this.loading = true;
+
+      try {
+        // Faites une requête pour supprimer l'élément avec l'ID itemId
+        const response = await axios.delete(`/clients/${id}`, {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`,
+          },
+        });
+        console.log("Réponse de suppression:", response);
+        if (response.data.status === "success") {
+          this.loading = false;
+          this.successmsg(
+            "Client Deleted",
+            " The client has been successfully deleted."
+          );
+          await this.fetchClients();
+        } else {
+          console.log("error", response.data);
+          this.loading = false;
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+
+        if (
+          error.response.data.message === "Vous n'êtes pas autorisé." ||
+          error.response.status === 401
+        ) {
+          await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+          this.$router.push("/"); //a revoir
+        }
+      }
+    },
 
     updateCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
@@ -445,24 +272,25 @@ export default {
       const endIndex = startIndex + this.itemsPerPage;
       return this.PendingOptions.slice(startIndex, endIndex);
     },
-//     filterByName() {
-// this.currentPage = 1;
-// if (this.control.name !== null) {
-//    const tt = this.control.name;
-//   const  searchValue = tt.toLowerCase()
-//   this.PendingOptions =this.data.filter(pending => {
-//     const Nom = pending.first_name || '';
-//     const Address = pending.address || '';
-//     const State = pending.email || '';
-//     return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue);
-//   });
+    filterByName() {
+this.currentPage = 1;
+if (this.control.name !== null) {
+   const tt = this.control.name;
+  const  searchValue = tt.toLowerCase()
+  this.PendingOptions =this.data.filter(pending => {
+    const Nom = pending.first_name || '';
+    const Last = pending.last_name || '';
+    const Address = pending.address || '';
+    const State = pending.email || '';
+    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue) || Last.toLowerCase().includes(searchValue);
+  });
 
-// } else {
-// this.PendingOptions = [...this.data];
+} else {
+this.PendingOptions = [...this.data];
  
-// }
+}
 
-// },
+},
   }
 }
 </script>

@@ -43,9 +43,7 @@
                                 </div> 
 
                                 
-                                <div v-if="paginatedItems.lenght === 0">
-                                           No records
-                                </div>
+                              
 
                                 <div class="col-xl-12">
                                 <div class="card custom-card">
@@ -68,7 +66,19 @@
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody v-if="paginatedItems.length === 0" >
+                                                <tr>
+                                                  <td colspan="18">
+                                                    <div
+                                                      class="badge bg-info-transparent"
+                                                      style="width: 100%; font-size: 25px"
+                                                    >
+                                                      No records found
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                                <tbody v-else>
                                                     <tr v-for="(data , index) in paginatedItems" :key="data.id">
                                                         <th scope="row" class="ps-4">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
                                                         <td>
@@ -241,7 +251,7 @@
       data-bs-backdrop="static"
       ref="update_client"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -321,7 +331,7 @@
               </div>
               <div class="row mb-3">
               <div class="boutton">
-                <button class="" @click.prevent="submitUpdate('add_client')">
+                <button class="" @click.prevent="submitUpdate('update_client')">
                   Save 
                 </button>
               </div>
@@ -510,9 +520,9 @@ export default {
           if (response.data.status === "success") {
             this.closeModal(modalId);
             this.successmsg(
-              "Client Created Successfully",
-              " The new client has been successfully created!"
-            );
+                "Duty Created Successfully",
+                "The new duty has been successfully created!"
+              );
             await this.fetchClients();
           } else {
           }
@@ -597,16 +607,16 @@ export default {
           headers: {
            
             Authorization: `Bearer ${this.loggedInUser.token}`,
-            'Content-Type': 'multipart/form-data'
+          
           },
         });
         console.log("Réponse du téléversement :", response);
         if (response.data.status === "success") {
           this.closeModal(modalId);
-            this.successmsg(
-              "Client Data Updated",
-              " The client's data has been successfully updated!"
-            );
+          this.successmsg(
+                  "Duty Data Updated",
+                  "The duty's data has been successfully updated!"
+                );
             await this.fetchClients();
          
           
@@ -679,8 +689,8 @@ export default {
            if (response.data.status === 'success') {
              this.loading = false
              this.successmsg(
-              "Client Deleted",
-              " The client has been successfully deleted."
+              "Duty Deleted",
+              "The duty has been successfully deleted."
             );
             await this.fetchClients();
    
@@ -705,10 +715,10 @@ if (this.control.name !== null) {
    const tt = this.control.name;
   const  searchValue = tt.toLowerCase()
   this.ClientOptions =this.data.filter(user => {
-    const Nom = user.client_name || '';
-    const Address = user.address || '';
-    const State = user.state || '';
-    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue);
+    const Nom = user.duty_name || '';
+    const Descriptions = user.descriptions || '';
+   
+    return Nom.toLowerCase().includes(searchValue) || Descriptions.toLowerCase().includes(searchValue) ;
   });
 
 } else {

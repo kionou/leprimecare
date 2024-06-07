@@ -17,6 +17,7 @@
           :class="{ current: currentStep == item, success: currentStep > item }"
           v-for="item in 6"
           :key="item"
+          @click="goToStep(item)"
         >
           <div class="stepper-item-counter">
             <img
@@ -33,7 +34,7 @@
       </div>
     </div>
   
-    <div class="error" v-if="this.error">{{ error }} <br /></div>
+    <div class="error text-center" v-if="this.error">{{ error }} <br /></div>
     <div  class="container-fluid" style="margin-top: 48px" >
      
       <form class="form"  style="position:relative">
@@ -1073,21 +1074,22 @@ reason:{},
      
     },
     methods: {
+    
    
       clearErrorExp(index, field) {
-        console.log('index')
+      
       if (this.errors.step4.experiences[index]) {
         this.errors.step4.experiences[index][field] = null;
       }
     },
     clearError(index, field) {
-        console.log('index')
+        
       if (this.errors.step1.DaysHours[index]) {
         this.errors.step1.DaysHours[index][field] = null;
       }
     },
     clearErrorRef(index, field) {
-        console.log('index')
+      
       if (this.errors.step5.references[index]) {
         this.errors.step5.references[index][field] = null;
       }
@@ -1154,7 +1156,7 @@ reason_employer:"",
   },
 
   deleteRow(index) {
-    console.log(index);
+  
     if(index !== 0){
       this.step4.experiences.splice(index, 1);
     }
@@ -1164,7 +1166,7 @@ AddformDataDays() {
   },
 
   deleteRowDays(index) {
-    console.log(index);
+   
     if(index !== 0){
       this.step1.DaysHours.splice(index, 1);
     }
@@ -1174,7 +1176,7 @@ AddformReferences() {
   },
 
   deleteRowReferences(index) {
-    console.log(index);
+  
     if(index !== 0){
       this.step5.references.splice(index, 1);
     }
@@ -1295,10 +1297,10 @@ for (let i = 1; i < step; i++) {
       } else {
         isValid = true; 
       }
-      console.log('entrer' ,isValid)
+   
 
 
-  console.log('entrer')
+  
         this.v$[`step${this.currentStep}`].$touch();
         if (this.v$.$errors.length === 0 && isValid) {
           if( this.currentStep === 6){
@@ -1319,17 +1321,17 @@ for (let i = 1; i < step; i++) {
                   }
           }else{
             const stepData = this.collectStepData(this.currentStep);
-                  console.log(stepData);
+                 
                   localStorage.setItem('tempLeprimecare', JSON.stringify(stepData))
                 this.currentStep++;
               window.scrollTo({ top: 0, behavior: "smooth" });
           
-            console.log('stepData', this.currentStep);
+           
           }
         } else {
             // Afficher un message d'erreur à l'utilisateur
             console.log("Le formulaire contient des erreurs");
-        console.log("errroor222", this.v$.$errors);
+             console.log("errroor222", this.v$.$errors);
             window.scrollTo({ top: 0, behavior: "smooth" });
                    this.loading = false;
         }
@@ -1427,12 +1429,12 @@ async registeremployeeData(employeeData) {
 
         console.log("response", response);
         if (response.data.status === 'success') {
-            console.log("Données MPME mises à jour avec succès !");
+          
             return response.data;
         } else {
             console.error("Erreur lors de la mise à ", response.data); 
             // Passer à l'étape suivante si l'erreur n'est pas liée à l'étape en cours
-            this.error = response.data.message;
+            this.error = "An error has occurred. Please try again later";
             return false;
         }
     } catch (error) {
@@ -1444,7 +1446,7 @@ async registeremployeeData(employeeData) {
             const currentStepFields = Object.keys(employeeData);
             const isCurrentStepError = errorKeys.some(key => currentStepFields.includes(key));
 
-            console.log('isCurrentStepError', errorKeys);
+       
 
             if (isCurrentStepError === true) {
                 // Passer à l'étape suivante si l'erreur n'est pas liée à l'étape en cours
@@ -1476,19 +1478,20 @@ prevStep() {
         }
       },
   
-
+      goToStep(step) {
+    this.currentStep = step;
+  },
       async fetchDays() {
       try {
        
         const response = await axios.get('/working-days');;
 
-        console.log("response", response);
         if (response.data.status === 'success') {
           this.DaysOptions = response.data.data.map((day) => ({
               label:day. name,
               value: day.id,
             }));
-          console.log('this.DaysOptions',this.DaysOptions)
+         
         }
        
       } catch (error) {
@@ -1502,13 +1505,13 @@ prevStep() {
        
         const response = await axios.get('/employees/detail/honoraires/emp');
 
-        console.log("response", response);
+      
         if (response.data.status === 'success') {
           this.HonorairesOptions = response.data.data.map((el) => ({
               label:el,
               value: el,
             }));
-          console.log('this.HonorairesOptions',this.HonorairesOptions)
+        
         }
        
       } catch (error) {
@@ -1522,13 +1525,13 @@ prevStep() {
        
         const response = await axios.get('/schools-level');;
 
-        console.log("response", response);
+       
         if (response.data.status === 'success') {
           this.LevelIdOptions = response.data.data.map((level) => ({
               label:level.name,
               value: level.id,
             }));
-          console.log('this.LevelIdOptions',this.LevelIdOptions)
+          
         }
        
       } catch (error) {
@@ -1542,13 +1545,13 @@ prevStep() {
        
         const response = await axios.get('/driving-issue-states');;
 
-        console.log("response", response);
+     
         if (response.data.status === 'success') {
           this.DrivingOptions = response.data.data.map((level) => ({
               label:level.name,
               value: level.id,
             }));
-          console.log('this.DrivingOptions',this.DrivingOptions)
+     
         }
        
       } catch (error) {
@@ -1563,13 +1566,13 @@ prevStep() {
        
         const response = await axios.get('/means-transportation');;
 
-        console.log("response", response);
+       
         if (response.data.status === 'success') {
           this.TransportOptions = response.data.data.map((level) => ({
               label:level.name,
               value: level.id,
             }));
-          console.log('this.TransportOptions',this.TransportOptions)
+         
         }
        
       } catch (error) {
@@ -1583,10 +1586,10 @@ prevStep() {
 
       for (const field in errors) {
         const errorMessages = errors[field]; // Liste complète des messages d'erreur
-        console.log(" errorMessages", errorMessages, typeof errorMessages);
+       
 
         const concatenatedError = errorMessages.join(", "); // Concaténer les messages d'erreur
-        console.log(" concatenatedError", concatenatedError, typeof concatenatedError);
+        
 
         formattedErrors[field] = concatenatedError; // Utilisez le nom du champ comme clé
       }
@@ -1594,7 +1597,7 @@ prevStep() {
       this.resultError = formattedErrors; // Stockez les erreurs dans un objet
 
       // Maintenant, this.resultError est un objet où les clés sont les noms des champs
-      console.log("resultError", this.resultError);
+    
       for (let key in this.resultError) {
   if (this.resultError.hasOwnProperty(key)) {
     // Construire le message d'erreur avec le nom du champ (clé) et son message (valeur)
@@ -1836,7 +1839,7 @@ this.step6.other_skills = userData.other_skills;
 
     },
     async mounted() {
-    
+   
  
    const localStorageUserData = localStorage.getItem('tempLeprimecare') || null;
    if(localStorageUserData !== null){
@@ -2106,6 +2109,7 @@ this.step6.other_skills = userData.other_skills;
     align-items: center;
     color: #c5c5c5;
     transition: all 500ms ease;
+    cursor:pointer;
   }
   
   .stepper-item-counter {

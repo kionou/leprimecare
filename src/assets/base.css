@@ -57,6 +57,18 @@
   background-color: var(--primary-color) !important;
 
 }
+.noresul {
+  border: 1px solid var(--primary-color);
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  border-radius: 6px;
+  font-size: 20px;
+  
+  }
 
 small {
   color: #f8001b;
@@ -65,7 +77,18 @@ small {
   /* justify-content: center; */
 }
 
+.container_pagination {
+  width: auto;
+  text-align: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  margin: 5px;
+  background-color:#fff;
 
+}
 
 .bouttons .boutton {
   max-width: 50px;
@@ -174,4 +197,9 @@ small {
 .m-phone-number-input{
 width: 100%;
 
+}
+
+.modal-footer{
+
+  padding: 0 !important;
 }

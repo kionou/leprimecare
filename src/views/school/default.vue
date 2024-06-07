@@ -43,9 +43,7 @@
                                 </div> 
 
                                 
-                                <div v-if="paginatedItems.lenght === 0">
-                                           No records
-                                </div>
+                               
 
                                 <div class="col-xl-12">
                                 <div class="card custom-card">
@@ -68,7 +66,19 @@
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody v-if="paginatedItems.length === 0" >
+                                                  <tr>
+                                                    <td colspan="18">
+                                                      <div
+                                                        class="badge bg-info-transparent"
+                                                        style="width: 100%; font-size: 25px"
+                                                      >
+                                                        No records found
+                                                      </div>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                                <tbody v-else>
                                                     <tr v-for="(data , index) in paginatedItems" :key="data.id">
                                                         <th scope="row" class="ps-4">{{ (currentPage - 1) * itemsPerPage + index + 1}}</th>
                                                         <td>
@@ -239,7 +249,7 @@
       data-bs-backdrop="static"
       ref="update_client"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -319,7 +329,7 @@
               </div>
               <div class="row mb-3">
               <div class="boutton">
-                <button class="" @click.prevent="submitUpdate('add_client')">
+                <button class="" @click.prevent="submitUpdate('update_client')">
                   Save 
                 </button>
               </div>
@@ -464,14 +474,7 @@ export default {
       }
     },
 
-    handleFileUploadPhoto(event) {
-    console.log("File input change");
-    const file = event.target.files[0];
-    console.log("handleFileUploadPhoto Selected file:", file);
-    
-    this.photo = file
-
-  },
+   
   async submitClient(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {
@@ -486,7 +489,7 @@ export default {
         console.log("data",data );
 
         try {
-          const response = await axios.post("/clients", data, {
+          const response = await axios.post("/schools-level", data, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` ,
            
           }
@@ -495,9 +498,9 @@ export default {
           if (response.data.status === "success") {
             this.closeModal(modalId);
             this.successmsg(
-              "Client Created Successfully",
-              " The new client has been successfully created!"
-            );
+            "School Level Created",
+            "The new school level has been successfully created!"
+          );
             await this.fetchClients();
           } else {
           }
@@ -519,7 +522,7 @@ export default {
     this.loading = true;
 
       try {
-        const response = await axios.get(`/clients/detail/${id}`, {
+        const response = await axios.get(`/schools-level/detail/${id}`, {
           headers: {
             Authorization: `Bearer ${this.loggedInUser.token}`
           }
@@ -569,27 +572,28 @@ export default {
        this.loading = true;
        let data = {
 
-            name:this.step1.name,
-            description:this.step2.description
+            name:this.step2.name,
+            description:this.step2.description,
+            id:this.ToId
             }
 
 
             console.log("data",data );
  
       try {
-        const response = await axios.put(`clients/${this.ToId}`,data, {
+        const response = await axios.put(`/schools-level/${this.ToId}`,data, {
           headers: {
            
             Authorization: `Bearer ${this.loggedInUser.token}`,
-            'Content-Type': 'multipart/form-data'
+           
           },
         });
         console.log("Réponse du téléversement :", response);
         if (response.data.status === "success") {
           this.closeModal(modalId);
-            this.successmsg(
-              "Client Data Updated",
-              " The client's data has been successfully updated!"
+          this.successmsg(
+              "School Level Updated",
+              "The school level has been successfully updated!"
             );
             await this.fetchClients();
          
@@ -650,7 +654,7 @@ export default {
          
          try {
            // Faites une requête pour supprimer l'élément avec l'ID itemId
-           const response = await axios.delete(`/clients/${id}`, {
+           const response = await axios.delete(`/schools-level/${id}`, {
              headers: {
                Authorization: `Bearer ${this.loggedInUser.token}`,
                
@@ -663,9 +667,9 @@ export default {
            if (response.data.status === 'success') {
              this.loading = false
              this.successmsg(
-              "Client Deleted",
-              " The client has been successfully deleted."
-            );
+                "School Level Deleted",
+                "The school level has been successfully deleted."
+              );
             await this.fetchClients();
    
            } else {
@@ -689,10 +693,10 @@ if (this.control.name !== null) {
    const tt = this.control.name;
   const  searchValue = tt.toLowerCase()
   this.ClientOptions =this.data.filter(user => {
-    const Nom = user.client_name || '';
-    const Address = user.address || '';
-    const State = user.state || '';
-    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue);
+    const Nom = user.name || '';
+    const Description = user.description || '';
+  
+    return Nom.toLowerCase().includes(searchValue) || Description.toLowerCase().includes(searchValue) ;
   });
 
 } else {

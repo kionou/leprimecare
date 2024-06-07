@@ -41,12 +41,6 @@
                                         </div>
                                     </div>
                                 </div> 
-
-                                
-                                <div v-if="paginatedItems.lenght === 0">
-                                           No records
-                                </div>
-
                                 <div class="col-xl-12">
                                 <div class="card custom-card">
                                     <div class="card-header justify-content-between">
@@ -68,7 +62,19 @@
                                                         <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody v-if="paginatedItems.length === 0" >
+                                                <tr>
+                                                  <td colspan="18">
+                                                    <div
+                                                      class="badge bg-info-transparent"
+                                                      style="width: 100%; font-size: 25px"
+                                                    >
+                                                      No records found
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                                <tbody v-else>
                                                     <tr v-for="(data , index) in paginatedItems" :key="data.id">
                                                         <th scope="row" class="ps-4">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
                                                         <td>
@@ -704,10 +710,8 @@ if (this.control.name !== null) {
    const tt = this.control.name;
   const  searchValue = tt.toLowerCase()
   this.ClientOptions =this.data.filter(user => {
-    const Nom = user.client_name || '';
-    const Address = user.address || '';
-    const State = user.state || '';
-    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) || State.toLowerCase().includes(searchValue);
+    const Nom = user.name || '';
+    return Nom.toLowerCase().includes(searchValue) ;
   });
 
 } else {

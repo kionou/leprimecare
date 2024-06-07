@@ -6794,7 +6794,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 .tab-content .tab-pane {
-  padding: 1rem;
+
   border: 1px solid var(--default-border);
   border-radius: 0.5rem;
   color: var(--default-text-color);

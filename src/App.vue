@@ -40,6 +40,9 @@
   //  import "@/assets/js/authentication-main.js"
    import "@/assets/css/icons.min.css"
   //  import "@/assets/libs/swiper/swiper-bundle.min.css"
+ 
+    // import "@/assets/libs/particles.js/particles.js"
+    // import "@/assets/js/error.js"
 
 
 

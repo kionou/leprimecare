@@ -62,6 +62,35 @@ const vuetify = createVuetify({
   app.component('MazInputCode', MazInputCode)
 
 
+function checkAndClearCache() {
+  const cacheKey = 'lastCacheClearDate'
+  const currentDate = new Date()
+  const lastCacheClearDate = localStorage.getItem(cacheKey)
+
+  if (lastCacheClearDate) {
+    const lastDate = new Date(lastCacheClearDate)
+    const diffTime = Math.abs(currentDate - lastDate)
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays >= 3) {
+      clearCache()
+      localStorage.setItem(cacheKey, currentDate.toISOString())
+    }
+  } else {
+    localStorage.setItem(cacheKey, currentDate.toISOString())
+  }
+}
+function clearCache() {
+  if ('caches' in window) {
+    caches.keys().then(function (names) {
+      for (let name of names) caches.delete(name)
+    })
+  }
+
+  window.location.reload(true)
+}
+
+checkAndClearCache()
 
 
 

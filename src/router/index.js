@@ -24,6 +24,11 @@ import Duties from '../views/duties/default.vue'
 
 import Users from '../views/users/default.vue'
 
+import Profil from '../views/profil/default.vue'
+
+import Page404 from '../views/Page404.vue'
+
+
 
 
 
@@ -50,6 +55,12 @@ const router = createRouter({
       name: 'test',
        component: Test
     },
+    { 
+      path: '/:pathMatch(.*)',
+      name: 'NotFound',
+      component: Page404
+
+      },
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -116,6 +127,15 @@ const router = createRouter({
           meta: { requiresAuth: true },
            component: Users
         },
+
+        {
+          path: 'profil',
+          name: 'profil',
+          meta: { requiresAuth: true },
+           component: Profil
+        },
+
+      
 
         
       ]

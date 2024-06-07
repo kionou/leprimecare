@@ -529,7 +529,7 @@
                         </a>
                         <!-- End::header-link|dropdown-toggle -->
                         <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                            <li><a class="dropdown-item d-flex" href="profile.html"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
+                            <li><router-link class="dropdown-item d-flex" to="/dashboard/profil"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</router-link></li>
                             <li><a class="dropdown-item d-flex" @click="logout" href="#"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</a></li>
                         </ul>
                     </div>  
@@ -581,7 +581,7 @@
                         <!-- End::slide -->
 
                          <!-- Start::slide -->
-                         <li class="slide">
+                         <li class="slide" v-if="loggedInUser.role_id === 2">
                             <router-link to="/dashboard/employee" class="side-menu__item">
                               <i class='bx bx-group side-menu__icon'></i>
                                 <span class="side-menu__label">Employee management</span>
@@ -590,7 +590,7 @@
                         <!-- End::slide -->
 
                            <!-- Start::slide -->
-                           <li class="slide">
+                           <li class="slide" >
                             <router-link to="/dashboard/clients" class="side-menu__item">
                               <i class='bx bx-group side-menu__icon'></i>
                                 <span class="side-menu__label">Clients</span>
@@ -599,7 +599,7 @@
                         <!-- End::slide -->
 
                          <!-- Start::slide -->
-                         <li class="slide">
+                         <li class="slide" v-if="loggedInUser.role_id === 2">
                             <router-link to="/dashboard/recruitment" class="side-menu__item">
                               <i class='bx bx-book-open side-menu__icon'></i>
                                 <span class="side-menu__label">Recruitment list</span>
@@ -609,7 +609,7 @@
                 
 
                         <!-- Start::slide -->
-                        <li class="slide has-sub">
+                        <li class="slide has-sub" v-if="loggedInUser.role_id === 2">
                             <a href="javascript:void(0);" class="side-menu__item">
                               <i class='bx bx-cog side-menu__icon'></i>
                                 <span class="side-menu__label ">Settings</span>

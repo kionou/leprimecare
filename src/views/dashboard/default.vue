@@ -291,7 +291,7 @@
                     <th scope="col">Print Time Sheet</th>
                   </tr>
                 </thead>
-                <tbody v-if="paginatedItems.length === 0" class="noresul">
+                <tbody v-if="filteredUsers.length === 0" >
                   <tr>
                     <td colspan="18">
                       <div
@@ -304,7 +304,7 @@
                   </tr>
                 </tbody>
                 <tbody v-else>
-                  <tr v-for="data in paginatedItems" :key="data.id">
+                  <tr v-for="data in filteredUsers" :key="data.id">
                     <td>
                       <div class="d-flex align-items-center">
                         <div class="me-2 lh-1">
@@ -414,11 +414,11 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="container_pagination">
-                  <Pag
+                  <pagination
                     :current-page="currentPage"
                     :total-pages="totalPages"
-                    @page-change="updateCurrentPage"
-                  />
+                    :fetch-data="fetchClientEmployee"
+                  ></pagination>
                 </div>
               </div>
             </div>
@@ -1193,7 +1193,7 @@
 <script>
 import axios from "@/lib/axiosConfig";
 import Loading from "@/components/others/loading.vue";
-import Pag from "@/components/others/pagination.vue";
+import Pagination from '@/components/others/paginationApi.vue';
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
 import { successmsg } from "@/lib/modal.js";
@@ -1202,7 +1202,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   components: {
     Loading,
-    Pag,
+    Pagination,
     ckeditor: CKEditor.component
   },
   data() {
@@ -1228,8 +1228,8 @@ export default {
       DaysOptions: [],
       ClientOptions: [],
       currentPage: 1,
-      itemsPerPage: 10,
-      totalPageArray: [],
+      totalPages: 0,
+      searchQuery: '',
       ClientEmployeeOptions: [],
       signatureStates: {},
       DutiesOptions: [],
@@ -1312,19 +1312,17 @@ export default {
     loggedInUser() {
       return this.$store.getters["auth/myAuthenticatedUser"];
     },
-    totalPages() {
-      return Math.ceil(this.ClientEmployeeOptions.length / this.itemsPerPage);
-    },
-    paginatedItems() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      const endIndex = startIndex + this.itemsPerPage;
-      return this.ClientEmployeeOptions.slice(startIndex, endIndex);
+    filteredUsers() {
+      return this.ClientEmployeeOptions.filter(user => {
+        return user.employee_id.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     }
+  
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
     await this.fetchStatitics();
-    await this.fetchClientEmployee();
+    await this.fetchClientEmployee(this.currentPage);
     await this.fetchDays();
     await this.fetchClients();
     await this.setWeekDates();
@@ -1342,9 +1340,9 @@ export default {
           }
         });
 
-        console.log("response", response);
+        // console.log("response", response);
         if (response.data.status === "success") {
-          console.log("responsedata", response.data.data);
+        
           this.StatiticsOptions = response.data.data;
           this.loading = false;
         }
@@ -1371,13 +1369,12 @@ export default {
       }
     },
 
-    async fetchClientEmployee() {
-      console.log("responsettwww", this.week);
-      console.log("responsettdata", this.month);
+    async fetchClientEmployee(page) {
+     
       this.loading = true;
 
       try {
-        const response = await axios.get("/clients-care-gives", {
+        const response = await axios.get(`/clients-care-gives?page=${page}`, {
           headers: {
             Authorization: `Bearer ${this.loggedInUser.token}`
           },
@@ -1390,8 +1387,10 @@ export default {
 
         console.log("responsett", response);
         if (response.data.status === "success") {
-          console.log("responsedatatt", response.data.data.data);
+        
           this.ClientEmployeeOptions = response.data.data.data;
+          this.currentPage = response.data.data.current_page;
+          this.totalPages = response.data.data.last_page;
           await this.loadSignatureStates();
 
           this.loading = false;
@@ -1418,21 +1417,26 @@ export default {
         }
       }
     },
+    search() {
+      this.currentPage = 1; // Reset to the first page when searching
+      this.fetchClientEmployee(this.currentPage);
+    },
+
     async fetchDays() {
       try {
         const response = await axios.get("/working-days");
-        console.log("response", response);
+     
 
         if (response.data.status === "success") {
           const currentDate = new Date();
           const currentDayIndex = (currentDate.getDay() + 6) % 7;
-          console.log("this.currentDayIndex", currentDayIndex);
+          
 
           const currentDayOption = {
             label: response.data.data[currentDayIndex].name,
             value: response.data.data[currentDayIndex].id
           };
-          console.log("this.currentDayOption", currentDayOption);
+         
 
           this.DaysOptions = response.data.data.map((day) => ({
             label: day.name,
@@ -1445,7 +1449,7 @@ export default {
           // Sélectionner automatiquement le jour actuel
           this.step1.day_id = currentDayOption.value;
 
-          console.log("this.DaysOptions", this.DaysOptions);
+         
         }
       } catch (error) {
         console.log(
@@ -1466,13 +1470,13 @@ export default {
           }
         );
 
-        console.log("responseclientenmploy", response);
+        // console.log("responseclientenmploy", response);
         if (response.data.status === "success") {
           this.ClientOptions = response.data.data.map((client) => ({
             label: client.client.client_name,
             value: client.client_id
           }));
-          console.log("this.DaysOptions", this.DaysOptions);
+       
         }
       } catch (error) {
         console.log(
@@ -1504,13 +1508,13 @@ export default {
           }
         });
 
-        console.log("responseclient", response);
+        // console.log("responseclient", response);
         if (response.data.status === "success") {
           this.DutiesOptions = response.data.data.map((client) => ({
             label: client.duty_name,
             value: client.id
           }));
-          console.log("this.DaysOptions", this.DaysOptions);
+         
         }
       } catch (error) {
         console.log(
@@ -1978,7 +1982,7 @@ export default {
     },
     async loadSignatureStates() {
       // Assurez-vous que `paginatedItems` est disponible et contient les éléments à vérifier
-      for (let item of this.paginatedItems) {
+      for (let item of this.filteredUsers) {
         await this.checkSignatureState(
           item.client_id,
           item.start_date_of_week,

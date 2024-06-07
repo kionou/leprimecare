@@ -55,7 +55,8 @@
                                                     <div class="card-body">
                                                          <div class="text-center">
                                                             <span class="avatar avatar-xl avatar-rounded mb-3 ">
-                                                            <img src="@/assets/img/client.png" alt="" class="text-center">
+                                                            <img v-if="client.user.profile === null" src="@/assets/img/client.png" alt="" class="text-center">
+                                                            <img v-else :src="client.user.profile" alt="" class="text-center">
                                                         </span>
                                                          </div>
                                                      
@@ -465,11 +466,12 @@ if (this.control.name !== null) {
    const tt = this.control.name;
   const  searchValue = tt.toLowerCase()
   this.EmployeeOptions =this.data.filter(user => {
-    
-    const Nom = user.user.Prenoms || '';
-    const Address = user.user.Nom || '';
+    const Email = user.user.email || '';
+    const Prenom = user.user.Prenoms || '';
+    const Nom = user.user.Nom || '';
+    const Address = user.address || '';
   
-    return Nom.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) ;
+    return Nom.toLowerCase().includes(searchValue) || Prenom.toLowerCase().includes(searchValue) || Email.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) ;
   });
 
 } else {
