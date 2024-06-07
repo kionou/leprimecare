@@ -341,9 +341,9 @@
                                   School Level
                                 </dt>
                                 <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
+                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.school_level_id"
                                 >
-                                  {{ data.school_level_id }}
+                                  {{ data.school_level_id.name  ||  "Unknown" }}
                                 </dd>
                               </div>
                               <div
@@ -402,9 +402,9 @@
                                   Means of transportation to work
                                 </dt>
                                 <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
+                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.means_transportation"
                                 >
-                                  {{ data.means_transportation }}
+                                  {{ data.means_transportation.name ||  "Unknown"   }}
                                 </dd>
                               </div>
   

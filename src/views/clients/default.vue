@@ -42,7 +42,7 @@
           </div>
 
           <button
-            class="btn btn-icon btn-primary ms-2"
+            class="btn btn-icon btn-primary ms-2" v-if="loggedInUser.role_id === 2"
             data-bs-placement="top"
             data-bs-title="Add Contact"
             data-bs-toggle="modal"
@@ -57,7 +57,7 @@
     <div v-if="paginatedItems.lenght === 0">No records</div>
     <div v-else class="row justify-content-center">
       <div class="col-xxl-12 col-xl-12">
-        <div class="row">
+        <div class="row" v-if="loggedInUser.role_id === 2">
           <div
             v-for="client in paginatedItems"
             :key="client.id"
@@ -66,7 +66,7 @@
             <div class="card custom-card">
               <div class="card-body">
                 <div class="text-center">
-                  <span class="avatar avatar-xl avatar-rounded mb-3">
+                  <span class="avatar avatar-xl avatar-rounded mb-3" >
                     <img v-if="client.photo === null"
                       src="@/assets/img/client.png"
                       alt=""
@@ -80,21 +80,21 @@
                   </span>
                 </div>
 
-                <p class="fw-semibold fs-18 mb-0 text-center">
+                <p class="fw-semibold fs-18 mb-0 text-center" >
                   {{ client.client_name }}
                 </p>
                 <br />
-                <span class="text-muted fs-15">
+                <span class="text-muted fs-15" >
                   <i class="ri-map-pin-add-line"></i>
                   {{ client.address || "Unknown" }}</span
                 >
                 <br />
-                <span class="text-muted fs-15">
+                <span class="text-muted fs-15"  >
                   <i class="ri-home-wifi-fill"></i>
                   {{ client.state || "Unknown" }}</span
                 >
                 <br />
-                <span class="text-muted fs-15">
+                <span class="text-muted fs-15"  >
                   <i class="ri-phone-fill"></i>
                   {{ client.phone || "Unknown" }}</span
                 >
@@ -103,7 +103,7 @@
                 <span class="text-muted fs-15 bg-success p-2 text-center mt-1" >
                   
                   <i class="ri-user-fill"></i>
-                Assigned to  {{ client.employee.employee.user.Prenoms }} {{ client.employee.employee.user.Nom  }}
+                    Assigned to  {{ client.employee.employee.user.Prenoms }} {{ client.employee.employee.user.Nom  }}
                   </span >
 
                     </div > 
@@ -118,7 +118,7 @@
                
                  
               </div>
-              <div class="card-footer bg-gray-400">
+              <div class="card-footer bg-gray-400" v-if="loggedInUser.role_id === 2">
                 <div class="btn-list">
                   <button
                     class="btn btn-sm btn-icon btn-primary-light"
@@ -137,6 +137,54 @@
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row" v-if="loggedInUser.role_id === 3">
+          <div
+            v-for="client in paginatedItems"
+            :key="client.id"
+            class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12"
+          >
+            <div class="card custom-card">
+              <div class="card-body">
+                <div class="text-center">
+                  <span class="avatar avatar-xl avatar-rounded mb-3" v-if="client.client">
+                    <img v-if="client.client.photo === null"
+                      src="@/assets/img/client.png"
+                      alt=""
+                      class="text-center"
+                    />
+                    <img v-else
+                      :src="client.client.photo"
+                      alt=""
+                      class="text-center"
+                    />
+                  </span>
+                </div>
+
+                <p class="fw-semibold fs-18 mb-0 text-center" v-if="client.client">
+                  {{ client.client.client_name }}
+                </p>
+                <br />
+                <span class="text-muted fs-15" v-if="client.client">
+                  <i class="ri-map-pin-add-line"></i>
+                  {{ client.client.address || "Unknown" }}</span
+                >
+                <br />
+                <span class="text-muted fs-15"  v-if="client.client">
+                  <i class="ri-home-wifi-fill"></i>
+                  {{ client.client.state || "Unknown" }}</span
+                >
+                <br />
+                <span class="text-muted fs-15"  v-if="client.client">
+                  <i class="ri-phone-fill"></i>
+                  {{ client.client.phone || "Unknown" }}</span
+                >   
+              </div>
+             
             </div>
           </div>
         </div>
@@ -574,14 +622,57 @@ export default {
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
+    if (this.loggedInUser.role_id === 2) {
+    await this.fetchClientsAll();
+      
+    }else if(this.loggedInUser.role_id === 3){
     await this.fetchClients();
+
+    }
   },
 
   methods: {
     successmsg: successmsg,
+    async fetchClientsAll() {
+      try {
+        const response = await axios.get('/clients', {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`,
+          },
+        });
+
+        console.log("responseclientenmploy", response.data);
+        if (response.data.status === "success") {
+          this.data = response.data.data;
+          this.ClientOptions = this.data;
+          console.log("this.DaysOptions", this.ClientOptions);
+          this.loading = false;
+        }
+      } catch (error) {
+        console.log(
+          "Erreur lors de la mise à jour des données MPME guinee :",
+          error
+        );
+        if (error.response.data.status === "error") {
+          console.log("aut", error.response.data.status === "error");
+
+          if (
+            error.response.data.message === "Vous n'êtes pas autorisé." ||
+            error.response.status === 401
+          ) {
+            await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+            this.$router.push("/"); //a revoir
+          }
+        } else {
+          this.formatValidationErrors(error.response.data.errors);
+          this.loading = false;
+          return false;
+        }
+      }
+    },
     async fetchClients() {
       try {
-        const response = await axios.get("/clients", {
+        const response = await axios.get(`/employees/assign-clients/${this.loggedInUser.id_user}`, {
           headers: {
             Authorization: `Bearer ${this.loggedInUser.token}`,
           },
@@ -658,7 +749,7 @@ export default {
               "Client Created Successfully",
               " The new client has been successfully created!"
             );
-            await this.fetchClients();
+            await this.fetchClientsAll();
           } else {
           }
         } catch (error) {
@@ -755,7 +846,7 @@ export default {
               "Client Data Updated",
               " The client's data has been successfully updated!"
             );
-            await this.fetchClients();
+            await this.fetchClientsAll();
           }
         } catch (error) {
           console.error("Erreur lors du téléversement :", error);
@@ -824,7 +915,7 @@ export default {
             "Client Deleted",
             " The client has been successfully deleted."
           );
-          await this.fetchClients();
+          await this.fetchClientsAll();
         } else {
           console.log("error", response.data);
           this.loading = false;
