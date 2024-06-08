@@ -113,8 +113,8 @@
         <div class="col-lg-12 col-12 mb-4">
           <div class="nav-align-top mb-4">
             <div class="tab-content">
-              <div class="tab-pane fade show active" id="step1" role="tabpanel">
-                <div class="row ttb">
+              <div class="tab-pane fade show active " id="step1" role="tabpanel">
+                <div class="row ttb ">
                   <div class="card col-xl-12 col-lg-12 col-md-12 py-2 ttb1">
                     <div class="bg-white rounded-lg">
                       <div class="">
