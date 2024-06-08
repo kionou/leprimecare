@@ -21,119 +21,340 @@
   </div>
   <!-- Page Header Close -->
 
-                             <div class="contact-header mb-3 bg-gray-400 py-2 px-1">
-                                  <div class="d-sm-flex d-block align-items-center justify-content-between">
-                                      <div class="h5 fw-semibold mb-0"></div>
-                                      <div class="d-flex mt-sm-0 mt-2 align-items-center">
-                                          <div class="input-group">
-                                              <input type="text" class="form-control bg-light border-0" placeholder="Search user managment" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
-                                              <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
+            <div class="contact-header mb-3 bg-gray-400 py-2 px-1">
+                <div class="d-sm-flex d-block align-items-center justify-content-between">
+                    <div class="h5 fw-semibold mb-0"></div>
+                    <div class="d-flex mt-sm-0 mt-2 align-items-center">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0" placeholder="Search user managment" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
+                            <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
+                        </div>
+                        
+                        <button class="btn btn-icon btn-primary ms-2" 
+                          data-bs-placement="top"
+                          data-bs-title="Add Contact"
+                          data-bs-toggle="modal"
+                            data-bs-target="#add_client"
+                          >
+                            <i class="ri-add-line">
+                                </i></button>
+                    </div>
+                </div>
+            </div> 
+
+            <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                    <div class="card-title">
+                          Users Managments list
+                    </div>
+                    
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap table-hover border table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="row" class="ps-4">N°</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Address Email</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="filteredUsers.length === 0" >
+                              <tr>
+                                <td colspan="18">
+                                  <div
+                                    class="badge bg-info-transparent"
+                                    style="width: 100%; font-size: 25px"
+                                  >
+                                    No records found
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr v-for="(data , index) in filteredUsers" :key="data.id">
+                                    <th scope="row" class="ps-4">{{ index + 1 }}</th>
+                                    <td>
+                                    
+                                      <div class="d-flex align-items-center fw-semibold">
+                                              <span class="avatar avatar-sm me-2 avatar-rounded">
+                                                  <img v-if="data.profile === null" src="@/assets/img/client.png" alt="img">
+                                                  <img v-else :src="data.profile" alt="img">
+                                              </span>{{ data.Prenoms }} {{ data.Nom }}
                                           </div>
-                                         
-                                          <button class="btn btn-icon btn-primary ms-2" 
-                                           data-bs-placement="top"
-                                            data-bs-title="Add Contact"
-                                            data-bs-toggle="modal"
-                                             data-bs-target="#add_client"
-                                            >
-                                              <i class="ri-add-line">
-                                                  </i></button>
-                                      </div>
-                                  </div>
-                              </div> 
+                                      
+                                    </td>
+                                  
+                                    <td>
+                                        
+                                        <span v-if="data.roles"  class="">{{ data.roles[0].name }}</span>
+                                        
+                                    </td>
+                                    
+                                    <td>
+                                        
+                                        <span   class="">{{ data.Whatsapp || 'Unknown' }}</span>
+                                        
+                                    </td>
+                                    <td>
+                                        
+                                        <span   class="">{{ data.email || 'Unknown' }}</span>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="hstack gap-2 fs-15">
+                                            <button  class="btn btn-icon btn-wave waves-effect waves-light btn-sm btn-primary-light"  data-bs-toggle="modal"  data-bs-target="#update_client" @click="HandleIdUpdate(data.id)"><i class="ri-edit-line"></i></button>
+                                          
+                                        </div>
+                                    </td>
+                                </tr>
+                                
 
-                              <div class="col-xl-12">
-                              <div class="card custom-card">
-                                  <div class="card-header justify-content-between">
-                                      <div class="card-title">
-                                           Users Managments list
-                                      </div>
-                                     
-                                  </div>
-                                  <div class="card-body">
-                                      <div class="table-responsive">
-                                          <table class="table text-nowrap table-hover border table-bordered table-striped">
-                                              <thead>
-                                                  <tr>
-                                                      <th scope="row" class="ps-4">N°</th>
-                                                      <th scope="col">Name</th>
-                                                      <th scope="col">Role</th>
-                                                      <th scope="col">Phone</th>
-                                                      <th scope="col">Address Email</th>
-                                                      <th scope="col">Action</th>
-                                                  </tr>
-                                              </thead>
-                                              <tbody v-if="filteredUsers.length === 0" >
-                                                <tr>
-                                                  <td colspan="18">
-                                                    <div
-                                                      class="badge bg-info-transparent"
-                                                      style="width: 100%; font-size: 25px"
-                                                    >
-                                                      No records found
-                                                    </div>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                              <tbody v-else>
-                                                  <tr v-for="(data , index) in filteredUsers" :key="data.id">
-                                                      <th scope="row" class="ps-4">{{ index + 1 }}</th>
-                                                      <td>
-                                                      
-                                                        <div class="d-flex align-items-center fw-semibold">
-                                                                <span class="avatar avatar-sm me-2 avatar-rounded">
-                                                                    <img v-if="data.profile === null" src="@/assets/img/client.png" alt="img">
-                                                                    <img v-else :src="data.profile" alt="img">
-                                                                </span>{{ data.Prenoms }} {{ data.Nom }}
-                                                            </div>
-                                                       
-                                                      </td>
-                                                    
-                                                      <td>
-                                                         
-                                                          <span v-if="data.roles"  class="">{{ data.roles[0].name }}</span>
-                                                          
-                                                      </td>
-                                                      
-                                                      <td>
-                                                         
-                                                         <span   class="">{{ data.Whatsapp || 'Unknown' }}</span>
-                                                         
-                                                     </td>
-                                                     <td>
-                                                         
-                                                         <span   class="">{{ data.email || 'Unknown' }}</span>
-                                                         
-                                                     </td>
-                                                      <td>
-                                                          <div class="hstack gap-2 fs-15">
-                                                              <button  class="btn btn-icon btn-wave waves-effect waves-light btn-sm btn-primary-light"  data-bs-toggle="modal"  data-bs-target="#update_client" @click="HandleIdUpdate(data.id)"><i class="ri-edit-line"></i></button>
-                                                           
-                                                          </div>
-                                                      </td>
-                                                  </tr>
-                                                 
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+<div class="col-lg-12">
+<div class="container_pagination">
+<pagination
+:current-page="currentPage"
+:total-pages="totalPages"
+:fetch-data="fetchData"
+></pagination>
+</div>
+</div>
+                  </div>
+                </div>
+            </div>
+        </div>     
 
-                                                  
-                                              </tbody>
-                                          </table>
-                                      </div>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="row">
-            <div class="col-lg-12">
-              <div class="container_pagination">
-                <pagination
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      :fetch-data="fetchData"
-    ></pagination>
+         <div
+      class="modal fade effect-rotate-bottom"
+      id="add_client"
+      tabindex="-1"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+      ref="add_client"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div
+            class="modal-header float-start text-center justify-content-center"
+            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
+          >
+            <h2
+              class="modal-title text-white text-center"
+              id="mail-ComposeLabel"
+              style="font-size: 22px !important"
+            >
+              <b class="text-center">Add new user</b>
+            </h2>
+          </div>
+          <div class="modal-body px-4">
+            <div
+              class="row gy-2 justify-content-center"
+              style="
+                border-width: 1px;
+                border-style: solid;
+                border-radius: 6px;
+                border-color: rgb(0, 77, 134);
+              "
+            >
+              <div>
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Name <span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.Nom"
+                        color="info"
+                        name="Nom"
+                        size="sm"
+                        rounded-size="sm"
+                        type="text"
+                      />
+                      <small v-if="v$.step1.Nom.$error">{{
+                        v$.step1.Nom.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['Nom']">
+                        {{ resultError["Nom"] }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Last Name<span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.Prenoms"
+                        color="info"
+                        name="Prenoms"
+                        size="sm"
+                        rounded-size="sm"
+                        type="text"
+                      />
+                      <small v-if="v$.step1.Prenoms.$error">{{
+                        v$.step1.Prenoms.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['Prenoms']">
+                        {{ resultError["Prenoms"] }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Address Email <span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.email"
+                        type="text"
+                        color="info"
+                        name="email"
+                        size="sm"
+                        rounded-size="sm"
+                      />
+                      <small v-if="v$.step1.email.$error">{{
+                        v$.step1.email.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['email']">
+                        {{ resultError["email"] }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Phone <span class="text-danger">*</span></label
+                      >
+                      <MazPhoneNumberInput
+                        v-model="step1.Whatsapp"
+                        size="sm"
+                        rounded-size="sm"
+                        show-code-on-list
+                        :ignored-countries="['AC']"
+                        defaultCountryCode="US"
+                        update="results = $event"
+                        :success="results?.isValid"
+                      />
+                      <small v-if="v$.step1.Whatsapp.$error">{{
+                        v$.step1.Whatsapp.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['Whatsapp']">
+                        {{ resultError["Whatsapp"] }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Password <span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.password"
+                        color="info"
+                        name="password"
+                        size="sm"
+                        rounded-size="sm"
+                        type="password"
+                      />
+                      <small v-if="v$.step1.password.$error">{{
+                        v$.step1.password.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['password']">
+                        {{ resultError["password"] }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Confirm PAssword<span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.password_confirmation"
+                        color="info"
+                        name="password_confirmation"
+                        size="sm"
+                        rounded-size="sm"
+                        type="password"
+                      />
+                      <small v-if="v$.step1.password_confirmation.$error">{{
+                        v$.step1.password_confirmation.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['password_confirmation']">
+                        {{ resultError["password_confirmation"] }}
+                      </small>
+                      <small v-if="!validatePasswordsMatch()">Passwords do not match.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Role<span class="text-danger">*</span></label
+                      >
+                      <MazSelect
+                        v-model="step1.role"
+                        color="info"
+                        name="role"
+                        size="sm"
+                        rounded-size="sm"
+                        :options="choix"
+                       
+                      />
+                      <small v-if="v$.step1.role.$error">{{
+                        v$.step1.role.$errors[0].$message
+                      }}</small>
+                      <small v-if="resultError['role']">
+                        {{ resultError["role"] }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="boutton">
+                  <button class="" @click.prevent="submitClient('add_client')">
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
-                                    </div>
-                                  </div>
-                              </div>
-                          </div>                         
+
+            <br />
+            <div class="modal-footer">
+              <div class="btn-group ms-auto">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>                    
   </div>
 </template>
 <script>
@@ -174,17 +395,28 @@ data(){
     resultError: {},
     photo:"",
     ToId:"",
-
+    choix: [
+          { label: "Admin", value: 2 },
+          { label: "Care give", value: 3 },
+        ],
     step1: {
-      duty_name:"",
-      descriptions:"",
-     
-    },
-    step2: {
-      duty_name:"",
-      descriptions:"",
-     
-    },
+        Nom: "",
+        Prenoms: "",
+        email: "",
+        Whatsapp: "",
+        password:"",
+        password_confirmation:"",
+        role:"",
+      },
+      step2: {
+        Nom: "",
+        Prenoms: "",
+        email: "",
+        Whatsapp: "",
+        password:"",
+        password_confirmation:"",
+        role:"",
+      },
     v$: useVuelidate(),
     error: "",
 
@@ -192,13 +424,23 @@ data(){
 },
 validations: {
   step1: {
-      duty_name:{require},
-      descriptions:{},
-  },
-  step2: {
-      duty_name:{require},
-      descriptions:{},
-  },
+      Nom: { require },
+      Prenoms: { require },
+      email: { require },
+      Whatsapp: { require },
+      password:{require},
+      password_confirmation:{require},
+      role:{require},
+    },
+    step2: {
+      Nom: { require },
+      Prenoms: { require },
+      email: { require },
+      Whatsapp: { require },
+      password:{require},
+      password_confirmation:{require},
+      role:{require},
+    },
  
  
 },
@@ -210,7 +452,9 @@ async mounted() {
 
 methods:{
   successmsg:successmsg,
- 
+   validatePasswordsMatch() {
+     return this.step1.password === this.step1.password_confirmation;
+    },
  
   async fetchData(page) {
     this.loading = true
@@ -254,34 +498,33 @@ methods:{
       }
     }
   },
+  
   search() {
       this.currentPage = 1; // Reset to the first page when searching
       this.fetchData(this.currentPage);
     },
 
-  handleFileUploadPhoto(event) {
-  console.log("File input change");
-  const file = event.target.files[0];
-  console.log("handleFileUploadPhoto Selected file:", file);
-  
-  this.photo = file
 
-},
 async submitClient(modalId) {
     this.v$.step1.$touch();
     if (this.v$.$errors.length == 0) {
       this.loading = true;
      let data = {
 
-          duty_name:this.step1.duty_name,
-          descriptions:this.step2.descriptions
+      Nom:this.step1.Nom,
+      Prenoms:this.step1.Prenoms,
+      email:this.step1.email,
+      Whatsapp:this.step1.Whatsapp,
+      password:this.step1.password,
+      password_confirmation:this.step1.password_confirmation,
+      role:this.step1.role,
      }
      
 
       console.log("data",data );
 
       try {
-        const response = await axios.post("/duties-services", data, {
+        const response = await axios.post("/register/system-user", data, {
           headers: { Authorization: `Bearer ${this.loggedInUser.token}` ,
          
         }
@@ -290,10 +533,10 @@ async submitClient(modalId) {
         if (response.data.status === "success") {
           this.closeModal(modalId);
           this.successmsg(
-            "Client Created Successfully",
-            " The new client has been successfully created!"
+            "User Created Successfully",
+            " The new user has been successfully created!"
           );
-          await this.fetchData();
+          await this.fetchData(this.currentPage);
         } else {
         }
       } catch (error) {

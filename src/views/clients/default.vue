@@ -106,34 +106,35 @@
                     Assigned to  {{ client.employee.employee.user.Prenoms }} {{ client.employee.employee.user.Nom  }}
                   </span >
 
-                    </div > 
-                    <div v-else>
+                </div > 
+                <div v-else>
                       <br />
                 <span class="text-muted fs-15  bg-warning p-2 text-center mt-1" >
                   
                   <i class="ri-user-fill me-1 "></i>
                   Not assigned 
                   </span >
-                    </div>
+                </div>
                
                  
               </div>
               <div class="card-footer bg-gray-400" v-if="loggedInUser.role_id === 2">
                 <div class="btn-list">
-                  <button
+                  <!-- <button
                     class="btn btn-sm btn-icon btn-primary-light"
                     data-bs-toggle="modal"
                     data-bs-target="#update_client"
                     @click="HandleIdUpdate(client.id)"
                   >
                     <i class="ri-edit-line"></i>
-                  </button>
+                  </button> -->
 
                   <button
-                    class="btn btn-sm btn-icon btn-danger-light"
+                    class="btn btn-sm  btn-danger"
                     @click="HandleIdDelete(client.id)"
                   >
-                    <i class="ri-delete-bin-line"></i>
+                    <i class="ri-delete-bin-line "> </i>  
+                    Delete
                   </button>
                 </div>
               </div>

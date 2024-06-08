@@ -181,7 +181,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ data.weekly_available_hours }}
+                                  {{ data.position_applied_agency }}
                                 </dd>
                               </div>
                               <div
@@ -341,9 +341,9 @@
                                   School Level
                                 </dt>
                                 <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.school_level_id"
+                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.school_level"
                                 >
-                                  {{ data.school_level_id.name  ||  "Unknown" }}
+                                  {{ data.school_level.name  ||  "Unknown" }}
                                 </dd>
                               </div>
                               <div
@@ -402,9 +402,9 @@
                                   Means of transportation to work
                                 </dt>
                                 <dd
-                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.means_transportation"
+                                  class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2" v-if="data.transportation"
                                 >
-                                  {{ data.means_transportation.name ||  "Unknown"   }}
+                                  {{ data.transportation.name ||  "Unknown"   }}
                                 </dd>
                               </div>
   
@@ -744,7 +744,7 @@
                                 <dd
                                   class="mt-1 font-semibold text-gray-900 sm:mt-0 sm:col-span-2"
                                 >
-                                  {{ experience.salary }}
+                                  {{ experience.salary }} $
                                 </dd>
                               </div>
                               <div

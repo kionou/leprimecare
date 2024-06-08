@@ -30,14 +30,13 @@
                                                 <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
                                             </div>
                                            
-                                            <button class="btn btn-icon btn-primary ms-2" 
+                                            <a  href="https://recruitment.leprimecare.care/" target="_blank" class="btn btn-icon btn-primary ms-2" 
                                              data-bs-placement="top"
                                               data-bs-title="Add Contact"
-                                              data-bs-toggle="modal"
-                                               data-bs-target="#employee_add_to_timesheet"
+                                             
                                               >
                                                 <i class="ri-add-line">
-                                                    </i></button>
+                                                    </i></a>
                                         </div>
                                     </div>
                                 </div> 
@@ -62,24 +61,48 @@
                                                         <p class="fw-semibold fs-18 mb-0 text-center">{{ client.first_name || 'Unknown'}} {{ client.last_name || 'Unknown'}}</p>    <br>
                                                         <span class="text-muted fs-15"> <i class="ri-map-pin-add-line"></i> {{ client.age || 'Unknown' }}</span>    <br>
                                                         <span class="text-muted fs-15"> <i class="ri-mail-line"></i> {{ client.address || 'Unknown'}}</span>    <br>
-                                                        <span class="text-muted fs-15"> <i class="ri-phone-fill"></i> {{ client.phone || 'Unknown'}}</span>
+                                                        <span class="text-muted fs-15"> <i class="ri-phone-fill"></i> {{ client.phone || 'Unknown'}}</span>  
+                                                        <div v-if="client.RecruitmentStatus !== null">
+                                                          <br />  
+                                                        <span class="text-muted fs-15 bg-success p-2 text-center mt-1" v-if="client.RecruitmentStatus === 'ACCEPTED'" >
+                                                          
+                                                          <i class="ri-user-fill"></i>
+                                                              {{ client.RecruitmentStatus }}
+                                                          </span >
+                                                          <span class="text-white fs-15 bg-danger  p-2 text-center mt-1" v-else >
+                                                          
+                                                          <i class="ri-user-fill"></i>
+                                                              {{ client.RecruitmentStatus }}
+                                                          </span >
+
+                                                        </div > 
+                                                        <div v-else>
+                                                              <br />
+                                                        <span class="text-muted fs-15  bg-warning p-2 text-center mt-1" >
+                                                          
+                                                          <i class="ri-user-fill me-1 "></i>
+                                                          On hold 
+                                                          </span >
+                                                        </div>
                                                     </div>
                                                     <div class="card-footer bg-gray-400">
                                                         <div class="btn-list">
-                                                          <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-success-light btn-wave">
+                                                          <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-primary btn-wave">
                                                                 <i class="ri-eye-line"></i>
                                                             </router-link>
-                                                            <button class="btn btn-sm  btn-success" @click="HandleId(client.id , 'ACCEPT')">
+                                                            <button class="btn btn-sm  btn-success" @click="HandleId(client.id , 'ACCEPTED')">
                                                               <i class="ri-user-line"></i>
-                                                              Accept candidate
+                                                              Accept 
                                                             </button>
  
                                                           
 
-                                                            <button class="btn btn-sm  btn-danger "  @click="HandleId(client.id ,'REJET')">
+                                                            <button class="btn btn-sm  btn-danger "  @click="HandleId(client.id ,'REJECTED')"
+                                                              :disabled="client.RecruitmentStatus === 'REJECTED'"
+                                                            >
                                                             
                                                             <i class="ri-user-line"></i>
-                                                             Rejet candidate
+                                                             Reject 
                                                           </button>
 
                                                             
@@ -226,10 +249,14 @@ export default {
     },
     async ConfirmeCandidate(id , response) {
       this.loading = true;
+      let data = {
+        employee:id,
+        status:response
+      }
 
       try {
         // Faites une requête pour supprimer l'élément avec l'ID itemId
-        const response = await axios.delete(`/clients/${id}`, {
+        const response = await axios.post('/employees/status-change', data, {
           headers: {
             Authorization: `Bearer ${this.loggedInUser.token}`,
           },
@@ -237,13 +264,23 @@ export default {
         console.log("Réponse de suppression:", response);
         if (response.data.status === "success") {
           this.loading = false;
+        console.log("Réponse de :", response.data.data.RecruitmentStatus);
+        if(response.data.data.RecruitmentStatus === "ACCEPTED"){
           this.successmsg(
-            "Client Deleted",
-            " The client has been successfully deleted."
+            "Candidate accepted",
+            " The candidate has been successfully accepted."
           );
-          await this.fetchClients();
+          await this.fetchemployeePending();
+        }else{
+          this.successmsg(  
+            "Candidate rejected",
+            " The candidate has been successfully rejected."
+          );
+          await this.fetchemployeePending();
+        }
+
+         
         } else {
-          console.log("error", response.data);
           this.loading = false;
         }
       } catch (error) {
