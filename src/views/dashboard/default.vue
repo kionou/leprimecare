@@ -228,19 +228,22 @@
             class="card-header justify-content-between"
             style="background-color: #e5e7eb !important"
           >
-            <div class="card-title text-uppercase mt-4"  >
+            <div class="card-title text-uppercase mt-4">
               Recent Client That Care Has Been Given
             </div>
             <div class="d-sm-flex align-items-center">
-              <a
-                href="#"
-                class="btn btn-primary btn-sm me-3 mt-4"
-                data-bs-toggle="modal"
-                data-bs-target="#employee_add_to_timesheet"
-              >
-                Add new daily work
-              </a>
-              <div class="input-groupe d-flex flex-column me-3">
+              <div>
+                <a
+                  href="#"
+                  class="btn btn-primary btn-block btn-xs me-3 mt-4 p-1 text-uppercase"
+                  data-bs-toggle="modal"
+                  data-bs-target="#employee_add_to_timesheet"
+                >
+                  Add new daily work
+                </a>
+              </div>
+
+              <div class="input-groupe d-flex flex-column me-2">
                 <label for="userpassword">Month & Year</label>
                 <MazInput
                   v-model="month"
@@ -250,7 +253,7 @@
                   rounded-size="xs"
                 />
               </div>
-              <div class="input-groupe d-flex flex-column me-3">
+              <div class="input-groupe d-flex flex-column">
                 <label for="userpassword">Week</label>
                 <MazSelect
                   v-model="week"
@@ -262,13 +265,14 @@
                 />
               </div>
 
-              <div class="bouttons" style="position: relative">
+              <div class="" style="position: relative">
+                &nbsp;
                 <div
-                  class="boutton mt-4"
-                  style="padding: 6px 10px !important ; background: #4dd70a"
+                  class="mt-4 btn btn-sm btn-block text-white"
+                  style="padding: 4px 5px !important ; background: #4dd70a"
                   @click="fetchClientEmployee()"
                 >
-                  <i class="ri-search-line"></i>
+                  <i class="ri-search-line"> </i> Search
                 </div>
               </div>
             </div>
@@ -278,11 +282,9 @@
               <table class="table text-nowrap table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th scope="col" >Client Names</th>
+                    <th scope="col">Client Names</th>
                     <th scope="col">Employee Names</th>
-                    <th scope="col">Signatures</th>
-                    <!-- <th scope="col">Supervisor Signature</th>
-                    <th scope="col">Employee Signature</th> -->
+                    <th scope="col">Client Signature</th>
                     <th scope="col">Week Start</th>
                     <th scope="col">Week End</th>
                     <th scope="col">N° Duties</th>
@@ -291,9 +293,9 @@
                     <th scope="col">Print Time Sheet</th>
                   </tr>
                 </thead>
-                <tbody v-if="filteredUsers.length === 0" >
+                <tbody v-if="paginatedItems.length === 0" class="">
                   <tr>
-                    <td colspan="18">
+                    <td colspan="9">
                       <div
                         class="badge bg-info-transparent"
                         style="width: 100%; font-size: 25px"
@@ -304,11 +306,11 @@
                   </tr>
                 </tbody>
                 <tbody v-else>
-                  <tr v-for="data in filteredUsers" :key="data.id">
+                  <tr v-for="data in paginatedItems" :key="data.id">
                     <td>
                       <div class="d-flex align-items-center">
                         <div class="me-2 lh-1">
-                          <span class="avatar avatar-sm" v-if="data.client" >
+                          <span class="avatar avatar-sm" v-if="data.client">
                             <img
                               v-if="data.client.photo === null"
                               src="@/assets/img/client.png"
@@ -317,8 +319,7 @@
                             <img v-else :src="data.client.photo" alt="" />
                           </span>
                         </div>
-                        <div class="fs-14" v-if="data.client"  >
-                          
+                        <div class="fs-14" v-if="data.client">
                           {{ data.client.client_name }}
                         </div>
                       </div>
@@ -330,36 +331,51 @@
                       </span>
                     </td>
                     <td>
-                      
-                        <button
-                          @click="SignatureAlls(data)"
-                          class="btn btn-sm "
-                          data-bs-toggle="modal"
-                          data-bs-target="#Signature_all"
-                          :class="{
-                                'btn-danger': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.client === 'undefined' ,
-                                'btn-warning': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === 'undefined' ||
-                                signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.employee === 'signed' ,
-                                'btn-success': signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === 'signed',
-                              
-                              }"
-                          :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.client === 'undefined' ||
-                          signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === 'signed' 
-                          "
-                          
-                        
-                        >
-                          <i class="bi-exclamation-triangle text-white me-1"></i>
-                          <span style="font-size: 13px">  
-                            
-                            {{
-                           signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.supervisor === ' signed ' ?  " Is Signed "  :  "  Click to sign "
-                           }}
-                          </span>
-                        </button>
-                    
+                      <button
+                        @click="
+                          HandleIdSignature(
+                            data.client_id,
+                            data.start_date_of_week,
+                            data.end_date_of_week
+                          )
+                        "
+                        class="btn btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#client_add_signature"
+                        :class="{
+                          'btn-danger':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'undefined',
+                          'btn-warning':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'null',
+                          'btn-success':
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'signed'
+                        }"
+                        :disabled="
+                          signatureStates[
+                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                          ] === 'undefined' ||
+                          signatureStates[
+                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                          ] === 'signed'
+                        "
+                      >
+                        <i class="bi-badge-wc-fill">
+                          {{
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === "signed"
+                              ? " Is Signed "
+                              : "Signature"
+                          }}
+                        </i>
+                      </button>
                     </td>
-
                     <td>
                       <span class="">{{ data.start_date_of_week }} </span>
                     </td>
@@ -375,17 +391,24 @@
                     <td>
                       <span class="">
                         <button
-                          @click=" HandleId(data )"
+                          @click="
+                            HandleId(
+                              data.client_id,
+                              data.start_date_of_week,
+                              data.end_date_of_week
+                            )
+                          "
                           class="btn btn-sm"
                           data-bs-toggle="modal"
                           data-bs-target="#employee_add_observation"
-                          :disabled="signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.client === 'null' ||
-                          signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}_${data.employee_id}`]?.client === 'signed' 
+                          :disabled="
+                            signatureStates[
+                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
+                            ] === 'signed'
                           "
-                          
                         >
-                          <i class="bi-exclamation-triangle text-danger me-1"></i>
-                          <span style="font-size: 13px"> Click to add </span>
+                          <i class="bi-exclamation-triangle text-danger"></i>
+                          <span style="font-size: 13px">Click to add</span>
                         </button>
                       </span>
                     </td>
@@ -414,11 +437,11 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="container_pagination">
-                  <pagination
+                  <Pag
                     :current-page="currentPage"
                     :total-pages="totalPages"
-                    :fetch-data="fetchClientEmployee"
-                  ></pagination>
+                    @page-change="updateCurrentPage"
+                  />
                 </div>
               </div>
             </div>
@@ -794,162 +817,13 @@
 
     <div
       class="modal fade effect-rotate-bottom"
-      id="Signature_all"
-      tabindex="-1"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-      ref="Signature_all"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-mx">
-        <div class="modal-content">
-          <div
-            class="modal-header float-start text-center justify-content-center"
-            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
-          >
-            <h2
-              class="modal-title text-white text-center"
-              id="mail-ComposeLabel"
-              style="font-size: 22px !important"
-            >
-              <b class="text-center"
-                >Add Signature</b
-              >
-            </h2>
-          </div>
-          <div class="modal-body px-4">
-            <div>
-              <div
-                class="d-flex gy-2 justify-content-center flex-column p-4"
-                style="
-                  border-width: 1px;
-                  border-style: solid;
-                  border-radius: 6px;
-                  border-color: rgb(0, 77, 134);
-                "
-              >
-              <div class="table-responsive">
-              <table class="table text-nowrap table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col" >Client </th>
-                    <th scope="col">Employee </th>
-                    <th v-if="loggedInUser.role_id === 2" scope="col">Supervisor</th>
-                 
-                  </tr>
-                </thead>
-                
-                <tbody >
-                  <tr >
-                   
-                    <td>
-                      <button @click="HandleIdSignature( this.Datas)"
-          class="btn btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#client_add_signature"
-          :class="{
-            'btn-danger': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client === 'undefined',
-            'btn-warning': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client === 'null',
-            'btn-success': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client === 'signed'
-          }"
-          :disabled="signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client === 'signed'">
-          <i class="bi-badge-wc-fill">
-            {{
-              signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client === 'signed' ? " Is Signed " : "Signature"
-            }}
-          </i>
-        </button> 
-                       
-                    
-                    </td>
-
-                   
-                    <td>
-                      <button @click="HandleIdSignatureEmployee(this.Datas)"
-          class="btn btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#client_add_signature_employee"
-          :class="{
-            'btn-danger': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee === 'undefined',
-            'btn-warning': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee === 'null',
-            'btn-success': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee === 'signed'
-          }"
-          :disabled="signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee === 'signed' ||
-            signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.client !== 'signed'">
-          <i class="bi-badge-wc-fill">
-            {{
-              signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee === 'signed' ? " Is Signed " : "Signature"
-            }}
-          </i>
-        </button>
-                    </td >
-                    <td v-if="loggedInUser.role_id === 2">
-                      <button @click="HandleIdSignatureSupervisor(this.Datas)"
-          class="btn btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#client_add_signature_supervisor"
-          :class="{
-            'btn-danger': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.supervisor === 'undefined',
-            'btn-warning': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.supervisor === 'null',
-            'btn-success': signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.supervisor === 'signed'
-          }"
-          :disabled="signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.supervisor === 'signed' ||
-            signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.employee !== 'signed'">
-          <i class="bi-badge-wc-fill">
-            {{
-              signatureStates[`${this.client_id}_${this.week_start2}_${this.week_end2}_${this.employee_id2}`]?.supervisor === 'signed' ? " Is Signed " : "Signature"
-            }}
-          </i>
-        </button>
-                    </td>
-                    
-
-                    
-                  </tr>
-                </tbody>
-              </table>
-            </div> 
-            <div class="btn-group ms-auto mt-3">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>    
-              </div>
-            </div>
-<!-- 
-            <br />
-            <div class="modal-footer">
-              <div class="btn-group ms-auto">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>
-            </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-
-    <div
-      class="modal fade effect-rotate-bottom"
       id="client_add_signature"
       tabindex="-1"
       aria-hidden="true"
       data-bs-backdrop="static"
       ref="client_add_signature"
     >
-      <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -975,18 +849,18 @@
                 "
               >
                 <div class="row mt-3 content-group">
-                  <div class="col d-flex justify-content-center">
+                  <div class="col">
                     <div class="input-groupe">
                       <label for="userpassword"
                         >Client Signature goes here
                         <span class="text-danger">*</span></label
                       >
                       <canvas
-                    ref="clientCanvas"
-                    @mousedown="startDrawing('clientCanvas' , $event)"
-                    @mousemove="draw('clientCanvas' , $event)"
-                    @mouseup="stopDrawing"
-                  ></canvas>
+                        ref="canvas"
+                        @mousedown="startDrawing"
+                        @mousemove="draw"
+                        @mouseup="stopDrawing"
+                      ></canvas>
                     </div>
                   </div>
                 </div>
@@ -1015,7 +889,7 @@
                   Close
                 </button>
               </div>
-              <button class="btn btn-primary" @click="clearCanvas('clientCanvas')">
+              <button class="btn btn-primary" @click="clearCanvas">
                 Effacer
               </button>
             </div>
@@ -1023,177 +897,12 @@
         </div>
       </div>
     </div>
-    <div
-      class="modal fade effect-rotate-bottom"
-      id="client_add_signature_supervisor"
-      tabindex="-1"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-      ref="client_add_signature_supervisor"
-    >
-      <div class="modal-dialog modal-dialog-centered ">
-        <div class="modal-content">
-          <div
-            class="modal-header float-start text-center justify-content-center"
-            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
-          >
-            <h2
-              class="modal-title text-white text-center"
-              id="mail-ComposeLabel"
-              style="font-size: 22px !important"
-            >
-              <b class="text-center">Supervisor Signature On timesheetces</b>
-            </h2>
-          </div>
-          <div class="modal-body px-4">
-            <div>
-              <div
-                class="row gy-2 justify-content-center"
-                style="
-                  border-width: 1px;
-                  border-style: solid;
-                  border-radius: 6px;
-                  border-color: rgb(0, 77, 134);
-                "
-              >
-                <div class="row mt-3 content-group">
-                  <div class="col d-flex justify-content-center">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Supervisor Signature goes here
-                        <span class="text-danger">*</span></label
-                      >
-                      <canvas
-                    ref="supervisorCanvas"
-                    @mousedown="startDrawing('supervisorCanvas' , $event)"
-                    @mousemove="draw('supervisorCanvas' , $event)"
-                    @mouseup="stopDrawing"
-                  ></canvas>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="boutton">
-                    <button
-                      class=""
-                      @click="SubmitSignatureSupervisor('client_add_signature_supervisor')"
-                    >
-                      Save Observation
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <br />
-            <div class="modal-footer">
-              <div class="btn-group ms-auto">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>
-              <button class="btn btn-primary" @click="clearCanvas('supervisorCanvas')">
-                Effacer
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="modal fade effect-rotate-bottom"
-      id="client_add_signature_employee"
-      tabindex="-1"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-      ref="client_add_signature_employee"
-    >
-      <div class="modal-dialog modal-dialog-centered ">
-        <div class="modal-content">
-          <div
-            class="modal-header float-start text-center justify-content-center"
-            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
-          >
-            <h2
-              class="modal-title text-white text-center"
-              id="mail-ComposeLabel"
-              style="font-size: 22px !important"
-            >
-              <b class="text-center">Employee Signature On timesheetces</b>
-            </h2>
-          </div>
-          <div class="modal-body px-4">
-            <div>
-              <div
-                class="row gy-2 justify-content-center"
-                style="
-                  border-width: 1px;
-                  border-style: solid;
-                  border-radius: 6px;
-                  border-color: rgb(0, 77, 134);
-                "
-              >
-                <div class="row mt-3 content-group">
-                  <div class="col d-flex justify-content-center">
-                    <div class="input-groupe">
-                      <label for="userpassword"
-                        >Employee Signature goes here
-                        <span class="text-danger">*</span></label
-                      >
-                      <canvas
-                    ref="employeeCanvas"
-                    @mousedown="startDrawing('employeeCanvas' , $event)"
-                    @mousemove="draw('employeeCanvas' , $event)"
-                    @mouseup="stopDrawing"
-                  ></canvas>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="boutton">
-                    <button
-                      class=""
-                      @click="SubmitSignatureEmployee('client_add_signature_employee')"
-                    >
-                      Save Observation
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <br />
-            <div class="modal-footer">
-              <div class="btn-group ms-auto">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>
-              <button class="btn btn-primary" @click="clearCanvas('employeeCanvas')">
-                Effacer
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 <script>
 import axios from "@/lib/axiosConfig";
 import Loading from "@/components/others/loading.vue";
-import Pagination from '@/components/others/paginationApi.vue';
+import Pag from "@/components/others/pagination.vue";
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
 import { successmsg } from "@/lib/modal.js";
@@ -1202,7 +911,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
   components: {
     Loading,
-    Pagination,
+    Pag,
     ckeditor: CKEditor.component
   },
   data() {
@@ -1218,7 +927,6 @@ export default {
       currentYear: currentYear,
       currentMonth: currentMonth,
       IdObservation: "",
-      IdEmployee:"",
       week_start_All: "",
       week_end_All: "",
       week: "All",
@@ -1228,18 +936,11 @@ export default {
       DaysOptions: [],
       ClientOptions: [],
       currentPage: 1,
-      totalPages: 0,
-      searchQuery: '',
+      itemsPerPage: 10,
+      totalPageArray: [],
       ClientEmployeeOptions: [],
       signatureStates: {},
       DutiesOptions: [],
-
-      client_id:"",
-      week_start2:"",
-      week_end2:"",
-      employee_id2:"",
-      Datas:"",
-
       week_start: "",
       week_end: "",
       step1: {
@@ -1312,17 +1013,19 @@ export default {
     loggedInUser() {
       return this.$store.getters["auth/myAuthenticatedUser"];
     },
-    filteredUsers() {
-      return this.ClientEmployeeOptions.filter(user => {
-        return user.employee_id.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
+    totalPages() {
+      return Math.ceil(this.ClientEmployeeOptions.length / this.itemsPerPage);
+    },
+    paginatedItems() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.ClientEmployeeOptions.slice(startIndex, endIndex);
     }
-  
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
     await this.fetchStatitics();
-    await this.fetchClientEmployee(this.currentPage);
+    await this.fetchClientEmployee();
     await this.fetchDays();
     await this.fetchClients();
     await this.setWeekDates();
@@ -1340,9 +1043,9 @@ export default {
           }
         });
 
-        // console.log("response", response);
+        console.log("response", response);
         if (response.data.status === "success") {
-        
+          console.log("responsedata", response.data.data);
           this.StatiticsOptions = response.data.data;
           this.loading = false;
         }
@@ -1369,12 +1072,13 @@ export default {
       }
     },
 
-    async fetchClientEmployee(page) {
-     
+    async fetchClientEmployee() {
+      console.log("responsettwww", this.week);
+      console.log("responsettdata", this.month);
       this.loading = true;
 
       try {
-        const response = await axios.get(`/clients-care-gives?page=${page}`, {
+        const response = await axios.get("/clients-care-gives", {
           headers: {
             Authorization: `Bearer ${this.loggedInUser.token}`
           },
@@ -1387,10 +1091,8 @@ export default {
 
         console.log("responsett", response);
         if (response.data.status === "success") {
-        
+          console.log("responsedatatt", response.data.data.data);
           this.ClientEmployeeOptions = response.data.data.data;
-          this.currentPage = response.data.data.current_page;
-          this.totalPages = response.data.data.last_page;
           await this.loadSignatureStates();
 
           this.loading = false;
@@ -1417,26 +1119,21 @@ export default {
         }
       }
     },
-    search() {
-      this.currentPage = 1; // Reset to the first page when searching
-      this.fetchClientEmployee(this.currentPage);
-    },
-
     async fetchDays() {
       try {
         const response = await axios.get("/working-days");
-     
+        console.log("response", response);
 
         if (response.data.status === "success") {
           const currentDate = new Date();
           const currentDayIndex = (currentDate.getDay() + 6) % 7;
-          
+          console.log("this.currentDayIndex", currentDayIndex);
 
           const currentDayOption = {
             label: response.data.data[currentDayIndex].name,
             value: response.data.data[currentDayIndex].id
           };
-         
+          console.log("this.currentDayOption", currentDayOption);
 
           this.DaysOptions = response.data.data.map((day) => ({
             label: day.name,
@@ -1449,7 +1146,7 @@ export default {
           // Sélectionner automatiquement le jour actuel
           this.step1.day_id = currentDayOption.value;
 
-         
+          console.log("this.DaysOptions", this.DaysOptions);
         }
       } catch (error) {
         console.log(
@@ -1470,13 +1167,13 @@ export default {
           }
         );
 
-        // console.log("responseclientenmploy", response);
+        console.log("responseclientenmploy", response);
         if (response.data.status === "success") {
           this.ClientOptions = response.data.data.map((client) => ({
             label: client.client.client_name,
             value: client.client_id
           }));
-       
+          console.log("this.DaysOptions", this.DaysOptions);
         }
       } catch (error) {
         console.log(
@@ -1508,13 +1205,13 @@ export default {
           }
         });
 
-        // console.log("responseclient", response);
+        console.log("responseclient", response);
         if (response.data.status === "success") {
           this.DutiesOptions = response.data.data.map((client) => ({
             label: client.duty_name,
             value: client.id
           }));
-         
+          console.log("this.DaysOptions", this.DaysOptions);
         }
       } catch (error) {
         console.log(
@@ -1555,16 +1252,14 @@ export default {
       this.step1.week_start = firstDay.toISOString().slice(0, 10);
       this.step1.week_end = lastDay.toISOString().slice(0, 10);
     },
-
-     startDrawing(canvasRef, event) {
+    startDrawing(event) {
       this.drawing = true;
       this.x = event.offsetX;
       this.y = event.offsetY;
-      this.currentCanvasRef = canvasRef;
     },
-    draw(canvasRef, event) {
+    draw(event) {
       if (this.drawing) {
-        const ctx = this.$refs[canvasRef].getContext("2d");
+        const ctx = this.$refs.canvas.getContext("2d");
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         this.x = event.offsetX;
@@ -1576,11 +1271,12 @@ export default {
     stopDrawing() {
       this.drawing = false;
     },
-    clearCanvas(canvasRef) {
-      const ctx = this.$refs[canvasRef].getContext("2d");
-      ctx.clearRect(0, 0, this.$refs[canvasRef].width, this.$refs[canvasRef].height);
+    clearCanvas() {
+      // const canvasData = this.$refs.canvas.toDataURL();
+      // console.log("canvasData", canvasData);
+      const ctx = this.$refs.canvas.getContext("2d");
+      ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
     },
-
     updateCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
       window.scrollTo({
@@ -1642,8 +1338,8 @@ export default {
     },
     async SubmitSignature(modalId) {
       this.loading = true;
-      const canvasData = this.$refs.clientCanvas.toDataURL();
-      console.log("canvasData", this.IdObservation);
+      const canvasData = this.$refs.canvas.toDataURL();
+      console.log("canvasData", canvasData);
       const formData = new FormData();
       formData.append("id", this.IdObservation);
       formData.append("SignatureC", canvasData);
@@ -1660,92 +1356,11 @@ export default {
         console.log("Réponse du téléversement :", response);
         if (response.data.status === "success") {
           this.closeModal(modalId);
-          await this.fetchClientEmployee();
           this.successmsg(
             "Patient Signature Recorded",
             "The patient's signature has been successfully recorded! It has been saved and is now on file."
           );
-        } else {
-        }
-      } catch (error) {
-        console.log("response.login", error);
-
-        this.loading = false;
-        if (error.response.data.status === "error") {
-          return (this.error = error.response.data.message);
-        } else {
-          this.formatValidationErrors(error.response.data.errors);
-        }
-      }
-    },
-    async SubmitSignatureSupervisor(modalId) {
-      this.loading = true;
-      const canvasData = this.$refs.supervisorCanvas.toDataURL();
-      console.log("canvasData", canvasData);
-      const formData = new FormData();
-      formData.append("id", this.IdObservation);
-      formData.append("SignatureC", canvasData);
-      formData.append("type", 'SUP');
-
-      console.log("data");
-      try {
-        const response = await axios.post(
-          "/employees/observations/timesheet/signature",
-          formData,
-          {
-            headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
-          }
-        );
-        console.log("Réponse du téléversementSupervisor :", response);
-        if (response.data.status === "success") {
-          this.closeModal(modalId);
           await this.fetchClientEmployee();
-          this.successmsg(
-            "Supervisor Signature Recorded",
-            "The Supervisor's signature has been successfully recorded! It has been saved and is now on file."
-          );
-         
-        } else {
-        }
-      } catch (error) {
-        console.log("response.login", error);
-
-        this.loading = false;
-        if (error.response.data.status === "error") {
-          return (this.error = error.response.data.message);
-        } else {
-          this.formatValidationErrors(error.response.data.errors);
-        }
-      }
-    },
-    async SubmitSignatureEmployee(modalId) {
-      // const dataURL = this.$refs[canvasRef].toDataURL('image/png');
-      this.loading = true;
-      const canvasData = this.$refs.employeeCanvas.toDataURL();
-      console.log("canvasData", canvasData);
-      const formData = new FormData();
-      formData.append("id", this.IdObservation);
-      formData.append("SignatureC", canvasData);
-      formData.append("type", 'EMP');
-
-      console.log("data");
-      try {
-        const response = await axios.post(
-          "/employees/observations/timesheet/signature",
-          formData,
-          {
-            headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
-          }
-        );
-        console.log("Réponse du téléversementEmployeee :", response);
-        if (response.data.status === "success") {
-          this.closeModal(modalId);
-          await this.fetchClientEmployee();
-          this.successmsg(
-            "Employee Signature Recorded",
-            "The Emplyee's signature has been successfully recorded! It has been saved and is now on file."
-          );
-         
         } else {
         }
       } catch (error) {
@@ -1764,7 +1379,7 @@ export default {
       if (this.v$.$errors.length == 0) {
         this.loading = true;
         let data = {
-          employee_id: this.IdEmployee,
+          employee_id: this.loggedInUser.id_user,
           client_id: this.step2.client_id,
           start_date_of_week: this.step2.week_start,
           end_date_of_week: this.step2.week_end,
@@ -1827,47 +1442,57 @@ export default {
     fetchPrint(data) {
       return `https://api.leprimecare.care/api/print-timesheet?employee_id=${data.employee_id}&client_id=${data.client_id}&start_date_of_week=${data.start_date_of_week}&end_date_of_week=${data.end_date_of_week}`;
     },
-    async HandleId(data) {
-      console.log("iddd", data);
-      this.step2.client_id = data.client_id;
-      this.step2.week_start = data.start_date_of_week;
-      this.step2.week_end = data.end_date_of_week;
-      this.IdEmployee = data.employee_id;
-      this.fetchClientObservation(data.client_id, data.start_date_of_week, data.end_date_of_week, data.employee_id);
+    async HandleId(id, week_start, week_end) {
+      console.log("iddd", id, week_start, week_end);
+      this.step2.client_id = id;
+      this.step2.week_start = week_start;
+      this.step2.week_end = week_end;
+      this.fetchClientObservation(id, week_start, week_end);
     },
-    async SignatureAlls(data) {
-      console.log("idddnnnnnnnnn", data);
-       this.client_id = data.client_id;
-       this.week_start2 =  data.start_date_of_week;
-       this.week_end2 = data.end_date_of_week;
-       this.employee_id2 = data.employee_id
-       this.Datas = data
-     
-     
-    },
- 
-    async HandleIdSignature(data) {
-      
-      console.log("idddnnnnnnnnn", data);
+    async HandleIdSignature(id, week_start, week_end) {
+      console.log("iddd", id);
 
-      this.IdEmployee = data.employee_id;
-      this.fetchClientSignature(data.client_id, data.start_date_of_week, data.end_date_of_week, data.employee_id);
+      this.fetchClientSignature(id, week_start, week_end);
     },
-    async HandleIdSignatureSupervisor(data) {
-      
+    async fetchClientDetail(id) {
+      this.loading = true;
 
-      this.IdEmployee = data.employee_id;
-      this.fetchClientSignature(data.client_id, data.start_date_of_week, data.end_date_of_week, data.employee_id);
-    },
-    async HandleIdSignatureEmployee(data) {
-     
-      this.IdEmployee = data.employee_id;
-      this.fetchClientSignature(data.client_id, data.start_date_of_week, data.end_date_of_week, data.employee_id);
+      try {
+        const response = await axios.get(`/clients/detail/${id}`, {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`
+          }
+        });
 
-      
+        console.log("responsett", response);
+        if (response.data.status === "success") {
+          console.log("responsedatatt", response.data.data.client_name);
+
+          this.loading = false;
+        }
+      } catch (error) {
+        console.log(
+          "Erreur lors de la mise à jour des données MPME guinee :",
+          error
+        );
+        if (error.response.data.status === "error") {
+          console.log("aut", error.response.data.status === "error");
+
+          if (
+            error.response.data.message === "Vous n'êtes pas autorisé." ||
+            error.response.status === 401
+          ) {
+            await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+            this.$router.push("/login"); //a revoir
+          }
+        } else {
+          this.formatValidationErrors(error.response.data.errors);
+          this.loading = false;
+          return false;
+        }
+      }
     },
-   
-    async fetchClientObservation(id, week_start, week_end , employee) {
+    async fetchClientObservation(id, week_start, week_end) {
       console.log("eereer", id, week_start, week_end);
 
       this.loading = true;
@@ -1880,7 +1505,7 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: employee,
+              employee_id: this.loggedInUser.id_user,
               client_id: id,
               start_date_of_week: week_start,
               end_date_of_week: week_end
@@ -1923,7 +1548,7 @@ export default {
         }
       }
     },
-    async fetchClientSignature(id, week_start, week_end , employee) {
+    async fetchClientSignature(id, week_start, week_end) {
       console.log("eereer", id, week_start, week_end);
 
       this.loading = true;
@@ -1936,7 +1561,7 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: employee,
+              employee_id: this.loggedInUser.id_user,
               client_id: id,
               start_date_of_week: week_start,
               end_date_of_week: week_end
@@ -1982,16 +1607,15 @@ export default {
     },
     async loadSignatureStates() {
       // Assurez-vous que `paginatedItems` est disponible et contient les éléments à vérifier
-      for (let item of this.filteredUsers) {
+      for (let item of this.paginatedItems) {
         await this.checkSignatureState(
           item.client_id,
           item.start_date_of_week,
-          item.end_date_of_week,
-          item.employee_id
+          item.end_date_of_week
         );
       }
     },
-    async checkSignatureState(client_id, start_date_of_week, end_date_of_week , employee_id) {
+    async checkSignatureState(client_id, start_date_of_week, end_date_of_week) {
       try {
         const response = await axios.get(
           `/employees/observations/detail/${client_id}`,
@@ -2000,45 +1624,26 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: employee_id,
+              employee_id: this.loggedInUser.id_user,
               client_id: client_id,
               start_date_of_week: start_date_of_week,
               end_date_of_week: end_date_of_week
             }
           }
         );
-        const key = `${client_id}_${start_date_of_week}_${end_date_of_week}_${employee_id}`;
-      
+        console.log("signatureStates", response);
+        const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
+        console.log("ssssss", key);
+        //  Signature_client
 
-        const data = response.data.data;
-        this.signatureStates[key] = {
-      client: 'undefined', // Rouge
-      employee: 'undefined', // Rouge
-      supervisor: 'undefined' // Rouge
-    };
-
-    if (data === undefined) {
-      // All states remain 'undefined'
-    } else {
-      if (data.Signature_client === null) {
-        this.signatureStates[key].client = 'null'; // Jaune
-        // Employee and Supervisor remain 'undefined' (Rouge)
-      } else if (data.Signature_client !== null) {
-        this.signatureStates[key].client = 'signed'; // Vert
-        this.signatureStates[key].employee = 'null'; // Jaune
-        // Supervisor remains 'undefined' (Rouge)
-        
-        if (data.Signature_care_giver !== null) {
-          this.signatureStates[key].employee = 'signed'; // Vert
-          this.signatureStates[key].supervisor = 'null'; // Jaune
-          
-          if (data.Signature_supervisor !== null) {
-            this.signatureStates[key].supervisor = 'signed'; // Vert
-          }
+        if (response.data.data === undefined) {
+          this.signatureStates[key] = "undefined"; // Rouge
+        } else if (response.data.data.Signature_client === null) {
+          this.signatureStates[key] = "null"; // Jaune
+        } else {
+          this.signatureStates[key] = "signed"; // Vert
         }
-      }
-    }
-    this.loading = false;
+        this.loading = false;
       } catch (error) {
         console.error(
           "Erreur lors de la vérification de la signature :",
