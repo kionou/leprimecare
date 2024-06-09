@@ -51,7 +51,7 @@
                                         <div class="row">
                                             <div v-for="client in paginatedItems" :key="client.id" class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                                 <div class="card custom-card ">
-                                                    <div class="card-body">
+                                                    <div class="card-body text-center">
                                                          <div class="text-center">
                                                             <span class="avatar avatar-xl avatar-rounded mb-3 ">
                                                             <img src="@/assets/img/client.png" alt="" class="text-center">
@@ -85,7 +85,7 @@
                                                           </span >
                                                         </div>
                                                     </div>
-                                                    <div class="card-footer bg-gray-400">
+                                                    <div class="card-footer bg-success">
                                                         <div class="btn-list">
                                                           <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-primary btn-wave">
                                                                 <i class="ri-eye-line"></i>
@@ -331,7 +331,7 @@ this.PendingOptions = [...this.data];
   }
 }
 </script>
-<style lang="css">
+<style lang="css" scoped>
     .container_pagination {
     width: auto;
     text-align: end;
@@ -348,6 +348,6 @@ this.PendingOptions = [...this.data];
 
     padding:10px !important;
     text-align:center !important;
-    background-color:#dbdfe1 !important;
+    /* background-color:#b1ed92 !important; */
 }
 </style>

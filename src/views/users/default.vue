@@ -91,7 +91,7 @@
                                   
                                     <td>
                                         
-                                        <span v-if="data.roles"  class="">{{ data.roles[0].name }}</span>
+                                        <span v-if="data.roles.length !== 0"  class="">{{ data.roles[0].name }}</span>
                                         
                                     </td>
                                     
@@ -377,6 +377,18 @@ computed: {
     return this.$store.getters["auth/myAuthenticatedUser"];
   },
   filteredUsers() {
+  
+// if (this.searchValue !== null) {
+//  const tt = this.searchValue;
+// const  searchValues = tt.toLowerCase()
+// this.ClientOptions =this.data.filter(user => {
+//   const Nom = user.Nom || '';
+//   const Prenom = user.Prenoms || '';
+//   const Email = user.email || '';
+ 
+//   return Nom.toLowerCase().includes(searchValues) || Prenom.toLowerCase().includes(searchValues) || Email.toLowerCase().includes(searchValues) ;
+// });
+// }
       return this.ClientOptions.filter(user => {
         return user.Nom.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
@@ -764,7 +776,7 @@ closeModal(modalId) {
 }
 }
 </script>
-<style lang="css">
+<style lang="css" scoped>
   .container_pagination {
   width: auto;
   text-align: end;

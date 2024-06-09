@@ -833,7 +833,7 @@
                   <tr>
                     <th scope="col" >Client </th>
                     <th scope="col">Employee </th>
-                    <th scope="col">Supervisor</th>
+                    <th v-if="loggedInUser.role_id === 2" scope="col">Supervisor</th>
                  
                   </tr>
                 </thead>
@@ -881,8 +881,8 @@
             }}
           </i>
         </button>
-                    </td>
-                    <td >
+                    </td >
+                    <td v-if="loggedInUser.role_id === 2">
                       <button @click="HandleIdSignatureSupervisor(this.Datas)"
           class="btn btn-sm"
           data-bs-toggle="modal"
@@ -949,7 +949,7 @@
       data-bs-backdrop="static"
       ref="client_add_signature"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -975,7 +975,7 @@
                 "
               >
                 <div class="row mt-3 content-group">
-                  <div class="col">
+                  <div class="col d-flex justify-content-center">
                     <div class="input-groupe">
                       <label for="userpassword"
                         >Client Signature goes here
@@ -1031,7 +1031,7 @@
       data-bs-backdrop="static"
       ref="client_add_signature_supervisor"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -1057,7 +1057,7 @@
                 "
               >
                 <div class="row mt-3 content-group">
-                  <div class="col">
+                  <div class="col d-flex justify-content-center">
                     <div class="input-groupe">
                       <label for="userpassword"
                         >Supervisor Signature goes here
@@ -1113,7 +1113,7 @@
       data-bs-backdrop="static"
       ref="client_add_signature_employee"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -1139,7 +1139,7 @@
                 "
               >
                 <div class="row mt-3 content-group">
-                  <div class="col">
+                  <div class="col d-flex justify-content-center">
                     <div class="input-groupe">
                       <label for="userpassword"
                         >Employee Signature goes here

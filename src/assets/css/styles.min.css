@@ -7708,7 +7708,7 @@
 }
 .card .card-footer,
 .card .card-header {
-  background-color: var(--custom-white) !important;
+  /* background-color: var(--custom-white); */
   color: var(--default-text-color);
 }
 .card.custom-card {
@@ -7759,7 +7759,7 @@
   text-transform: initial;
 }
 .card.custom-card .card-footer {
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
   border-block-start: 1px solid var(--default-border);
   padding: 1rem 1.25rem;
   font-size: 0.813rem;

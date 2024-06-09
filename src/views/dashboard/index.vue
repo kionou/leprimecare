@@ -492,9 +492,9 @@
                     <!-- End::header-element -->
 
                     <!-- Start::header-element -->
-                    <div class="header-element">
+                    <div class="header-element" >
                         <!-- Start::header-link -->
-                        <a aria-label="Hide Sidebar"    @click="menuClose" class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle main-content" data-bs-toggle="sidebar"  href="javascript:void(0);"><span></span></a>
+                        <a aria-label="Hide Sidebar"    @click="menuClose"  class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle main-content" data-bs-toggle="sidebar"  href="javascript:void(0);"><span></span></a>
                         <!-- End::header-link -->
                     </div>
                     <!-- End::header-element -->
@@ -1095,6 +1095,8 @@ function ResizeMenu() {
   checkHoriMenu();
 }
 function menuClose() {
+  
+  console.log('ee')
   let html = document.querySelector('html');
   html.setAttribute('data-toggled', 'close');
   document.querySelector("#responsive-overlay").classList.remove("active");
@@ -1273,7 +1275,10 @@ function toggleSidemenu() {
       html.setAttribute('data-toggled', 'open');
       let i = document.createElement("div");
       i.id = "responsive-overlay";
+      html.append(i)
+
       setTimeout(() => {
+
         if (document.querySelector("html").getAttribute("data-toggled") == "open") {
           document.querySelector("#responsive-overlay").classList.add("active");
           document
@@ -1796,4 +1801,22 @@ document.querySelector(".main-content").addEventListener("click", () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped>
+
+#responsive-overlay {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 101;
+  background-color: rgba(15, 23, 42, 0.5);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.1s;
+}
+#responsive-overlay.active {
+  visibility: visible;
+}
+</style>
