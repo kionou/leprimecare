@@ -1,6 +1,6 @@
-<template >
-    <div>
-        <Loading v-if="loading" style="z-index: 99999"></Loading>
+<template>
+  <div>
+    <Loading v-if="loading" style="z-index: 99999"></Loading>
     <!-- Page Header -->
     <div
       class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb"
@@ -12,100 +12,138 @@
             <li class="breadcrumb-item">
               <a href="javascript:void(0);">LePrimeCare</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Employee
-            </li>
+            <li class="breadcrumb-item active" aria-current="page">Employee</li>
           </ol>
         </nav>
       </div>
     </div>
     <!-- Page Header Close -->
 
-                               <div class="contact-header mb-3 bg-gray-400 py-2 px-1">
-                                    <div class="d-sm-flex d-block align-items-center justify-content-between">
-                                        <div class="h5 fw-semibold mb-0"></div>
-                                        <div class="d-flex mt-sm-0 mt-2 align-items-center">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control bg-light border-0" placeholder="Search Employee" aria-describedby="search-member" v-model="control.name" @input="filterByName" >
-                                                <button class="btn btn-light" type="button" id="search-contact-member"><i class="ri-search-line text-muted"></i></button>
-                                            </div>
-                                           
-                                            <button class="btn btn-icon btn-primary ms-2" 
-                                             data-bs-placement="top"
-                                              data-bs-title="Add Contact"
-                                              data-bs-toggle="modal"
-                                               data-bs-target="#employee_add_to_timesheet"
-                                              >
-                                                <i class="ri-add-line">
-                                                    </i></button>
-                                        </div>
-                                    </div>
-                                </div> 
+    <div class="contact-header mb-3 bg-gray-400 py-2 px-1">
+      <div class="d-sm-flex d-block align-items-center justify-content-between">
+        <div class="h5 fw-semibold mb-0"></div>
+        <div class="d-flex mt-sm-0 mt-2 align-items-center">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control bg border-0"
+              placeholder="Search Employee"
+              aria-describedby="search-member"
+              v-model="control.name"
+              @input="filterByName"
+            />
+            <button class="btn btn" type="button" id="search-contact-member">
+              <i class="ri-search-line text-muted"></i>
+            </button>
+          </div>
 
-                                <div v-if="paginatedItems.length === 0"  class="noresul">  No records </div>
+          <button
+            class="btn btn-icon btn-primary ms-2"
+            data-bs-placement="top"
+            data-bs-title="Add Contact"
+            data-bs-toggle="modal"
+            data-bs-target="#employee_add_to_timesheet"
+          >
+            <i class="ri-add-line"> </i>
+          </button>
+        </div>
+      </div>
+    </div>
 
-                                <div v-else class="row justify-content-center">
-                                    <div class="col-xxl-12 col-xl-12">
-                                       
-                                        <div class="row">
-                                            <div v-for="client in paginatedItems" :key="client.id" class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                <div class="card custom-card ">
-                                                    <div class="card-body text-center">
-                                                         <div class="text-center">
-                                                            <span class="avatar avatar-xl avatar-rounded mb-3 ">
-                                                            <img v-if="client.user.profile === null" src="@/assets/img/client.png" alt="" class="text-center">
-                                                            <img v-else :src="client.user.profile" alt="" class="text-center">
-                                                        </span>
-                                                         </div>
-                                                     
-                                                        <p class="fw-semibold fs-18 mb-0 text-center">{{ client.user.Prenoms }} {{ client.user.Nom }}</p>    <br>
-                                                        <span class="text-muted fs-15"> <i class="ri-map-pin-add-line"></i> {{ client.age || 'Unknown' }}</span>    <br>
-                                                        <span class="text-muted fs-15"> <i class="ri-mail-line"></i> {{ client.user.email || 'Unknown'}}</span>    <br>
-                                                        <span class="text-muted fs-15"> <i class="ri-phone-fill"></i> {{ client.phone || 'Unknown'}}</span>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="btn-list">
-                                                            <router-link :to="{ name: 'employee-details', params: { id: client.id }}" class="btn btn-sm btn-icon btn-success-light btn-wave">
-                                                                <i class="ri-eye-line"></i>
-                                                            </router-link>
-                                                            <button class="btn btn-sm btn-icon btn-primary-light btn-wave">
-                                                                <i class="ri-edit-line"></i>
-                                                            </button>
- 
-                                                            <button class="btn btn-sm btn-icon btn-danger-light btn-wave">
-                                                                <i class="ri-delete-bin-line"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm  btn-primary-light " data-bs-toggle="modal" data-bs-target="#Assign_client" @click="HandleId(client.user_id)">
-                                                            
-                                                              <i class="ri-user-line"></i>
-                                                               Assign a client
-                                                            </button>
+    <div v-if="paginatedItems.lenght === 0">No records</div>
+    <div v-else class="row justify-content-center">
+      <div class="col-xxl-12 col-xl-12">
+        <div class="row">
+          <div
+            v-for="client in paginatedItems"
+            :key="client.id"
+            class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12"
+          >
+            <div class="card custom-card">
+              <div class="card-body text-center">
+                <div class="text-center">
+                  <span class="avatar avatar-xl avatar-rounded mb-3">
+                    <img
+                      v-if="client.user.profile === null"
+                      src="@/assets/img/client.png"
+                      alt=""
+                      class="text-center"
+                    />
+                    <img
+                      v-else
+                      :src="client.user.profile"
+                      alt=""
+                      class="text-center"
+                    />
+                  </span>
+                </div>
 
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <p class="fw-semibold fs-18 mb-0 text-center">
+                  {{ client.user.Prenoms }} {{ client.user.Nom }}
+                </p>
+                <br />
+                <span class="text-muted fs-15">
+                  <i class="ri-map-pin-add-line"></i>
+                  {{ client.age || "Unknown" }}</span
+                >
+                <br />
+                <span class="text-muted fs-15">
+                  <i class="ri-mail-line"></i>
+                  {{ client.user.email || "Unknown" }}</span
+                >
+                <br />
+                <span class="text-muted fs-15">
+                  <i class="ri-phone-fill"></i>
+                  {{ client.phone || "Unknown" }}</span
+                >
+              </div>
+              <div class="card-footer">
+                <div class="btn-list">
+                  <router-link
+                    :to="{
+                      name: 'employee-details',
+                      params: { id: client.id }
+                    }"
+                    class="btn btn-sm btn-icon btn-success btn-wave"
+                  >
+                    <i class="ri-eye-line"></i>
+                  </router-link>
+                  <button class="btn btn-sm btn-icon btn-primary btn-wave">
+                    <i class="ri-edit-line"></i>
+                  </button>
 
-                                        </div>
-                                        <div class="row">
-              <div class="col-lg-12">
-                <div class="container_pagination">
-                  <Pag
-                    :current-page="currentPage"
-                    :total-pages="totalPages"
-                    @page-change="updateCurrentPage"
-                  />
+                  <button class="btn btn-sm btn-icon btn-danger btn-wave">
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#Assign_client"
+                    @click="HandleId(client.user_id)"
+                  >
+                    <i class="ri-user-line"></i>
+                    Assign a client
+                  </button>
                 </div>
               </div>
-                                      </div>
-                                    </div>
-                                   
-                                </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="container_pagination">
+              <Pag
+                :current-page="currentPage"
+                :total-pages="totalPages"
+                @page-change="updateCurrentPage"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                             
-
-                   <div
+    <div
       class="modal fade effect-rotate-bottom"
       id="Assign_client"
       tabindex="-1"
@@ -124,9 +162,7 @@
               id="mail-ComposeLabel"
               style="font-size: 22px !important"
             >
-              <b class="text-center"
-                >Assign clients</b
-              >
+              <b class="text-center">Assign clients</b>
             </h2>
           </div>
           <div class="modal-body px-4">
@@ -140,12 +176,11 @@
                   border-color: rgb(0, 77, 134);
                 "
               >
-              <div class="row mt-3 content-group">
+                <div class="row mt-3 content-group">
                   <div class="col">
                     <div class="input-groupe">
                       <label for="userpassword"
-                        >Clients list
-                        <span class="text-danger">*</span></label
+                        >Clients list <span class="text-danger">*</span></label
                       >
                       <MazSelect
                         v-model="step1.ClientAssign"
@@ -157,8 +192,10 @@
                         multiple
                         search
                       />
-                      <small v-if="v$.step1.ClientAssign.$error">{{ v$.step1.ClientAssign.$errors[0].$message}}</small>
-                     
+                      <small v-if="v$.step1.ClientAssign.$error">{{
+                        v$.step1.ClientAssign.$errors[0].$message
+                      }}</small>
+
                       <small v-if="resultError['client']">
                         {{ resultError["client"] }}
                       </small>
@@ -169,8 +206,7 @@
                   <div class="col">
                     <div class="input-groupe">
                       <label for="userpassword"
-                        >Frequency
-                        <span class="text-danger">*</span></label
+                        >Frequency <span class="text-danger">*</span></label
                       >
                       <MazInput
                         v-model="step1.frequency"
@@ -178,58 +214,57 @@
                         name="duties_id"
                         size="xs"
                         rounded-size="xs"
-                       type="number"
+                        type="number"
                       />
-                     <small v-if="v$.step1.frequency.$error">{{ v$.step1.frequency.$errors[0].$message}}</small>
-                     
+                      <small v-if="v$.step1.frequency.$error">{{
+                        v$.step1.frequency.$errors[0].$message
+                      }}</small>
+
                       <small v-if="resultError['frequency']">
                         {{ resultError["frequency"] }}
                       </small>
                     </div>
                   </div>
                 </div>
-                <div class="row ">
-                <div class="boutton">
+                <div class="row">
+                  <div class="boutton">
+                    <button
+                      class=""
+                      @click.prevent="submitAssign('Assign_client')"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+                <div class="btn-group ms-auto my-3">
                   <button
-                    class=""
-                    @click.prevent="
-                    submitAssign('Assign_client')
-                    "
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
                   >
-                    Save 
+                    Close
                   </button>
                 </div>
               </div>
-            <div class="btn-group ms-auto my-3">
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>    
-              </div>
             </div>
-
           </div>
         </div>
       </div>
-    </div>         
     </div>
+  </div>
 </template>
 <script>
 import Pag from "@/components/others/pagination.vue";
 import Loading from "@/components/others/loading.vue";
-import axios from '@/lib/axiosConfig'
+import axios from "@/lib/axiosConfig";
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
-import {successmsg} from "@/lib/modal.js"
+import { successmsg } from "@/lib/modal.js";
 export default {
-    components: {
+  components: {
     Loading,
-    Pag, 
+    Pag
   },
   computed: {
     loggedInUser() {
@@ -242,66 +277,57 @@ export default {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.EmployeeOptions.slice(startIndex, endIndex);
-    },
-  
+    }
   },
-  data(){
-    return{
-        loading: true,
-        ClientOptions: [],
-        EmployeeOptions: [],
-        data:[],
+  data() {
+    return {
+      loading: true,
+      ClientOptions: [],
+      EmployeeOptions: [],
+      data: [],
       currentPage: 1,
       itemsPerPage: 12,
       totalPageArray: [],
-      control: { name: '',},
+      control: { name: "" },
       resultError: {},
-      IdEmployee:"",
-    
+      IdEmployee: "",
 
       step1: {
-        ClientAssign:[],
-        frequency: "",
-        
+        ClientAssign: [],
+        frequency: ""
       },
       v$: useVuelidate(),
-      error: "",
-
-    }
+      error: ""
+    };
   },
   validations: {
     step1: {
       ClientAssign: { require },
-      frequency: { require },
-      
-    },
-   
+      frequency: { require }
+    }
   },
   async mounted() {
     console.log("loggedInUser", this.loggedInUser);
     await this.fetchEmployees();
     await this.fetchClients();
-
   },
 
-  methods:{
-    successmsg:successmsg,
+  methods: {
+    successmsg: successmsg,
     async fetchEmployees() {
       try {
-        const response = await axios.get( '/employees',
-          {
-            headers: {
-              Authorization: `Bearer ${this.loggedInUser.token}`,
-            },
+        const response = await axios.get("/employees", {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`
           }
-        );
+        });
 
-         console.log("responseclientenmploy", response.data);
+        console.log("responseclientenmploy", response.data);
         if (response.data.status === "success") {
-            this.data  = response.data.data;
-              this.EmployeeOptions = this.data
+          this.data = response.data.data;
+          this.EmployeeOptions = this.data;
 
-          this.loading =  false
+          this.loading = false;
         }
       } catch (error) {
         console.log(
@@ -327,23 +353,21 @@ export default {
     },
     async fetchClients() {
       try {
-        const response = await axios.get( '/clients',
-          {
-            headers: {
-              Authorization: `Bearer ${this.loggedInUser.token}`,
-            },
+        const response = await axios.get("/clients", {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`
           }
-        );
+        });
 
         // console.log("responseclientenmploy", response.data);
         if (response.data.status === "success") {
-            response.data.data;
-              this.ClientOptions = response.data.data.map((client) => ({
+          response.data.data;
+          this.ClientOptions = response.data.data.map((client) => ({
             label: client.client_name,
             value: client.id
           }));
           // console.log("this.DaysOptionsyy", this.ClientOptions);
-          this.loading =  false
+          this.loading = false;
         }
       } catch (error) {
         console.log(
@@ -367,18 +391,18 @@ export default {
         }
       }
     },
-    HandleId(id ){this.IdEmployee = id},
+    HandleId(id) {
+      this.IdEmployee = id;
+    },
 
     async submitAssign(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {
-    
         this.loading = true;
         let data = {
           employee_id: this.IdEmployee,
           client: this.step1.ClientAssign,
-          frequency:this.step1.frequency
-         
+          frequency: this.step1.frequency
         };
 
         console.log("data", data);
@@ -417,7 +441,7 @@ export default {
       this.currentPage = pageNumber;
       window.scrollTo({
         top: 0,
-        behavior: "smooth", // Utilisez 'auto' pour un défilement instantané
+        behavior: "smooth" // Utilisez 'auto' pour un défilement instantané
       });
     },
     updatePaginatedItems() {
@@ -459,45 +483,45 @@ export default {
       console.log("resultError", this.resultError);
     },
     filterByName() {
-this.currentPage = 1;
-if (this.control.name !== null) {
-   const tt = this.control.name;
-  const  searchValue = tt.toLowerCase()
-  this.EmployeeOptions =this.data.filter(user => {
-    const Email = user.user.email || '';
-    const Prenom = user.user.Prenoms || '';
-    const Nom = user.user.Nom || '';
-    const Address = user.address || '';
-  
-    return Nom.toLowerCase().includes(searchValue) || Prenom.toLowerCase().includes(searchValue) || Email.toLowerCase().includes(searchValue) || Address.toLowerCase().includes(searchValue) ;
-  });
+      this.currentPage = 1;
+      if (this.control.name !== null) {
+        const tt = this.control.name;
+        const searchValue = tt.toLowerCase();
+        this.EmployeeOptions = this.data.filter((user) => {
+          const Email = user.user.email || "";
+          const Prenom = user.user.Prenoms || "";
+          const Nom = user.user.Nom || "";
+          const Address = user.address || "";
 
-} else {
-this.EmployeeOptions = [...this.data];
- 
-}
-
-},
+          return (
+            Nom.toLowerCase().includes(searchValue) ||
+            Prenom.toLowerCase().includes(searchValue) ||
+            Email.toLowerCase().includes(searchValue) ||
+            Address.toLowerCase().includes(searchValue)
+          );
+        });
+      } else {
+        this.EmployeeOptions = [...this.data];
+      }
+    }
   }
-}
+};
 </script>
 <style lang="css" scoped>
-    .container_pagination {
-    width: auto;
-    text-align: end;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 10px;
-    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
-    margin: 5px;
-    background-color:#fff;
-
+.container_pagination {
+  width: auto;
+  text-align: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  margin: 5px;
+  background-color: #fff;
 }
-.card.custom-card .card-footer{
-
-    padding:10px !important;
-    text-align:center !important;
-    /* background-color:#b1ed92 !important; */
+.card.custom-card .card-footer {
+  padding: 10px !important;
+  text-align: center !important;
+  /* background-color:#b1ed92 !important; */
 }
 </style>
