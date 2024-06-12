@@ -42,7 +42,8 @@
                                 </div> 
 
                                 
-                                <div v-if="paginatedItems.lenght === 0">
+                                <div v-if="paginatedItems.length === 0"  class="noresul">
+                                  
                                            No records
                                 </div>
                                 <div v-else class="row justify-content-center">

@@ -54,7 +54,8 @@
       </div>
     </div>
 
-    <div v-if="paginatedItems.lenght === 0">No records</div>
+    <div v-if="paginatedItems.length === 0"  class="noresul">  No records </div>
+                      
     <div v-else class="row justify-content-center">
       <div class="col-xxl-12 col-xl-12">
         <div class="row" v-if="loggedInUser.role_id === 2">
