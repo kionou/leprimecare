@@ -240,8 +240,7 @@ export default {
           this.phoneNumber = selectedActualites.Whatsapp;
           this.id = selectedActualites.id;
           (this.image = selectedActualites.profile),
-            (this.direction = selectedActualites.Direction),
-            (this.region = selectedActualites.region);
+            
           this.loading = false;
         }
       } catch (error) {
@@ -266,9 +265,7 @@ export default {
         Nom: this.nom,
         Prenoms: this.prenom,
         Whatsapp: this.phoneNumber,
-        CodePartenaire: null,
-        region: this.region,
-        Direction: this.direction,
+        
       };
       console.log("data", DataUser);
       try {
@@ -279,7 +276,29 @@ export default {
         });
         console.log(response);
         if (response && response.data && response.data.status === "success") {
-          this.fetchUserDetail(); // Assurez-vous que cette fonction est correctement définie
+          const updatedUser = response.data.data;
+          let role_id;
+      if (Array.isArray(this.loggedInUser.role_id)) {
+        role_id = this.loggedInUser.role_id.length > 0 ? this.loggedInUser.role_id[0].id : null;
+      } else {
+        role_id = this.loggedInUser.role_id;
+      }
+
+      this.$store.dispatch('auth/setMyAuthenticatedUser', {
+        user: {
+          id: updatedUser.id,
+          Nom: updatedUser.Nom,
+          Prenoms: updatedUser.Prenoms,
+          email: updatedUser.email,
+          Whatsapp: updatedUser.Whatsapp,
+          profile: updatedUser.profile,
+        },
+        roles: role_id,
+        expires_in: this.loggedInUser.tokenExpiration - Math.floor(Date.now() / 1000),
+        access_token: this.loggedInUser.token,
+      });
+
+          this.fetchUserDetail()
 
           this.loading = false;
           this.successmsg(

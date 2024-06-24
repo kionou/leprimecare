@@ -29,18 +29,26 @@ const actions = {
     console.log(user);
     const now = Math.floor(Date.now() / 1000);
     const tokenExpiration = now + user.expires_in;
+    let role_id;
+
+    if (Array.isArray(user.roles)) {
+      role_id = user.roles.length > 0 ? user.roles[0].id : null;
+    } else {
+      role_id = user.role_id;
+    }
+
     const userSessionData = {
-      id: user.user.Entreprises || user.user.Identifiant,
+      id: user.user.id,
       nom: user.user.Nom,
       prenom: user.user.Prenoms,
       email: user.user.email,
       whatsapp: user.user.Whatsapp,
-      profile:user.user.profile,
-      id_user:user.user.id,
-      role_id:user.roles[0].id,
+      profile: user.user.profile,
+      role_id: role_id,
       token: user.access_token,
       tokenExpiration: tokenExpiration,
     };
+
 
     commit('SET_MY_AUTHENTICATED_USER', userSessionData);
     localStorage.setItem('myAuthenticatedPrimecare', JSON.stringify(userSessionData));
