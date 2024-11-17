@@ -422,7 +422,7 @@
 <div class="input-groupe">
   <!-- <label for="userpassword">File <span class="text-danger">*</span></label> -->
   <div class="mb-3 position-relative">
-                      <div class="input-groupe">
+               <div class="input-groupe">
                 <label for="FileInsurance">File Insurance</label>
                  <input
                   type="file"
@@ -1076,7 +1076,7 @@ reason:{},
     methods: {
     
    
-      clearErrorExp(index, field) {
+    clearErrorExp(index, field) {
       
       if (this.errors.step4.experiences[index]) {
         this.errors.step4.experiences[index][field] = null;
@@ -1298,9 +1298,6 @@ for (let i = 1; i < step; i++) {
         isValid = true; 
       }
    
-
-
-  
         this.v$[`step${this.currentStep}`].$touch();
         if (this.v$.$errors.length === 0 && isValid) {
           if( this.currentStep === 6){
@@ -1445,8 +1442,6 @@ async registeremployeeData(employeeData) {
             const errorKeys = Object.keys(error.response.data.errors);
             const currentStepFields = Object.keys(employeeData);
             const isCurrentStepError = errorKeys.some(key => currentStepFields.includes(key));
-
-       
 
             if (isCurrentStepError === true) {
                 // Passer à l'étape suivante si l'erreur n'est pas liée à l'étape en cours
@@ -1774,12 +1769,6 @@ this.step4.experiences = userData.experiences
 
   }
   console.log('userDataexperethis',this.step4.experiences)
-
-
-
-
-
- 
 
 this.step1.first_name = userData.first_name;
 this.step1.last_name = userData.last_name;

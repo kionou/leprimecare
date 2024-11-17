@@ -37,15 +37,15 @@
             </button>
           </div>
 
-          <button
+          <router-link
+          to="/dashboard/employee-add"
             class="btn btn-icon btn-primary ms-2"
             data-bs-placement="top"
             data-bs-title="Add Contact"
-            data-bs-toggle="modal"
-            data-bs-target="#employee_add_to_timesheet"
+            
           >
             <i class="ri-add-line"> </i>
-          </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -108,9 +108,16 @@
                   >
                     <i class="ri-eye-line"></i>
                   </router-link>
-                  <button class="btn btn-sm btn-icon btn-primary btn-wave">
+
+                 
+                  <router-link  class="btn btn-sm btn-icon btn-primary btn-wave"   :to="{
+                      name: 'employee-update',
+                      params: { id: client.id }
+                    }" >
                     <i class="ri-edit-line"></i>
-                  </button>
+
+                  </router-link> 
+              
 
                   <button class="btn btn-sm btn-icon btn-danger btn-wave">
                     <i class="ri-delete-bin-line"></i>
@@ -468,11 +475,7 @@ export default {
         console.log(" errorMessages", errorMessages, typeof errorMessages);
 
         const concatenatedError = errorMessages.join(", "); // Concaténer les messages d'erreur
-        console.log(
-          " concatenatedError",
-          concatenatedError,
-          typeof concatenatedError
-        );
+    
 
         formattedErrors[field] = concatenatedError; // Utilisez le nom du champ comme clé
       }

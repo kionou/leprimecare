@@ -993,6 +993,16 @@
               </li>
               <!-- End::slide -->
 
+              
+              <!-- Start::slide -->
+              <!-- <li class="slide">
+                <router-link to="/dashboard/payroll" class="side-menu__item">
+                  <i class="bx bx-group side-menu__icon"></i>
+                  <span class="side-menu__label">Payroll</span>
+                </router-link>
+              </li> -->
+              <!-- End::slide -->
+
               <!-- Start::slide -->
               <li class="slide" v-if="loggedInUser.role_id === 2">
                 <router-link

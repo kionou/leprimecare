@@ -43,10 +43,9 @@
 
           <button
             class="btn btn-icon btn-primary ms-2" v-if="loggedInUser.role_id === 2"
+             @click="openModal('add_client')"
             data-bs-placement="top"
-            data-bs-title="Add Contact"
-            data-bs-toggle="modal"
-            data-bs-target="#add_client"
+          
           >
             <i class="ri-add-line"> </i>
           </button>
@@ -121,14 +120,13 @@
               </div>
               <div class="card-footer " v-if="loggedInUser.role_id === 2">
                 <div class="btn-list">
-                  <!-- <button
+                  <button
                     class="btn btn-sm btn-icon btn-primary-light"
-                    data-bs-toggle="modal"
-                    data-bs-target="#update_client"
-                    @click="HandleIdUpdate(client.id)"
+                   
+                    @click="HandleIdUpdate(client.id , 'update_client')"
                   >
                     <i class="ri-edit-line"></i>
-                  </button> -->
+                  </button>
 
                   <button
                     class="btn btn-sm  btn-danger"
@@ -211,6 +209,7 @@
       aria-hidden="true"
       data-bs-backdrop="static"
       ref="add_client"
+       style="  background: rgba(0, 0, 0, 0.5); "
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -365,8 +364,8 @@
                 <button
                   type="button"
                   class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
+                
+                   @click="closeModal('add_client')"
                 >
                   Close
                 </button>
@@ -501,7 +500,7 @@
                   </div>
                 </div>
 
-                <div class="row mt-3 content-group">
+                <!-- <div class="row mt-3 content-group">
                   <div class="col">
                     <div class="input-groupe">
                       <div class="mb-3 position-relative">
@@ -521,11 +520,11 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="row mb-3">
                 <div class="boutton">
-                  <button class="" @click.prevent="submitUpdate('add_client')">
+                  <button class="" @click.prevent="submitUpdate('update_client')">
                     Save
                   </button>
                 </div>
@@ -538,8 +537,7 @@
                 <button
                   type="button"
                   class="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
+                  @click="closeModal('update_client')"
                 >
                   Close
                 </button>
@@ -768,7 +766,9 @@ export default {
         console.log("error", this.v$.$errors);
       }
     },
-    async HandleIdUpdate(id) {
+    async HandleIdUpdate(id , modalId) {
+      this.step2 = {}
+      this.openModal(modalId)
       this.loading = true;
 
       try {
@@ -780,7 +780,6 @@ export default {
 
         // console.log("response", response);
         if (response.data.status === "success") {
-          console.log("responsedata", response.data.data);
           let data = response.data.data;
           (this.step2.client_name = data.client_name),
             (this.step2.address = data.address),
@@ -817,28 +816,28 @@ export default {
 
       if (this.v$.$errors.length == 0) {
         this.loading = true;
+        let data = {
+          client_name:this.step2.client_name,
+          address:this.step2.address,
+          state:this.step2.state,
+          phone:this.step2.phone,
 
-        const formData = new FormData();
-        formData.append("client_name", this.step2.client_name);
-        formData.append("address", this.step2.address);
-        formData.append("state", this.step2.state);
-        formData.append("phone", this.step2.phone);
-        formData.append("profil", this.profil);
+        }
 
-        console.log(
-          "data",
-          this.step2.client_name,
-          this.step2.address,
-          this.step2.state,
-          this.step2.phone,
-          this.profil
-        );
+        // const formData = new FormData();
+        // formData.append("client_name", this.step2.client_name);
+        // formData.append("address", this.step2.address);
+        // formData.append("state", this.step2.state);
+        // formData.append("phone", this.step2.phone);
+        // formData.append("profil", this.profil);
+
+       
 
         try {
-          const response = await axios.put(`clients/${this.ToId}`, formData, {
+          const response = await axios.put(`clients/${this.ToId}`, data, {
             headers: {
               Authorization: `Bearer ${this.loggedInUser.token}`,
-              "Content-Type": "multipart/form-data",
+            
             },
           });
           console.log("Réponse du téléversement :", response);
@@ -874,7 +873,7 @@ export default {
       this.currentPage = pageNumber;
       window.scrollTo({
         top: 0,
-        behavior: "smooth", // Utilisez 'auto' pour un défilement instantané
+        behavior: "smooth",
       });
     },
     updatePaginatedItems() {
@@ -953,15 +952,34 @@ export default {
         this.ClientOptions = [...this.data];
       }
     },
-    closeModal(modalId) {
-      let modalElement = this.$refs[modalId];
-      modalElement.classList.remove("show");
-      modalElement.style.display = "none";
-      document.body.classList.remove("modal-open");
-      let modalBackdrop = document.querySelector(".modal-backdrop");
-      if (modalBackdrop) {
-        modalBackdrop.parentNode.removeChild(modalBackdrop);
+    addBackdrop() {
+      if (!$('.modal-backdrop').length) {
+        const backdrop = $('<div class="modal-backdrop fade"></div>');
+        $('body').append(backdrop);
+        backdrop.fadeIn(100); 
       }
+    },
+
+    openModal(modalId) {
+      let modalElement = this.$refs[modalId];
+
+      $(modalElement).fadeIn(100, function() {
+        $(modalElement).addClass('show');
+      });
+      $('body').addClass('modal-open');
+      this.addBackdrop();
+    },
+    closeModal(modalId) { 
+      let modalElement = this.$refs[modalId];
+
+      $(modalElement).fadeOut(100, function() {
+        $(modalElement).removeClass('show');
+        $(modalElement).css('display', 'none');
+      });
+      $('body').removeClass('modal-open');
+      $('.modal-backdrop').fadeOut(100, function() {
+        $(this).remove(); 
+      });
     },
     async formatValidationErrors(errors) {
       const formattedErrors = {};

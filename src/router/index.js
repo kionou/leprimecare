@@ -6,6 +6,8 @@ import Accueil from '../views/dashboard/default.vue'
 
  import Employee from '../views/employee/employee.vue'
  import EmployeeDetail from '../views/employee/detail.vue'
+ import EmployeeUpdate from '../views/employee/update.vue'
+ import EmployeeAdd from '../views/employee/add.vue'
 
 
 import Clients from '../views/clients/default.vue'
@@ -21,6 +23,9 @@ import Transportation from '../views/transportation/default.vue'
 import Driver from '../views/Driving/default.vue'
 
 import Duties from '../views/duties/default.vue'
+
+
+import PayrollDefault from '../views/payroll/default.vue'
 
 import Users from '../views/users/default.vue'
 
@@ -87,6 +92,20 @@ const router = createRouter({
            component: EmployeeDetail
         },
         {
+          path: 'employee-update/:id',
+          name: 'employee-update',
+          meta: { requiresAuth: true },
+          props:true,
+           component: EmployeeUpdate
+        },
+        {
+          path: 'employee-add',
+          name: 'employee-add',
+          meta: { requiresAuth: true },
+          
+           component: EmployeeAdd
+        },
+        {
           path: 'clients',
           name: 'clients',
           meta: { requiresAuth: true },
@@ -129,6 +148,13 @@ const router = createRouter({
         },
 
         {
+          path: 'payroll',
+          name: 'payroll',
+          meta: { requiresAuth: true },
+           component: PayrollDefault
+        },
+
+        {
           path: 'profil',
           name: 'profil',
           meta: { requiresAuth: true },
@@ -152,12 +178,10 @@ router.beforeEach((to, from, next) => {
   console.log("isAuthenticated", isAuthenticated);
   console.log(authenticatedUser);
   if (requiresAuth && !isAuthenticated) {
-    // Si la route nécesite une authentification et l'utilisateur n'est pas connecté,
-    // redirigez-le vers la page de connexion
+   
     next("/");
   } else if (to.name === "login" && isAuthenticated) {
-    // Si l'utilisateur est connecté et essaie d'accéder aux pages d'inscription ou de connexion,
-    // redirigez-le vers la page mon_espace
+    
    
       next("/dashboard");
     
