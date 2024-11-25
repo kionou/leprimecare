@@ -119,14 +119,14 @@
                   </router-link> 
               
 
-                  <button class="btn btn-sm btn-icon btn-danger btn-wave">
+                  <button class="btn btn-sm btn-icon btn-danger btn-wave"  @click="HandleIdDelete(client.id)">
                     <i class="ri-delete-bin-line"></i>
                   </button>
                   <button
                     class="btn btn-sm btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#Assign_client"
-                    @click="HandleId(client.user_id)"
+                    @click="HandleId(client.id)"
                   >
                     <i class="ri-user-line"></i>
                     Assign a client
@@ -268,6 +268,7 @@ import axios from "@/lib/axiosConfig";
 import useVuelidate from "@vuelidate/core";
 import { require, lgmin, lgmax, ValidEmail } from "@/functions/rules";
 import { successmsg } from "@/lib/modal.js";
+import Swal from "sweetalert2";
 export default {
   components: {
     Loading,
@@ -412,7 +413,7 @@ export default {
           frequency: this.step1.frequency
         };
 
-        console.log("data", data);
+      
 
         try {
           const response = await axios.post("/employees/assign-clients", data, {
@@ -430,8 +431,7 @@ export default {
           } else {
           }
         } catch (error) {
-          console.log("response.login", error);
-
+   
           this.loading = false;
           if (error.response.data.status === "error") {
             return (this.error = error.response.data.message);
@@ -456,6 +456,57 @@ export default {
 
       const endIndex = startIndex + this.itemsPerPage;
       return this.EmployeeOptions.slice(startIndex, endIndex);
+    },
+    async HandleIdDelete(id) {
+      // Affichez une boîte de dialogue Sweet Alert pour confirmer la suppression
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      });
+
+      // Si l'utilisateur confirme la suppression
+      if (result.isConfirmed) {
+        this.ConfirmeDelete(id);
+      }
+    },
+    async ConfirmeDelete(id) {
+      this.loading = true;
+ 
+      try {
+        // Faites une requête pour supprimer l'élément avec l'ID itemId
+        const response = await axios.delete(`/employees/${id}`, {
+          headers: {
+            Authorization: `Bearer ${this.loggedInUser.token}`,
+          },
+        });
+        console.log("Réponse de suppression:", response);
+        if (response.data.status === "success") {
+          this.loading = false;
+          this.successmsg(
+            "Employee Deleted",
+            " The Employee has been successfully deleted."
+          );
+          await this.fetchEmployees();
+        } else {
+          console.log("error", response.data);
+          this.loading = false;
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+
+        if (
+          error.response.data.message === "Vous n'êtes pas autorisé." ||
+          error.response.status === 401
+        ) {
+          await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+          this.$router.push("/"); //a revoir
+        }
+      }
     },
     closeModal(modalId) {
       let modalElement = this.$refs[modalId];

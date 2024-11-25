@@ -19904,7 +19904,7 @@ html:not([dir=rtl]) .switches-stacked .switch {
 .timeline .timeline-item .timeline-event {
   position: relative;
   top: -1rem;
-  width: 100%;
+  /* width: 100%; */
   min-height: 4rem;
   background-color: #fff;
   border-radius: 0.375rem;

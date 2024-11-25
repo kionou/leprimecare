@@ -133,6 +133,28 @@
                 <small v-if="v$.step1.social_security.$error">{{ v$.step1.social_security.$errors[0].$message}}</small>
                 <small v-if="resultError['social_security']"> {{ resultError["social_security"] }} </small>
                </div>
+               <div class="col" >
+<div class="input-groupe">
+
+  <div class="mb-3 position-relative">
+               <div class="input-groupe">
+                <label for="FileSocialSecurity">File Social Security</label>
+                 <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                   @change="handleFileUploadSocialSecurity"
+                  name="FileSocialSecurity"
+                  id="FileSocialSecurity"
+                  placeholder=""
+                 
+                  :class="{ 'error-border': resultError['FileSocialSecurity'] }"
+                  @input="resultError['FileSocialSecurity'] = false"
+                />
+              </div>
+                     </div>
+
+                  </div>
+                  </div>
                   <div class="col">
                   <div class="input-groupe">
                   <label for="userpassword">Number street city state zip <span class="text-danger">*</span></label>
@@ -337,7 +359,7 @@
 
 <div class="col">
 <div class="input-groupe">
-  <label for="userpassword">School Email Address <span class="text-danger">*</span></label>
+  <label for="userpassword">School Email Address </label>
   <MazInput  v-model="step2.school_email_address" type="email"  color="info" name="email"   size="sm" rounded-size="sm" />
 </div>
 <small v-if="v$.step2.school_email_address.$error">{{ v$.step2.school_email_address.$errors[0].$message}}</small>
@@ -420,7 +442,7 @@
 </div>
 <div class="col" v-if="this.step2.current_insurance === true">
 <div class="input-groupe">
-  <!-- <label for="userpassword">File <span class="text-danger">*</span></label> -->
+
   <div class="mb-3 position-relative">
                <div class="input-groupe">
                 <label for="FileInsurance">File Insurance</label>
@@ -585,18 +607,18 @@
           <div class="row mb-3 mt-3 content-group">
             <div class="col">
               <div class="input-groupe">
-                <label for="employer_name">Name <span class="text-danger">*</span></label>
+                <label for="employer_name">Company name <span class="text-danger">*</span></label>
                 <MazInput v-model="experience.employer_name" type="text" color="info" name="employer_name" size="sm" rounded-size="sm"  @input="clearErrorExp(index, 'employer_name')"/>
                 <small v-if="errors.step4.experiences[index]?.employer_name">{{ errors.step4.experiences[index].employer_name }}</small>
               </div>
             </div>
-            <div class="col">
+            <!-- <div class="col">
               <div class="input-groupe">
-                <label for="name_of_last">Name of Last <span class="text-danger">*</span></label>
+                <label for="name_of_last">Company name <span class="text-danger">*</span></label>
                 <MazInput v-model="experience.name_of_last" type="text" color="info" name="name_of_last" size="sm" rounded-size="sm" @input="clearErrorExp(index, 'name_of_last')" />
                 <small v-if="errors.step4.experiences[index]?.name_of_last">{{ errors.step4.experiences[index].name_of_last }}</small>
               </div>
-            </div>
+            </div> -->
             <div class="col">
               <div class="input-groupe">
                 <label for="phone">Phone Number <span class="text-danger">*</span></label>
@@ -604,8 +626,6 @@
                 <small v-if="errors.step4.experiences[index]?.phone">{{ errors.step4.experiences[index].phone }}</small>
               </div>
             </div>
-          </div>
-          <div class="row mb-3 mt-3 content-group">
             <div class="col">
               <div class="input-groupe">
                 <label for="city_state_zip">City, State, Zip code <span class="text-danger">*</span></label>
@@ -613,6 +633,9 @@
                 <small v-if="errors.step4.experiences[index]?.city_state_zip">{{ errors.step4.experiences[index].city_state_zip }}</small>
               </div>
             </div>
+          </div>
+          <div class="row mb-3 mt-3 content-group">
+            
             <div class="col">
               <div class="input-groupe">
                 <label for="salary">Pay or Salary <span class="text-danger">*</span></label>
@@ -627,8 +650,6 @@
                 <small v-if="errors.step4.experiences[index]?.supervisor">{{ errors.step4.experiences[index].supervisor }}</small>
               </div>
             </div>
-          </div>
-          <div class="row mb-3 mt-3 content-group">
             <div class="col">
               <div class="input-groupe">
                 <label for="last_job_title">Your last job title <span class="text-danger">*</span></label>
@@ -636,6 +657,9 @@
                 <small v-if="errors.step4.experiences[index]?.last_job_title">{{ errors.step4.experiences[index].last_job_title }}</small>
               </div>
             </div>
+          </div>
+          <div class="row mb-3 mt-3 content-group">
+          
             <div class="col">
               <div class="input-groupe">
                 <label for="employment_date_begin">Start date <span class="text-danger">*</span></label>
@@ -841,6 +865,7 @@
         DrivingOptions:[],
         TransportOptions:[],
         FileInsurance:"",
+        FileSocialSecurity:"",
         errors: {
         step1: { DaysHours: [] },
         step4: { experiences: [] },
@@ -1204,6 +1229,7 @@ for (let i = 1; i < step; i++) {
               email:this.step1.email,
               age: this.step1.age,
               social_security: this.step1.social_security,
+              FileSocialSecurity:this.FileSocialSecurity,
               number_street_city_state_zip: this.step1.number_street_city_state_zip,
               position_applied_agency: this.step1.position_applied_agency,
               weekly_available_hours: this.step1.weekly_available_hours,
@@ -1284,9 +1310,14 @@ for (let i = 1; i < step; i++) {
 },
     
   
-      async nextStep() {   
+      async nextStep() {  
+        this.resultError= {}
+        this.error = ""
+        this.loading = true;
+
         try {
           let isValid = false;
+
 
         if (this.currentStep === 1) {
         isValid = this.validateStep1();
@@ -1301,34 +1332,37 @@ for (let i = 1; i < step; i++) {
         this.v$[`step${this.currentStep}`].$touch();
         if (this.v$.$errors.length === 0 && isValid) {
           if( this.currentStep === 6){
-               this.loading = true
                 const stepData = this.collectStepData(this.currentStep);
-                  console.log(stepData);
                   localStorage.setItem('tempLeprimecare', JSON.stringify(stepData));
-                  const response = await this.registeremployeeData(stepData) 
-                  console.log('responseenregistrement',response)
-                  if(response.status === "success"){
-                  this.loading = false
+                  const response = await this.registeremployeeData(stepData)  
+                  if (response === true) {   
                     this.swaaa()
                     localStorage.removeItem('tempLeprimecare')
-
-                  }else{
-                  this.loading = false
-
+                      this.loading = false;
+                  } else {
+                      console.error("Erreur lors de l'envoi des données :", response);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      this.loading = false;
                   }
           }else{
             const stepData = this.collectStepData(this.currentStep);
                  
                   localStorage.setItem('tempLeprimecare', JSON.stringify(stepData))
-                this.currentStep++;
-              window.scrollTo({ top: 0, behavior: "smooth" });
-          
-           
+                  const response = await this.registeremployeeData(stepData) 
+                  if (response === true) {
+                    this.resultError= {}
+                      this.currentStep++;
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      this.loading = false;
+                  } else {
+                      console.error("Erreur lors de l'envoi des données :", response);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      this.loading = false;
+                  }
           }
         } else {
-            // Afficher un message d'erreur à l'utilisateur
-            console.log("Le formulaire contient des erreurs");
-             console.log("errroor222", this.v$.$errors);
+           
+            //  console.log("errroor222", this.v$.$errors);
             window.scrollTo({ top: 0, behavior: "smooth" });
                    this.loading = false;
         }
@@ -1336,101 +1370,25 @@ for (let i = 1; i < step; i++) {
        
     } catch (error) {
         // Gérer les erreurs
-        console.log("errroor222", this.v$.$errors);
+        // console.log("errroor222", this.v$.$errors);
 
         console.error("Une erreur s'est produite :", error);
-        console.log("errroor222", this.v$.$errors);
+        
         
 
         window.scrollTo({ top: 0, behavior: "smooth" });
          this.loading = false;
     }
       },
-      async nextStep1() {
-    try {
-        // Valider les données de l'étape actuelle
-        this.v$[`step${this.currentStep}`].$touch();
-        if (this.v$.$errors.length === 0) {
-          
-            console.log('stepData', this.currentStep);
-            this.loading = true;
-            if( this.currentStep === 5){
-              
-               const stepData = this.collectStepData(this.currentStep);
-                console.log(stepData);
-                  const response = await this.updateMpmeDonnees(stepData) 
-                  console.log('eee',response);
-                  if (response === true) {
-                    this.loading = false;
-                    this.confirmDelete()
-                
-                  } else {
-                      console.error("Erreur lors de l'envoi des données :", response);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      this.loading = false;
-                  }
 
-            }else if(this.currentStep === 4 || this.currentStep === 5){
-                  
-                  const stepData = this.collectStepData(this.currentStep);
-                  console.log(stepData);
-                  localStorage.setItem('tempLeprimecare', JSON.stringify(stepData))
-                  const response = await this.updateMpmeDonnees(stepData) 
-                  console.log('eee',response);
-                  if (response === true) {
-                      this.currentStep++;
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                   this.loading = false;
-                  } else {
-                      console.error("Erreur lors de l'envoi des données :", response);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      this.loading = false;
-                  }
-            }else{
-              const stepData = this.collectStepData(this.currentStep);
-                  console.log(stepData);
-                  localStorage.setItem('tempLeprimecare', JSON.stringify(stepData));
-                  const response = await this.registeremployeeData(stepData) 
-                  console.log('eee',response);
-                  if (response === true) {
-                      this.currentStep++;
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      this.loading = false;
-                  } else {
-                      console.error("Erreur lors de l'envoi des données :", response);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      this.loading = false;
-                  }
-
-            }
-
-            
-
-
-        } else {
-            // Afficher un message d'erreur à l'utilisateur
-            console.log("Le formulaire contient des erreurs");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-                   this.loading = false;
-        }
-    } catch (error) {
-        // Gérer les erreurs
-        console.error("Une erreur s'est produite :", error);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-         this.loading = false;
-    }
-},
 async registeremployeeData(employeeData) {
     try {
         const response = await axios.post('/employees', employeeData);
-
-        console.log("response", response);
         if (response.data.status === 'success') {
           
-            return response.data;
+            return true;
         } else {
             console.error("Erreur lors de la mise à ", response.data); 
-            // Passer à l'étape suivante si l'erreur n'est pas liée à l'étape en cours
             this.error = "An error has occurred. Please try again later";
             return false;
         }
@@ -1444,20 +1402,20 @@ async registeremployeeData(employeeData) {
             const isCurrentStepError = errorKeys.some(key => currentStepFields.includes(key));
 
             if (isCurrentStepError === true) {
-                // Passer à l'étape suivante si l'erreur n'est pas liée à l'étape en cours
                 this.formatValidationErrors(error.response.data.errors);
               return false;
 
             }else{
               return true;
             }
+
+            
           }
           else{
 
             if (error.response) {
                 
             } else {
-                // Afficher les erreurs à l'utilisateur
                 this.formatValidationErrors(error.response.data.errors);
                 this.loading = false;
             }
@@ -1490,9 +1448,7 @@ prevStep() {
         }
        
       } catch (error) {
-        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);
-      
-        
+        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);   
       }
     },
     async fetchHonoraires() {
@@ -1506,13 +1462,9 @@ prevStep() {
               label:el,
               value: el,
             }));
-        
-        }
-       
+        } 
       } catch (error) {
-        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);
-      
-        
+        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);   
       }
     },
     async fetchLevelID() {
@@ -1530,17 +1482,13 @@ prevStep() {
         }
        
       } catch (error) {
-        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);
-      
-        
+        console.log("Erreur lors de la mise à jour des données MPME guinee :", error);  
       }
     },
     async fetchDrivingState() {
       try {
        
-        const response = await axios.get('/driving-issue-states');;
-
-     
+        const response = await axios.get('/driving-issue-states');
         if (response.data.status === 'success') {
           this.DrivingOptions = response.data.data.map((level) => ({
               label:level.name,
@@ -1581,24 +1529,18 @@ prevStep() {
 
       for (const field in errors) {
         const errorMessages = errors[field]; // Liste complète des messages d'erreur
-       
-
         const concatenatedError = errorMessages.join(", "); // Concaténer les messages d'erreur
-        
-
         formattedErrors[field] = concatenatedError; // Utilisez le nom du champ comme clé
       }
 
       this.resultError = formattedErrors; // Stockez les erreurs dans un objet
-
-      // Maintenant, this.resultError est un objet où les clés sont les noms des champs
     
       for (let key in this.resultError) {
   if (this.resultError.hasOwnProperty(key)) {
     // Construire le message d'erreur avec le nom du champ (clé) et son message (valeur)
     let errorMessage = `${key}: ${this.resultError[key]}`;
     // Afficher le toast pour chaque erreur
-    this.triggerToast(errorMessage);
+    // this.triggerToast(errorMessage);
   }
 }
     },
@@ -1620,15 +1562,17 @@ prevStep() {
   });
 },
 handleFileUploadInsurance(event) {
-    console.log("File input change");
-    const file = event.target.files[0];
-    console.log("handleFileUploadInsurance Selected file:", file);
-    
-    this.submitFile(file )
+    const file = event.target.files[0];   
+    this.submitFile(file  , 'FileInsurance')
+
+  },
+  handleFileUploadSocialSecurity(event) {
+    const file = event.target.files[0];   
+    this.submitFile(file  , 'FileSocialSecurity')
 
   },
  
-async submitFile(file ){
+async submitFile(file , a){
   const formData = new FormData();
 formData.append('Fichier',file);
 
@@ -1639,9 +1583,13 @@ const response = await axios.post('/recruitment/insurance/upload' , formData, {
      
             'Content-Type': 'multipart/form-data'
     }});
-  console.log('Réponse du téléversement :', response);
   if (response.data.status === "success") { 
-        this.FileInsurance = response.data.data.url
+    if(a === 'FileInsurance' ) {
+      this.FileInsurance = response.data?.data?.url
+
+    }else{
+      this.FileSocialSecurity = response.data?.data?.url
+    }
        
        
 
@@ -1688,12 +1636,9 @@ validateStep1() {
 
       this.step4.experiences.forEach((experience, index) => {
         const experienceErrors = {};
+        
         if (!experience.employer_name) {
-          experienceErrors.employer_name = 'Employer name is required';
-          isValid = false;
-        }
-        if (!experience.name_of_last) {
-          experienceErrors.name_of_last = 'Name of last is required';
+          experienceErrors.employer_name = 'Company name  is required';
           isValid = false;
         }
         if (!experience.phone) {
@@ -1768,8 +1713,6 @@ this.step4.experiences = this.step4.experiences
 this.step4.experiences = userData.experiences
 
   }
-  console.log('userDataexperethis',this.step4.experiences)
-
 this.step1.first_name = userData.first_name;
 this.step1.last_name = userData.last_name;
 this.step1.phone = userData.phone;
@@ -1835,7 +1778,7 @@ this.step6.other_skills = userData.other_skills;
     const userDataString = JSON.parse(localStorageUserData)
            this.userData = userDataString
             this.storeUserDataLocal(userDataString);
-           console.log("UserData:",userDataString );
+  
    }
    
    try {

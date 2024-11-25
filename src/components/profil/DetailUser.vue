@@ -502,14 +502,14 @@
                       </div>
                       <div class="card-body">
                         <ul class="timeline ms-2">
-                          <li class="timeline-item timeline-item-transparent">
+                          <li class="timeline-item timeline-item-transparent d-flex justify-content-start align-items-end">
                             <span
                               class="timeline-point timeline-point-primary"
                             ></span>
                             <div class="timeline-event">
                               <div class="d-flex flex-wrap gap-2">
                                 <p v-if="data.FileInsurance === null">
-                                 No File Insurance yet 
+                                 No File Insurance 
                                 </p>
                                 <a
                                   v-else
@@ -527,7 +527,32 @@
                                 </a>
                               </div>
                             </div>
+
+
+                            <div class="timeline-event">
+                              <div class="d-flex flex-wrap gap-2">
+                                <p v-if="data.FileSocialSecurity === null">
+                                 No File Social Security 
+                                </p>
+                                <a
+                                  v-else
+                                  :href="data.FileSocialSecurity"
+                                  class="me-3 d-flex flex-column align-items-center"
+                                  download
+                                >
+                                  <img
+                                    src="@/assets/misc/pdf.png"
+                                    alt="Document image"
+                                    width="20"
+                                    class="me-2"
+                                  />
+                                  <span class="h6">File Social Security</span>
+                                </a>
+                              </div>
+                            </div>
                           </li>
+
+                          
                         </ul>
                       </div>
                     </div>

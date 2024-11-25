@@ -50,11 +50,11 @@ const router = createRouter({
       name: 'login',
       component: SignIn
     },
-    // {
-    //   path: '/register',
-    //   name: 'register-employee',
-    //   component: Employees
-    // },
+    {
+      path: '/register',
+      name: 'register-employee',
+      component: Employees
+    },
     {
       path: '/test',
       name: 'test',
