@@ -292,10 +292,10 @@
                               </thead>
                               <tbody>
                                 <tr
-                                  v-if="data.work_days"
+                                  v-if="data?.work_days"
                                   class="bg-white"
                                   v-for="(day, index) in data.work_days"
-                                  :key="day.id"
+                                  :key="index"
                                 >
                                   <td
                                     class="px-2 py-4 text-sm font-normal text-center text-gray-500 whitespace-nowrap"

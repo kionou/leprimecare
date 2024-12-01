@@ -320,14 +320,14 @@
                           </span>
                         </div>
                         <div class="fs-14" v-if="data.client">
-                          {{ data.client.client_name }}
+                          {{ data.client?.client_name }}
                         </div>
                       </div>
                     </td>
                     <td>
                       <span class="fw-semibold" v-if="data.employee">
-                        {{ data.employee.user.Prenoms }}
-                        {{ data.employee.user.Nom }}
+                        {{ data.employee?.user?.Prenoms }}
+                        {{ data.employee?.user?.Nom }}
                       </span>
                     </td>
                     <td>
@@ -336,7 +336,8 @@
                           HandleIdSignature(
                             data.client_id,
                             data.start_date_of_week,
-                            data.end_date_of_week
+                            data.end_date_of_week , 
+                            data.employee?.id
                           )
                         "
                         class="btn btn-sm"
@@ -395,7 +396,8 @@
                             HandleId(
                               data.client_id,
                               data.start_date_of_week,
-                              data.end_date_of_week
+                              data.end_date_of_week ,
+                              data.employee?.id
                             )
                           "
                           class="btn btn-sm"
@@ -492,7 +494,20 @@
                       <label for="userpassword"
                         >Client <span class="text-danger">*</span></label
                       >
-                      <MazSelect
+                      <MazSelect v-model="step1.client_id" color="info"   size="xs"
+                        rounded-size="xs"
+                        :options="ClientOptions"
+                            search v-slot="{ option }" >
+                            <div class="flex items-center"
+                              style="padding-top: 0.5rem; padding-bottom: 0.5rem; width: 100%; gap: 1rem"
+                              @click="handleOptionClickEmployeeid(option)">
+  
+                              {{ option.label }}
+  
+                            </div>
+  
+                          </MazSelect>
+                      <!-- <MazSelect
                         v-model="step1.client_id"
                         color="info"
                         name="client_id"
@@ -500,7 +515,7 @@
                         rounded-size="xs"
                         :options="ClientOptions"
                         search
-                      />
+                      /> -->
                       <small v-if="v$.step1.client_id.$error">{{
                         v$.step1.client_id.$errors[0].$message
                       }}</small>
@@ -823,7 +838,7 @@
       data-bs-backdrop="static"
       ref="client_add_signature"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
             class="modal-header float-start text-center justify-content-center"
@@ -927,6 +942,7 @@ export default {
       currentYear: currentYear,
       currentMonth: currentMonth,
       IdObservation: "",
+      employeeId:"",
       week_start_All: "",
       week_end_All: "",
       week: "All",
@@ -943,6 +959,7 @@ export default {
       DutiesOptions: [],
       week_start: "",
       week_end: "",
+      clientId:"",
       step1: {
         client_id: "",
         day_id: "",
@@ -1023,7 +1040,7 @@ export default {
     }
   },
   async mounted() {
-    console.log("loggedInUser", this.loggedInUser);
+   
     await this.fetchStatitics();
     await this.fetchClientEmployee();
     await this.fetchDays();
@@ -1043,7 +1060,7 @@ export default {
           }
         });
 
-        console.log("response", response);
+      ;
         if (response.data.status === "success") {
           console.log("responsedata", response.data.data);
           this.StatiticsOptions = response.data.data;
@@ -1055,7 +1072,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+        
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1073,8 +1090,7 @@ export default {
     },
 
     async fetchClientEmployee() {
-      console.log("responsettwww", this.week);
-      console.log("responsettdata", this.month);
+    
       this.loading = true;
 
       try {
@@ -1089,9 +1105,9 @@ export default {
           }
         });
 
-        console.log("responsett", response);
+      
         if (response.data.status === "success") {
-          console.log("responsedatatt", response.data.data.data);
+        
           this.ClientEmployeeOptions = response.data.data.data;
           await this.loadSignatureStates();
 
@@ -1103,7 +1119,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+         
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1122,18 +1138,18 @@ export default {
     async fetchDays() {
       try {
         const response = await axios.get("/working-days");
-        console.log("response", response);
+      
 
         if (response.data.status === "success") {
           const currentDate = new Date();
           const currentDayIndex = (currentDate.getDay() + 6) % 7;
-          console.log("this.currentDayIndex", currentDayIndex);
+     
 
           const currentDayOption = {
             label: response.data.data[currentDayIndex].name,
             value: response.data.data[currentDayIndex].id
           };
-          console.log("this.currentDayOption", currentDayOption);
+       
 
           this.DaysOptions = response.data.data.map((day) => ({
             label: day.name,
@@ -1146,7 +1162,7 @@ export default {
           // Sélectionner automatiquement le jour actuel
           this.step1.day_id = currentDayOption.value;
 
-          console.log("this.DaysOptions", this.DaysOptions);
+         
         }
       } catch (error) {
         console.log(
@@ -1159,7 +1175,7 @@ export default {
     async fetchClients() {
       try {
         const response = await axios.get(
-          `/employees/assign-clients/list/${this.loggedInUser.id_user}`,
+          `/employees/assign-clients/list/${this.loggedInUser.id}`,
           {
             headers: {
               Authorization: `Bearer ${this.loggedInUser.token}`
@@ -1167,13 +1183,14 @@ export default {
           }
         );
 
-        console.log("responseclientenmploy", response);
         if (response.data.status === "success") {
-          this.ClientOptions = response.data.data.map((client) => ({
-            label: client.client.client_name,
-            value: client.client_id
+          
+          this.ClientOptions = response.data.data?.map((client) => ({
+            label: client.client?.client_name,
+            value: client?.client_id,
+            id:client?.employee_id
           }));
-          console.log("this.DaysOptions", this.DaysOptions);
+         
         }
       } catch (error) {
         console.log(
@@ -1181,7 +1198,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+         
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1205,13 +1222,13 @@ export default {
           }
         });
 
-        console.log("responseclient", response);
+        
         if (response.data.status === "success") {
           this.DutiesOptions = response.data.data.map((client) => ({
             label: client.duty_name,
             value: client.id
           }));
-          console.log("this.DaysOptions", this.DaysOptions);
+         
         }
       } catch (error) {
         console.log(
@@ -1219,7 +1236,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+       
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1272,8 +1289,7 @@ export default {
       this.drawing = false;
     },
     clearCanvas() {
-      // const canvasData = this.$refs.canvas.toDataURL();
-      // console.log("canvasData", canvasData);
+     
       const ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
     },
@@ -1290,13 +1306,17 @@ export default {
       const endIndex = startIndex + this.itemsPerPage;
       return this.ClientEmployeeOptions.slice(startIndex, endIndex);
     },
+    handleOptionClickEmployeeid(value){
+    
+      this.employeeId = value?.id
 
+    },
     async submitDailyWork(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {
         this.loading = true;
         let data = {
-          employee_id: this.loggedInUser.id_user,
+          employee_id: this.employeeId,
           client: this.step1.client_id,
           day_id: this.step1.day_id,
           start_date_of_week: this.step1.week_start,
@@ -1306,13 +1326,13 @@ export default {
           duty_take_id: this.step1.duties_id
         };
 
-        console.log("data", data);
+   
 
         try {
           const response = await axios.post("/employees/timesheets", data, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           });
-          console.log("Réponse du téléversement :", response);
+         
           if (response.data.status === "success") {
             this.closeModal(modalId);
             this.successmsg(
@@ -1323,7 +1343,7 @@ export default {
           } else {
           }
         } catch (error) {
-          console.log("response.login", error);
+        
 
           this.loading = false;
           if (error.response.data.status === "error") {
@@ -1333,18 +1353,16 @@ export default {
           }
         }
       } else {
-        console.log("error", this.v$.$errors);
+      console.log("error", this.v$.$errors);
       }
     },
     async SubmitSignature(modalId) {
       this.loading = true;
       const canvasData = this.$refs.canvas.toDataURL();
-      console.log("canvasData", canvasData);
       const formData = new FormData();
       formData.append("id", this.IdObservation);
       formData.append("SignatureC", canvasData);
 
-      console.log("data");
       try {
         const response = await axios.post(
           "/employees/observations/timesheet/signature",
@@ -1353,7 +1371,7 @@ export default {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           }
         );
-        console.log("Réponse du téléversement :", response);
+  
         if (response.data.status === "success") {
           this.closeModal(modalId);
           this.successmsg(
@@ -1364,7 +1382,7 @@ export default {
         } else {
         }
       } catch (error) {
-        console.log("response.login", error);
+      
 
         this.loading = false;
         if (error.response.data.status === "error") {
@@ -1379,19 +1397,18 @@ export default {
       if (this.v$.$errors.length == 0) {
         this.loading = true;
         let data = {
-          employee_id: this.loggedInUser.id_user,
+          employee_id: this.employeeId,
           client_id: this.step2.client_id,
           start_date_of_week: this.step2.week_start,
           end_date_of_week: this.step2.week_end,
           observations: this.step2.observations
         };
 
-        console.log("data", data);
         try {
           const response = await axios.post("/employees/observations", data, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
           });
-          console.log("Réponse du téléversement :", response);
+      
           if (response.data.status === "success") {
             this.closeModal(modalId);
             this.successmsg(
@@ -1402,7 +1419,7 @@ export default {
           } else {
           }
         } catch (error) {
-          console.log("response.login", error);
+   
 
           this.loading = false;
           if (error.response.data.status === "error") {
@@ -1421,38 +1438,33 @@ export default {
 
       for (const field in errors) {
         const errorMessages = errors[field]; // Liste complète des messages d'erreur
-        console.log(" errorMessages", errorMessages, typeof errorMessages);
+     
 
         const concatenatedError = errorMessages.join(", "); // Concaténer les messages d'erreur
-        console.log(
-          " concatenatedError",
-          concatenatedError,
-          typeof concatenatedError
-        );
+       
 
         formattedErrors[field] = concatenatedError; // Utilisez le nom du champ comme clé
       }
 
       this.resultError = formattedErrors; // Stockez les erreurs dans un objet
 
-      // Maintenant, this.resultError est un objet où les clés sont les noms des champs
-      console.log("resultError", this.resultError);
+      
     },
 
     fetchPrint(data) {
       return `https://api.leprimecare.care/api/print-timesheet?employee_id=${data.employee_id}&client_id=${data.client_id}&start_date_of_week=${data.start_date_of_week}&end_date_of_week=${data.end_date_of_week}`;
     },
-    async HandleId(id, week_start, week_end) {
-      console.log("iddd", id, week_start, week_end);
+    async HandleId(id, week_start, week_end ,employee_id) {
+      
       this.step2.client_id = id;
       this.step2.week_start = week_start;
       this.step2.week_end = week_end;
-      this.fetchClientObservation(id, week_start, week_end);
+      this.fetchClientObservation(id, week_start, week_end ,employee_id);
     },
-    async HandleIdSignature(id, week_start, week_end) {
-      console.log("iddd", id);
+    async HandleIdSignature(id, week_start, week_end , employee_id) {
+   
 
-      this.fetchClientSignature(id, week_start, week_end);
+      this.fetchClientSignature(id, week_start, week_end ,employee_id);
     },
     async fetchClientDetail(id) {
       this.loading = true;
@@ -1464,9 +1476,9 @@ export default {
           }
         });
 
-        console.log("responsett", response);
+       
         if (response.data.status === "success") {
-          console.log("responsedatatt", response.data.data.client_name);
+        
 
           this.loading = false;
         }
@@ -1476,7 +1488,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+        
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1492,8 +1504,8 @@ export default {
         }
       }
     },
-    async fetchClientObservation(id, week_start, week_end) {
-      console.log("eereer", id, week_start, week_end);
+    async fetchClientObservation(id, week_start, week_end ,employee_id) {
+      
 
       this.loading = true;
 
@@ -1505,34 +1517,31 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: this.loggedInUser.id_user,
+              employee_id: employee_id,
               client_id: id,
               start_date_of_week: week_start,
               end_date_of_week: week_end
             }
           }
         );
+          this.employeeId = employee_id
+        ;
 
-        console.log("responsett", response);
-
-        console.log("responsedatattaaaaaa", response.data.data);
+        
         if (response.data.data === undefined) {
-          console.log("AAAA", response.data);
+          ;
 
           this.step2.observations = "";
           this.loading = false;
         } else {
-          console.log("AAAA", response.data.data);
+          
           this.step2.observations = response.data.data.observations;
           this.loading = false;
         }
       } catch (error) {
-        console.log(
-          "Erreur lors de la mise à jour des données MPME guinee :",
-          error
-        );
+       
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+         
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1548,8 +1557,8 @@ export default {
         }
       }
     },
-    async fetchClientSignature(id, week_start, week_end) {
-      console.log("eereer", id, week_start, week_end);
+    async fetchClientSignature(id, week_start, week_end , employee_id) {
+     
 
       this.loading = true;
 
@@ -1561,7 +1570,7 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: this.loggedInUser.id_user,
+              employee_id: employee_id,
               client_id: id,
               start_date_of_week: week_start,
               end_date_of_week: week_end
@@ -1569,8 +1578,8 @@ export default {
           }
         );
 
-        console.log("responsett", response);
-        console.log("responsedatattaaaaaa", response.data.data);
+      
+       
         this.loading = false;
 
         //  return response.data.data;
@@ -1589,7 +1598,7 @@ export default {
           error
         );
         if (error.response.data.status === "error") {
-          console.log("aut", error.response.data.status === "error");
+         
 
           if (
             error.response.data.message === "Vous n'êtes pas autorisé." ||
@@ -1611,11 +1620,12 @@ export default {
         await this.checkSignatureState(
           item.client_id,
           item.start_date_of_week,
-          item.end_date_of_week
+          item.end_date_of_week,
+          item.employee?.id
         );
       }
     },
-    async checkSignatureState(client_id, start_date_of_week, end_date_of_week) {
+    async checkSignatureState(client_id, start_date_of_week, end_date_of_week ,employee_id) {
       try {
         const response = await axios.get(
           `/employees/observations/detail/${client_id}`,
@@ -1624,17 +1634,16 @@ export default {
               Authorization: `Bearer ${this.loggedInUser.token}`
             },
             params: {
-              employee_id: this.loggedInUser.id_user,
+              employee_id: employee_id,
               client_id: client_id,
               start_date_of_week: start_date_of_week,
               end_date_of_week: end_date_of_week
             }
           }
         );
-        console.log("signatureStates", response);
+     
         const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
-        console.log("ssssss", key);
-        //  Signature_client
+        
 
         if (response.data.data === undefined) {
           this.signatureStates[key] = "undefined"; // Rouge

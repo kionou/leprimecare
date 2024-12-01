@@ -103,7 +103,7 @@
                 <span class="text-muted fs-15 bg-success p-2 text-center mt-1" >
                   
                   <i class="ri-user-fill"></i>
-                    Assigned to  {{ client.employee.employee.user.Prenoms }} {{ client.employee.employee.user.Nom  }}
+                    Assigned to  {{ client.employee?.employee?.user?.Prenoms }} {{ client.employee?.employee?.user?.Nom  }}
                   </span >
 
                 </div > 
@@ -383,6 +383,7 @@
       aria-hidden="true"
       data-bs-backdrop="static"
       ref="update_client"
+      style="  background: rgba(0, 0, 0, 0.5); "
     >
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -621,7 +622,7 @@ export default {
     },
   },
   async mounted() {
-    console.log("loggedInUser", this.loggedInUser);
+ 
     if (this.loggedInUser.role_id === 2) {
     await this.fetchClientsAll();
       
@@ -726,14 +727,7 @@ export default {
         formData.append("phone", this.step1.phone);
         formData.append("profil", this.profil);
 
-        console.log(
-          "data",
-          this.step1.client_name,
-          this.step1.address,
-          this.step1.state,
-          this.step1.phone,
-          this.profil
-        );
+      
 
         try {
           const response = await axios.post("/clients", formData, {
@@ -745,6 +739,13 @@ export default {
           console.log("Réponse du téléversement :", response);
           if (response.data.status === "success") {
             this.closeModal(modalId);
+            this.step1 = {
+                client_name: "",
+                address: "",
+                state: "",
+                phone: "",
+              },
+              this.v$.step1.$reset();
             this.successmsg(
               "Client Created Successfully",
               " The new client has been successfully created!"
