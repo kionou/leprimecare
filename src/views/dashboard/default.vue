@@ -331,52 +331,36 @@
                       </span>
                     </td>
                     <td>
-                      <button
-                        @click="
-                          HandleIdSignature(
-                            data.client_id,
-                            data.start_date_of_week,
-                            data.end_date_of_week , 
-                            data.employee?.id
-                          )
-                        "
-                        class="btn btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#client_add_signature"
-                        :class="{
-                          'btn-danger':
-                            signatureStates[
-                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                            ] === 'undefined',
-                          'btn-warning':
-                            signatureStates[
-                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                            ] === 'null',
-                          'btn-success':
-                            signatureStates[
-                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                            ] === 'signed'
-                        }"
-                        :disabled="
-                          signatureStates[
-                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                          ] === 'undefined' ||
-                          signatureStates[
-                            `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                          ] === 'signed'
-                        "
-                      >
-                        <i class="bi-badge-wc-fill">
-                          {{
-                            signatureStates[
-                              `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                            ] === "signed"
-                              ? " Is Signed "
-                              : "Signature"
-                          }}
-                        </i>
-                      </button>
-                    </td>
+  <button @click=" HandleIdSignature( data.client_id, data.start_date_of_week, data.end_date_of_week, data.employee?.id , signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`])"
+    class="btn btn-sm"
+    data-bs-toggle="modal"
+   
+    :class="{
+      'btn-danger': signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined' || signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'no_observation',
+      'btn-warning': signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'client_signed',
+      'btn-success': signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'caregiver_signed' || signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'supervisor_signed'
+    }"
+    :disabled="
+      signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'no_observation' ||
+      signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'supervisor_signed'
+    "
+  >
+    <i class="bi-badge-wc-fill">
+      {{
+        signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'no_observation'
+          ? 'No Observation'
+          : signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'undefined'
+          ? 'Client Needs to Sign'
+          : signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'client_signed'
+          ? 'Caregiver Needs to Sign'
+          : signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'caregiver_signed'
+          ? 'Supervisor Needs to Sign'
+          : 'Completed'
+      }}
+    </i>
+  </button>
+</td>
+
                     <td>
                       <span class="">{{ data.start_date_of_week }} </span>
                     </td>
@@ -406,7 +390,7 @@
                           :disabled="
                             signatureStates[
                               `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`
-                            ] === 'signed'
+                            ] === 'supervisor_signed'
                           "
                         >
                           <i class="bi-exclamation-triangle text-danger"></i>
@@ -830,14 +814,7 @@
       </div>
     </div>
 
-    <div
-      class="modal fade effect-rotate-bottom"
-      id="client_add_signature"
-      tabindex="-1"
-      aria-hidden="true"
-      data-bs-backdrop="static"
-      ref="client_add_signature"
-    >
+    <div class="modal fade effect-rotate-bottom" id="client_add_signature" tabindex="-1"  aria-hidden="true" data-bs-backdrop="static"  ref="client_add_signature">
       <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
           <div
@@ -849,7 +826,7 @@
               id="mail-ComposeLabel"
               style="font-size: 22px !important"
             >
-              <b class="text-center">Client Signature On timesheetces</b>
+            <b class="text-center"  > Client Signature On timesheet</b>
             </h2>
           </div>
           <div class="modal-body px-4">
@@ -866,27 +843,157 @@
                 <div class="row mt-3 content-group">
                   <div class="col">
                     <div class="input-groupe">
-                      <label for="userpassword"
-                        >Client Signature goes here
-                        <span class="text-danger">*</span></label
-                      >
+                      <label for="userpassword" >Client Signature goes here<span class="text-danger">*</span></label>
                       <canvas
-                        ref="canvas"
-                        @mousedown="startDrawing"
-                        @mousemove="draw"
-                        @mouseup="stopDrawing"
+                      ref="clientCanvas"
+                      @mousedown="startDrawing('clientCanvas', $event)"
+                      @mousemove="draw('clientCanvas', $event)"
+                      @mouseup="stopDrawing('clientCanvas')"
                       ></canvas>
                     </div>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="boutton">
-                    <button
-                      class=""
-                      @click="SubmitSignature('client_add_signature')"
-                    >
-                      Save Observation
-                    </button>
+                    <button class="" @click="SubmitSignature('client_add_signature', '', 'clientCanvas')"> Save Observation </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+            <div class="modal-footer">
+              <div class="btn-group ms-auto">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Close
+                </button>
+              </div>
+              <button class="btn btn-primary" @click="clearCanvas('clientCanvas')">
+                Effacer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade effect-rotate-bottom" id="caregive_add_signature" tabindex="-1"  aria-hidden="true" data-bs-backdrop="static"  ref="caregive_add_signature">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div
+            class="modal-header float-start text-center justify-content-center"
+            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
+          >
+            <h2
+              class="modal-title text-white text-center"
+              id="mail-ComposeLabel"
+              style="font-size: 22px !important"
+            >
+            <b class="text-center" > Employee Signature On timesheet</b>
+            </h2>
+          </div>
+          <div class="modal-body px-4">
+            <div>
+              <div
+                class="row gy-2 justify-content-center"
+                style="
+                  border-width: 1px;
+                  border-style: solid;
+                  border-radius: 6px;
+                  border-color: rgb(0, 77, 134);
+                "
+              >
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword" >Employee Signature goes here <span class="text-danger">*</span></label>
+                      <canvas
+                      ref="employeeCanvas"
+                      @mousedown="startDrawing('employeeCanvas', $event)"
+                      @mousemove="draw('employeeCanvas', $event)"
+                      @mouseup="stopDrawing('employeeCanvas')"
+                      ></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="boutton">
+                    <button class=""  @click="SubmitSignature('caregive_add_signature' ,'EMP' , 'employeeCanvas')"> Save Observation </button>
+      
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+            <div class="modal-footer">
+              <div class="btn-group ms-auto">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Close
+                </button>
+              </div>
+              <button class="btn btn-primary" @click="clearCanvas">
+                Effacer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade effect-rotate-bottom" id="supervisor_add_signature" tabindex="-1"  aria-hidden="true" data-bs-backdrop="static"  ref="supervisor_add_signature">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div
+            class="modal-header float-start text-center justify-content-center"
+            style="background-color: rgb(0, 77, 134); padding-bottom: 10px"
+          >
+            <h2
+              class="modal-title text-white text-center"
+              id="mail-ComposeLabel"
+              style="font-size: 22px !important"
+            >
+
+            <b class="text-center" > Supervisor Signature On timesheet </b>
+            </h2>
+          </div>
+          <div class="modal-body px-4">
+            <div>
+              <div
+                class="row gy-2 justify-content-center"
+                style="
+                  border-width: 1px;
+                  border-style: solid;
+                  border-radius: 6px;
+                  border-color: rgb(0, 77, 134);
+                "
+              >
+                <div class="row mt-3 content-group">
+                  <div class="col">
+                    <div class="input-groupe">
+
+                      <label for="userpassword"  >Supervisor Signature goes here<span class="text-danger">*</span></label>
+                      <canvas
+                      ref="supervisorCanvas"
+                      @mousedown="startDrawing('supervisorCanvas', $event)"
+                      @mousemove="draw('supervisorCanvas', $event)"
+                      @mouseup="stopDrawing('supervisorCanvas')"
+                      ></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="boutton">
+                    <button class=""  @click="SubmitSignature('supervisor_add_signature', 'SUP' , 'supervisorCanvas')"> Save Observation </button>
                   </div>
                 </div>
               </div>
@@ -934,15 +1041,22 @@ export default {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
     return {
-      drawing: false,
-      x: 0,
-      y: 0,
+      canvasData: {
+        clientCanvas: { drawing: false, x: 0, y: 0 },
+        employeeCanvas: { drawing: false, x: 0, y: 0 },
+        supervisorCanvas: { drawing: false, x: 0, y: 0 },
+      },
+     
       loading: true,
       StatiticsOptions: "",
       currentYear: currentYear,
       currentMonth: currentMonth,
       IdObservation: "",
       employeeId:"",
+      signatureClient:"",
+      signatureSupervisor:"",
+      signatureObservation:"",
+      signatureCare:"",
       week_start_All: "",
       week_end_All: "",
       week: "All",
@@ -1062,7 +1176,7 @@ export default {
 
       ;
         if (response.data.status === "success") {
-          console.log("responsedata", response.data.data);
+         
           this.StatiticsOptions = response.data.data;
           this.loading = false;
         }
@@ -1269,30 +1383,34 @@ export default {
       this.step1.week_start = firstDay.toISOString().slice(0, 10);
       this.step1.week_end = lastDay.toISOString().slice(0, 10);
     },
-    startDrawing(event) {
-      this.drawing = true;
-      this.x = event.offsetX;
-      this.y = event.offsetY;
+
+    startDrawing(canvasRef, event) {
+      const canvas = this.canvasData[canvasRef];
+      canvas.drawing = true;
+      canvas.x = event.offsetX;
+      canvas.y = event.offsetY;
     },
-    draw(event) {
-      if (this.drawing) {
-        const ctx = this.$refs.canvas.getContext("2d");
+    draw(canvasRef, event) {
+      const canvas = this.canvasData[canvasRef];
+      if (canvas.drawing) {
+        const ctx = this.$refs[canvasRef].getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        this.x = event.offsetX;
-        this.y = event.offsetY;
-        ctx.lineTo(this.x, this.y);
+        ctx.moveTo(canvas.x, canvas.y);
+        canvas.x = event.offsetX;
+        canvas.y = event.offsetY;
+        ctx.lineTo(canvas.x, canvas.y);
         ctx.stroke();
       }
     },
-    stopDrawing() {
-      this.drawing = false;
+    stopDrawing(canvasRef) {
+      this.canvasData[canvasRef].drawing = false;
     },
-    clearCanvas() {
-     
-      const ctx = this.$refs.canvas.getContext("2d");
-      ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+    clearCanvas(canvasRef) {
+      const ctx = this.$refs[canvasRef].getContext("2d");
+      const canvasElement = this.$refs[canvasRef];
+      ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     },
+    
     updateCurrentPage(pageNumber) {
       this.currentPage = pageNumber;
       window.scrollTo({
@@ -1307,8 +1425,7 @@ export default {
       return this.ClientEmployeeOptions.slice(startIndex, endIndex);
     },
     handleOptionClickEmployeeid(value){
-    
-      this.employeeId = value?.id
+      this.employeeId = value.id
 
     },
     async submitDailyWork(modalId) {
@@ -1325,9 +1442,7 @@ export default {
           time_out: this.step1.time_out,
           duty_take_id: this.step1.duties_id
         };
-
-   
-
+      
         try {
           const response = await axios.post("/employees/timesheets", data, {
             headers: { Authorization: `Bearer ${this.loggedInUser.token}` }
@@ -1356,12 +1471,24 @@ export default {
       console.log("error", this.v$.$errors);
       }
     },
-    async SubmitSignature(modalId) {
+    async SubmitSignature(modalId ,type , canvasRef) {
       this.loading = true;
-      const canvasData = this.$refs.canvas.toDataURL();
+      
+      const canvasElement = this.$refs[canvasRef];
+      const canvasData = canvasElement.toDataURL();
       const formData = new FormData();
-      formData.append("id", this.IdObservation);
+
+      
+      if (type === null ||  type === '') {
+        formData.append("id", this.IdObservation);
       formData.append("SignatureC", canvasData);
+     
+      } else {
+        formData.append("id", this.IdObservation);
+      formData.append("SignatureC", canvasData);
+      formData.append("type", type);
+      }
+     
 
       try {
         const response = await axios.post(
@@ -1374,10 +1501,24 @@ export default {
   
         if (response.data.status === "success") {
           this.closeModal(modalId);
-          this.successmsg(
-            "Patient Signature Recorded",
-            "The patient's signature has been successfully recorded! It has been saved and is now on file."
-          );
+          if (type === 'EMP') {
+            this.successmsg(
+              "Signature Recorded",
+              "Your signature has been successfully recorded! It has been saved and is now on file."
+            );
+          } else if (type === 'SUP') {
+            this.successmsg(
+              "Signature Recorded",
+              "Your signature has been successfully recorded! It has been saved and is now on file."
+            );
+          } else {
+            this.successmsg(
+              "Signature Recorded",
+              "The patient's signature has been successfully recorded! It has been saved and is now on file."
+            );
+          }
+
+          
           await this.fetchClientEmployee();
         } else {
         }
@@ -1461,10 +1602,25 @@ export default {
       this.step2.week_end = week_end;
       this.fetchClientObservation(id, week_start, week_end ,employee_id);
     },
-    async HandleIdSignature(id, week_start, week_end , employee_id) {
-   
+    async HandleIdSignature(id, week_start, week_end , employee_id , modal) {
 
+      if(modal === 'undefined'){
       this.fetchClientSignature(id, week_start, week_end ,employee_id);
+
+        const modal = new bootstrap.Modal(document.getElementById('client_add_signature'));
+        modal.show();
+
+      }else if(modal === 'client_signed'){
+        this.fetchClientSignature(id, week_start, week_end ,employee_id);
+        const modal = new bootstrap.Modal(document.getElementById('caregive_add_signature'));
+        modal.show();
+      }else{
+        this.fetchClientSignature(id, week_start, week_end ,employee_id);
+        const modal = new bootstrap.Modal(document.getElementById('supervisor_add_signature'));
+        modal.show();
+
+      }
+
     },
     async fetchClientDetail(id) {
       this.loading = true;
@@ -1641,17 +1797,36 @@ export default {
             }
           }
         );
-     
-        const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
-        
 
-        if (response.data.data === undefined) {
-          this.signatureStates[key] = "undefined"; // Rouge
-        } else if (response.data.data.Signature_client === null) {
-          this.signatureStates[key] = "null"; // Jaune
-        } else {
-          this.signatureStates[key] = "signed"; // Vert
-        }
+        const key = `${client_id}_${start_date_of_week}_${end_date_of_week}`;
+         this.signatureClient = response.data?.data?.Signature_client
+         this.signatureCare = response.data?.data?.Signature_care_giver
+         this.signatureObservation = response.data?.data?.observations
+         this.signatureSupervisor = response.data?.data?.Signature_supervisor
+
+        if (response.data.data === undefined || !response.data.data?.observations) {
+  // Aucune observation ou données (désactivé et danger)
+  this.signatureStates[key] = "no_observation"; // Bouton danger désactivé
+} else if (response.data.data?.observations && 
+           !response.data.data?.Signature_client) {
+  // Observation présente mais le client n'a pas signé (rouge actif)
+  this.signatureStates[key] = "undefined"; // Bouton danger actif
+} else if (response.data.data?.Signature_client && 
+           !response.data.data?.Signature_care_giver && 
+           !response.data.data?.Signature_supervisor) {
+  // Le client a signé mais pas l'employé (orange actif)
+  this.signatureStates[key] = "client_signed"; // Bouton warning actif
+} else if (response.data.data?.Signature_care_giver && 
+           !response.data.data?.Signature_supervisor) {
+  // L'employé a signé mais pas le superviseur (vert actif)
+  this.signatureStates[key] = "caregiver_signed"; // Bouton success actif
+} else if (response.data.data?.Signature_supervisor) {
+  // Le superviseur a signé (vert désactivé)
+  this.signatureStates[key] = "supervisor_signed"; // Bouton success désactivé
+} else {
+  // Aucun autre cas (fallback)
+  this.signatureStates[key] = "no_observation";
+}
         this.loading = false;
       } catch (error) {
         console.error(

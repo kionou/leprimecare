@@ -91,7 +91,7 @@ small {
 }
 
 .bouttons .boutton {
-  max-width: 50px;
+  max-width: 30px;
   width: 100%;
   background: var(--primary-color);
   color: #f9f9f9;
@@ -193,7 +193,14 @@ small {
   width: 100%;
 
 }
+.m-input-wrapper.--rounded-sm{
+  width: 100% !important;
+}
+.m-input-wrapper{
+  width: 100% !important;
 
+
+}
 .m-phone-number-input{
 width: 100%;
 

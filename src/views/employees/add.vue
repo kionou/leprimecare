@@ -224,58 +224,96 @@
 
               </div>
             
-             <div class="row mb-3 mt-3 content-group">
-              <div class="btn-list" style="position:relative" >
-          <div class="bouttons" style="position:relative">
-        <div class="boutton"   style="max-width: 34px; width: 100%;padding: 6px; margin-top: 20px; display: flex;
-                    flex-direction: column;  align-items: center; justify-content: center; right: -45.5%; top: 38px; position: relative; z-index:1000" @click="AddformDataDays" ><i  class="ri-add-line"></i></div>
-        </div>
-          </div>
-          <div  class="row mb-3 mt-3 content-group" v-for="(day, index) in step1.DaysHours" :key="day.id">
-            <div class="col">
-          <div class="input-groupe">
-          <label for="userpassword">Days Available to Work <span class="text-danger">*</span></label>
-          <MazSelect 
-           label="Select" 
-           v-model="day.day_id"
-            name="day_id"  
-            listPosition="left" 
-            color="info"
-             :options="DaysOptions" 
-              size="sm" 
-              rounded-size="sm" 
-               v-slot="{ option }"
-             search > 
-             <div class="flex items-center" style="  width: 100%;  gap: 1rem; " @click="clearError(index, 'day_id')">
-                      {{ option.label }}
-                    </div>
-                  </MazSelect>  
-          </div>
-          <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].day_id">{{ errors.step1.DaysHours[index].day_id }}</small>
-          <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
-          </div>
+              <div class="row mb-3 mt-3 content-group justify-content-center">
+           <div class="btn-list" style="position:relative" >
+       <div class="bouttons" style="position:relative">
+     <div class="boutton"   style="max-width: 34px; width: 100%;padding: 6px; margin-top: 20px; display: flex;
+                 flex-direction: column;  align-items: center; justify-content: center; right: -45.5%; top: 38px; position: relative; z-index:1000" @click="AddformDataDays" ><i  class="ri-add-line"></i></div>
+     </div>
+       </div>
+       <div class="row mb-2 " v-for="(day, index) in step1.DaysHours" :key="day.id" style="border-bottom: 1px solid red; justify-content:center; width: 99%;">
+        <div class="col-xl-11">
+          <div class="titres">
+           <span class="nombre">{{ index + 1 }}</span>
+         </div>
+          <div  >
+            <div  class="row mb-3 mt-3 content-group">
+         <div class="col">
+       <div class="input-groupe">
+       <label for="userpassword">Days Available to Work <span class="text-danger">*</span></label>
+       <MazSelect 
+        label="Select" 
+        v-model="day.day_id"
+         name="day_id"  
+         listPosition="left" 
+         color="info"
+          :options="DaysOptions" 
+           size="sm" 
+           rounded-size="sm" 
+            v-slot="{ option }"
+          search > 
+          <div class="flex items-center" style="  width: 100%;  gap: 1rem; " @click="clearError(index, 'day_id')">
+                   {{ option.label }}
+                 </div>
+               </MazSelect>  
+       </div>
+       <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].day_id">{{ errors.step1.DaysHours[index].day_id }}</small>
+       <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
+       </div>
 
-          <div class="col   d-flex align-items-center">
-          <div class="input-groupe w-100 me-2">
-             <div >
-              <label for="userpassword">Hours Available to Work <span class="text-danger">*</span></label>
-          <MazInput  v-model="day.available_hour" type="time"  color="info" @input="clearError(index, 'available_hour')"  name="day.available_hour" size="sm" rounded-size="sm" />
+       <div class="col  ">
+       <div class="input-groupe ">
+          <div >
+           <label for="userpassword">Time In <span class="text-danger">*</span></label>
+       <MazInput  v-model="day.available_hour" type="time"  color="info" @input="() => calculateTotalTime(day)"   name="day.available_hour" size="sm" rounded-size="sm" />
+       </div>
+       <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].available_hour">{{ errors.step1.DaysHours[index].available_hour }}</small>
+       <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
           </div>
-          <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].available_hour">{{ errors.step1.DaysHours[index].available_hour }}</small>
+         
+       </div>
+
+            </div>
+            <div  class="row mb-3 mt-3 content-group">
+        
+
+       <div class="col  ">
+       <div class="input-groupe ">
+          <div >
+           <label for="userpassword">Time Out <span class="text-danger">*</span></label>
+       <MazInput  v-model="day.timeOut" type="time"  color="info" @input="() => calculateTotalTime(day)"  name="day.timeOut" size="sm" rounded-size="sm" />
+       </div>
+       <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].timeOut">{{ errors.step1.DaysHours[index].timeOut }}</small>
+       <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
+          </div>
+         
+       </div>
+
+       <div class="col  ">
+       <div class="input-groupe ">
+       
+           <label for="userpassword">Total Time <span class="text-danger">*</span></label>
+           <MazInput  v-model="day.totalTime" type="number" disabled  color="info" @click="clearError(index, 'totalTime')"  name="day.totalTime" size="sm" rounded-size="sm" />
+          <small v-if="errors.step1.DaysHours && errors.step1.DaysHours[index] && errors.step1.DaysHours[index].totalTime">{{ errors.step1.DaysHours[index].totalTime }}</small>
           <small v-if="resultError['DaysHours']"> {{ resultError["DaysHours"] }} </small>
-             </div>
-             <div class="btn-list mt-8">
-              <div class="bouttons" style="position:relative;">
-        <div class="boutton"   style=" padding:6px 10px !important ; background:red;margin-top:0 !important" @click="deleteRowDays(index)" ><i class="ri-delete-bin-line"></i></div>
-        </div>
-            <!-- <a aria-label="anchor"  @click="deleteRowDays(index)" href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-light"><i class="ri-delete-bin-line"></i></a> -->
-        </div>
-          </div>
           </div>
          
+       </div>
+            </div>
+          </div>
          
-           
-              </div>
+        </div>
+        <div class="col-xl-1">
+          <div class="btn-list mt-8">
+           <div class="bouttons" style="position:relative;">
+     <div class="boutton"   style=" padding:6px 10px !important ; background:red;margin-top:0 !important ;top: 75px;  position: absolute;" @click="deleteRowDays(index)" ><i class="ri-delete-bin-line"></i></div>
+     </div>
+     </div>
+        </div>
+        
+       </div>
+      
+           </div>
 
                <div class="row mb-3 mt-3 content-group">
 
@@ -912,6 +950,8 @@
             DaysHours:[{
               day_id:'',
             available_hour:'',
+            timeOut:'',
+           totalTime:'',
 
             }],
 
@@ -1017,6 +1057,8 @@ step6: {
           $each: {
             day_id: { require},
             available_hour: { require },
+            timeOut:{ require },
+            totalTime:{  },
           }
         },
             date_available_to_start:{require}, 
@@ -1100,7 +1142,24 @@ reason:{},
     },
     methods: {
     
-   
+      calculateTotalTime(day) {
+    if (day.available_hour && day.timeOut) {
+     
+      const timeIn = new Date(`1970-01-01T${day.available_hour}:00`);
+      const timeOut = new Date(`1970-01-01T${day.timeOut}:00`); 
+    
+      const diff = timeOut - timeIn;
+      if (diff >= 0) {  
+        const totalMinutes = Math.floor(diff / 60000); 
+        const totalHours = (totalMinutes / 60).toFixed();   
+        day.totalTime = totalHours; 
+      } else {
+        day.totalTime = 0;
+      }
+    } else {
+      day.totalTime = 0; 
+    }
+  },
     clearErrorExp(index, field) {
       
       if (this.errors.step4.experiences[index]) {
@@ -1187,7 +1246,8 @@ reason_employer:"",
     }
 },
 AddformDataDays() {
-    this.step1.DaysHours.push({ day_id:'', available_hour:'',});
+ this.step1.DaysHours.push({ day_id:'', available_hour:'',timeOut:'', totalTime:'',});
+
   },
 
   deleteRowDays(index) {
@@ -1625,6 +1685,10 @@ validateStep1() {
           dayErrors.available_hour = 'Hour is required';
           isValid = false;
         }
+        if (!day.timeout) {
+       dayErrors.timeout = 'Hour is required';
+       isValid = false;
+     }
         this.errors.step1.DaysHours[index] = dayErrors;
       });
 
