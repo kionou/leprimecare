@@ -581,6 +581,7 @@
                         name="time_in"
                         size="xs"
                         rounded-size="xs"
+                         @input="calculateTotalTime"
                       />
                       <small v-if="v$.step1.time_in.$error">{{
                         v$.step1.time_in.$errors[0].$message
@@ -602,6 +603,7 @@
                         name="time_out"
                         size="xs"
                         rounded-size="xs"
+                         @input="calculateTotalTime"
                       />
                       <small v-if="v$.step1.time_out.$error">{{
                         v$.step1.time_out.$errors[0].$message
@@ -609,6 +611,22 @@
                       <small v-if="resultError['time_out']">
                         {{ resultError["time_out"] }}
                       </small>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="input-groupe">
+                      <label for="userpassword"
+                        >Total Time <span class="text-danger">*</span></label
+                      >
+                      <MazInput
+                        v-model="step1.Total_time"
+                        type="number"
+                        disabled
+                        color="info"
+                        name="time_out"
+                        size="xs"
+                        rounded-size="xs"
+                      />
                     </div>
                   </div>
                 </div>
@@ -1081,6 +1099,7 @@ export default {
         week_end: "",
         time_in: "",
         time_out: "",
+        Total_time:"",
         duties_id: []
       },
       step2: {
@@ -1166,6 +1185,26 @@ export default {
 
   methods: {
     successmsg: successmsg,
+    calculateTotalTime() {
+  
+
+    if (this.step1.time_in && this.step1.time_out) {
+     
+      const timeIn = new Date(`1970-01-01T${this.step1.time_in}:00`);
+      const timeOut = new Date(`1970-01-01T${this.step1.time_out}:00`); 
+    
+      const diff = timeOut - timeIn;
+      if (diff >= 0) {  
+        const totalMinutes = Math.floor(diff / 60000); 
+        const totalHours = (totalMinutes / 60).toFixed();   
+        this.step1.Total_time = totalHours; 
+      } else {
+        this.step1.Total_time = 0;
+      }
+    } else {
+      this.step1.Total_time = 0; 
+    }
+  },
     async fetchStatitics() {
       try {
         const response = await axios.get("/statistics/admin", {
@@ -1426,8 +1465,44 @@ export default {
     },
     handleOptionClickEmployeeid(value){
       this.employeeId = value.id
-
+      // this.fetchEmployeeDetail(value.id)
     },
+    async fetchEmployeeDetail(id) {
+        try {
+          const response = await axios.get(`employees/detail/${id}`, {
+            headers: {
+              Authorization: `Bearer ${this.loggedInUser.token}`,
+            },
+          });
+  
+          console.log("responseclientenmploy", response.data);
+          if (response.data.status === "success") {
+            console.log()
+            this.data = response.data.data;
+            this.loading = false;
+          }
+        } catch (error) {
+          console.log(
+            "Erreur lors de la mise à jour des données MPME guinee :",
+            error
+          );
+          if (error.response.data.status === "error") {
+            console.log("aut", error.response.data.status === "error");
+  
+            if (
+              error.response.data.message === "Vous n'êtes pas autorisé." ||
+              error.response.status === 401
+            ) {
+              await this.$store.dispatch("auth/clearMyAuthenticatedUser");
+              this.$router.push("/"); //a revoir
+            }
+          } else {
+            this.formatValidationErrors(error.response.data.errors);
+            this.loading = false;
+            return false;
+          }
+        }
+      },
     async submitDailyWork(modalId) {
       this.v$.step1.$touch();
       if (this.v$.$errors.length == 0) {

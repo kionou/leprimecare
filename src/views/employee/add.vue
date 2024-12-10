@@ -1681,8 +1681,8 @@ validateStep1() {
        dayErrors.available_hour = 'Hour is required';
        isValid = false;
      }
-     if (!day.timeout) {
-       dayErrors.timeout = 'Hour is required';
+     if (!day.timeOut) {
+       dayErrors.timeOut = 'Hour is required';
        isValid = false;
      }
      this.errors.step1.DaysHours[index] = dayErrors;
