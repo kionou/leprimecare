@@ -342,6 +342,8 @@
     }"
     :disabled="
       signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'no_observation' ||
+      (signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'client_signed' && this.loggedInUser.role_id === 2) ||
+      (signatureStates[`${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'caregiver_signed' && this.loggedInUser.role_id === 3) ||
       signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'supervisor_signed'
     "
   >
@@ -354,12 +356,12 @@
           : signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'client_signed'
           ? 'Caregiver Needs to Sign'
           : signatureStates[ `${data.client_id}_${data.start_date_of_week}_${data.end_date_of_week}`] === 'caregiver_signed'
-          ? 'Supervisor Needs to Sign'
+          ? 'R.N Needs to Sign'
           : 'Completed'
       }}
     </i>
   </button>
-</td>
+                    </td>
 
                     <td>
                       <span class="">{{ data.start_date_of_week }} </span>
@@ -1557,7 +1559,7 @@ export default {
       if (type === null ||  type === '') {
         formData.append("id", this.IdObservation);
       formData.append("SignatureC", canvasData);
-     
+    
       } else {
         formData.append("id", this.IdObservation);
       formData.append("SignatureC", canvasData);
